@@ -5,7 +5,10 @@ from django.http import HttpResponse
 
 
 def circle(request):
-    return HttpResponse('circle')
+    context = {
+        'page_name': 'Circle'
+    }
+    return render(request, 'circle/circle.html', context)
 
 
 def current_circle(request, pk):
@@ -13,8 +16,11 @@ def current_circle(request, pk):
         'circle_id': int(pk),
         'page_name': 'Circle Info'
     }
-    return render(request, 'circle/trail.html', context)
+    return render(request, 'circle/current-circle.html', context)
 
 
-def create(create):
-    return HttpResponse('create')
+def create(request):
+    context = {
+        'page_name': 'Create'
+    }
+    return render(request, 'circle/add.html', context)
