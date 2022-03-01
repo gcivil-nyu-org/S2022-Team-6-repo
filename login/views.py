@@ -12,8 +12,14 @@ def index(request):
 
 
 def signin(request):
-    return HttpResponse('signin')
+    context = {
+        'page_name': 'SignIn'
+    }
+    return render(request, 'login/signin.html', context)
 
 
 def signup(request):
-    return HttpResponse('signup')
+    context = {
+        'page_name': 'SignUp'
+    }
+    return render(request, 'login/signup.html', context)
