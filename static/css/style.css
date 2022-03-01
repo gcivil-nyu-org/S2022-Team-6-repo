@@ -1,4 +1,15 @@
 .develop {
-      width: 15em;
-      height: 250px;
-    }
+  width: 15em;
+  height: 250px;
+}
+
+.thumb {
+  height: 320px;
+  width: 300px;
+  background-color: #fff;
+}
+
+.plus {
+  height: 180;
+  width: 180px;
+}

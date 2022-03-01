@@ -1,12 +1,12 @@
 {% extends 'main.html' %}
-
+{% load static %}
 {% block content %}
     <!-- intro -->
     <section>
         <div class="container m-5">
             <div class="row">
                 <div class="col-sm-3">
-                    <img src="img/famliy.jpg" class="img-fluid rounded-circle" alt="...">
+                    <img src="{% static 'img/famliy.jpg'%}" class="img-fluid rounded-circle" alt="...">
                 </div>
                 <div class="col-sm-9">
                     <h1 class="fw-bold text-uppercase text-secondary align-self-start">

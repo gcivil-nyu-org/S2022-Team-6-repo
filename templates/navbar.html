@@ -1,8 +1,9 @@
 <!-- Navbar -->
+{% load static %}
     <nav class="navbar navbar-expand-lg bg-light navbar-light py-3">
         <div class="container-sm">
             <a class="navbar-brand" href="{% url 'index' %}">
-                <img src="img/5.png" width="50" height="50" alt="">
+                <img src="{%static 'img/5.png'%}" width="50" height="50" alt="">
                 CoviGuard
             </a>
             <a href="#" class="navbar-brand"></a>
