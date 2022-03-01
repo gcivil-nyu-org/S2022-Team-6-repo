@@ -85,10 +85,10 @@ WSGI_APPLICATION = 'coviguard.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd9ah145q41esbq',
-        'USER': 'jvslsvpjekdqai',
+        'NAME': 'dcoctgfod079on',
+        'USER': 'fvfxynrmpdpcdv',
         'PASSWORD': os.environ['DATABASES_PASSWORD'],
-        'HOST': 'ec2-52-73-149-159.compute-1.amazonaws.com',
+        'HOST': 'ec2-34-226-18-183.compute-1.amazonaws.com',
         'PORT': '5432'
     }
 }
