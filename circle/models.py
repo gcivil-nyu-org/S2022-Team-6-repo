@@ -1,5 +1,5 @@
 from django.db import models
-
+from login.models import UserData
 # Create your models here.
 
 
@@ -16,10 +16,9 @@ class Circle(models.Model):
 
 class CircleUser(models.Model):
     class Meta:
-        unique_together = (('circle_id', 'user_id'),)
+        unique_together = (('circle_id', 'username'),)
     circle_id = models.ForeignKey(Circle, on_delete=models.CASCADE)
-    user_id = models.CharField(max_length=100)
-    username = models.CharField(max_length=100)
+    username = models.ForeignKey(UserData, on_delete=models.CASCADE)
     is_admin = models.BooleanField(default=False)
     is_member = models.BooleanField(default=False)
 
