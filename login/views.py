@@ -5,7 +5,10 @@ from django.http import HttpResponse
 
 
 def index(request):
-    return HttpResponse('index')
+    context = {
+        'page_name': 'CoviGuard'
+    }
+    return render(request, 'login/index.html', context)
 
 
 def signin(request):
