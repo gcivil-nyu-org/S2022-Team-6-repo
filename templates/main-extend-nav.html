@@ -1,21 +1,24 @@
 <!DOCTYPE html>
+
+{% load static %}
+
 <html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    {% comment %} <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet"> {% endcomment %}
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="{% static 'assets/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    {% comment %} <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> {% endcomment %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
-    {% comment %} <link rel="stylesheet" href="style.css" /> {% endcomment %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <title>{{ page_name }}</title>
-    <style>
+    {% comment %} <style>
     .develop {
       width: 15em;
       height: 250px;
     }
-    </style>
+    </style> {% endcomment %}
 </head>
 
 <body>
@@ -23,7 +26,7 @@
   <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 fixed-top">
     <div class="container-sm">
       <a class="navbar-brand" href="{% url 'index' %}">
-        <img src="img/5.png" width="50" height="50" alt="">
+        <img src="{% static 'img/5.png' %}" width="50" height="50" alt="">
         CoviGuard
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
@@ -47,8 +50,8 @@
 
     {% include 'footer.html' %}
 
-    {% comment %} <script src="../assets/dist/js/bootstrap.bundle.min.js"></script> {% endcomment %}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="{% static 'assets/dist/js/bootstrap.bundle.min.js' %}"></script>
+    {% comment %} <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> {% endcomment %}
 
 </body>
 

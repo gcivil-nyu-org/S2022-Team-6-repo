@@ -6,7 +6,8 @@ from django.http import HttpResponse
 
 def index(request):
     context = {
-        'page_name': 'CoviGuard'
+        'page_name': 'CoviGuard',
+        'css_name': 'login'
     }
     return render(request, 'login/index.html', context)
 
