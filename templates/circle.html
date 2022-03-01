@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Frontend Bootcamp</title>
+
+    <style>
+        /* [class*="col"] {
+            padding: 1rem;
+            background-color: #33b5e5;
+            border: 2px solid #fff;
+            color: #fff
+        } */
+
+        */ .thumb {
+            height: 320px;
+            width: 300px;
+            background-color: #fff;
+        }
+
+        .plus {
+            height: 180;
+            width: 180px;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-light navbar-light py-3">
+        <div class="container-sm">
+            <a class="navbar-brand" href="#">
+                <img src="img/5.png" width="50" height="50" alt="">
+                CoviGuard
+            </a>
+            <a href="#" class="navbar-brand"></a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navmenu">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Self-Track</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Monitor</a>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn btn-light position-relative">
+                            <p class="text-danger">Alerts</p>
+
+
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                                <span class="visually-hidden">New alerts</span>
+                            </span>
+                        </button>
+                        <!-- <a href="#" class="nav-link">
+                            <p class="text-success">Alerts</p>
+                        </a> -->
+                    </li>
+                </ul>
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle position-relative mx-3" type="button"
+                        id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        Notifications
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            5
+                            <span class="visually-hidden">unread messages</span>
+                        </span>
+                    </button>
+                    <ul class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton1">
+                        <li>
+                            <div class="alert alert-primary m-0" role="alert">
+                                Dhruv requested to join Family
+                            </div>
+                        </li>
+                        <li>
+                            <div class="alert alert-primary m-0" role="alert">
+                                Dhruv2 requested to join Family
+                            </div>
+                        <li>
+                            <div class="alert alert-primary m-0" role="alert">
+                                Dhruv3 requested to join Family
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Add Circle -->
+    <section id="add-circle" class="p-5 bg-primary">
+        <h2 class="text-left text-white">Add Circles</h2>
+        <div class="container my-5">
+            <div class="row">
+                <div class="col-4">
+                    <a href="">
+                        <img src="img/plus.png" alt="" class="center-block plus">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="your-circle" class="p-5 bg-light">
+        <h2 class="text-left text-primary">Your Circles</h2>
+        <div class="container my-5 mx-5">
+            <div class="row">
+                <div class="card col-lg-4 col-md-6 my-3">
+                    <img class="rounded mx-auto d-block card-img-top my-3" src="img/famliy.jpg" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Family</h5>
+                    </div>
+                    <button type="button" class="btn btn-outline-primary btn-lg btn-block my-3">Enter Circle</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="p-5 bg-dark fixed-bottom">
+        <div class="container">
+            <a href="#" class="position-absolute bottom-0 end-0 p-4">
+                <i class="bi bi-arrow-up-circle h1"></i>
+            </a>
+        </div>
+    </footer>
+
+    <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
