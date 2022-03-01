@@ -9,7 +9,8 @@ def circle(request, username):
     # print(circle_user_data[0].username.username)
     context = {
         'page_name': 'Circle',
-        'circle_user_data': circle_user_data
+        'circle_user_data': circle_user_data,
+        'username': username
     }
     return render(request, 'circle/circle.html', context)
 

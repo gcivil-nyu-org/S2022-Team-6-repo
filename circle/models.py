@@ -10,6 +10,7 @@ class Circle(models.Model):
     # admin_id = models.CharField(max_length=100, default=0)
     no_of_users = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
+    pending_request = models.IntegerField(default=0)
     #circle_display_image = models.ImageField(upload_to = 'images/')
     # description = models.TextField(null=True, blank=True)
 
