@@ -71,15 +71,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% comment %} <form action="" method="post">
+                            {% for request_data in request_user_data %}
+                            <form action="" method="post">
+                            {% csrf_token %}
                                 <tr>
-                                    <td>Family</td>
-                                    <td>Dhruv3</td>
-                                    <td><button type="button" class="btn btn-outline-success">Accept</button></td>
-                                    <td><button type="button" class="btn btn-outline-danger">Reject</button></td>
+                                    <td>{{ request_data.circle_id.circle_name }}</td>
+                                    <td>{{ request_data.username.username }}</td>
+                                    <td><button name="accept_circle" value="{{request_data.request_id}}" type="submit" class="btn btn-outline-success">Accept</button></td>
+                                    <td><button name="reject_circle" value="{{request_data.request_id}}" type="submit" class="btn btn-outline-danger">Reject</button></td>
                                 </tr>
-                            </form> {% endcomment %}
-                            <tr>
+                            </form>
+                            {% endfor %}
+                            {% comment %} <tr>
                                 <td>Family</td>
                                 <td>Dhruv4</td>
                                 <td><button type="button" class="btn btn-outline-success">Accept</button></td>
@@ -90,7 +93,7 @@
                                 <td>Dhruv5</td>
                                 <td><button type="button" class="btn btn-outline-success">Accept</button></td>
                                 <td><button type="button" class="btn btn-outline-danger">Reject</button></td>
-                            </tr>
+                            </tr> {% endcomment %}
                         </tbody>
                     </table>
                 </div>
