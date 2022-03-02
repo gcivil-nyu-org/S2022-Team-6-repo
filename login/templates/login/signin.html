@@ -12,7 +12,8 @@
                         <h2>Login</h2>
                      </div>
                 </div>
-               <form action="" method="post" name="login">
+               <form action="{% url 'login' %}" method="post" name="login">
+                  {% csrf_token %}
                        <div class="form-group">
                           <label for="exampleInputEmail1">Email Address</label>
                           <input type="email" name="email"  class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter Email Address">
@@ -44,10 +45,9 @@
                           <p class="text-center">Don't have account? <a href="#" id="signup">Sign up here</a></p>
                        </div>
                     </form>
-             
             </div>
         </div>
         </div>
     </div>
-  </div>   
+  </div>
 {% endblock content %}
