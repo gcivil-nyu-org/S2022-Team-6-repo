@@ -35,8 +35,8 @@ def create(request, username):
     for query in circle:
         # print(RequestCircle.objects.filter(circle_id=query))
         if RequestCircle.objects.filter(circle_id=query):
-            request_user_data.append(
-                RequestCircle.objects.get(circle_id=query))
+            request_user_data.extend(
+                RequestCircle.objects.filter(circle_id=query.circle_id))
     context = {
         'page_name': 'Create',
         'circle_user_data': circle_user_data,
