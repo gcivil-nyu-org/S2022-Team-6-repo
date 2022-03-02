@@ -9,24 +9,42 @@
                     <!-- join circle -->
                     <h1 class="text-muted">Join Existing Circle</h1>
                     <hr>
-                    <form>
+                    <form action="", method="post">
+                        {% csrf_token %}
                         <div class="mb-3">
-                            <label for="circleid" class="form-label">Circle ID</label>
-                            <input type="text" class="form-control" id="exampleInputEmail1">
+                            <label for="circle_id" class="form-label">Circle ID</label>
+                            <input type="text" class="form-control" name="circle_id" id="circle_id">
                         </div>
-                        <button type="submit" class="btn btn-primary">Join</button>
+                        <button type="submit" name="request_circle" class="btn btn-primary">Join</button>
                     </form>
+                    {% comment %} <form action="" method="post">
+                        {{ request_cricle_form }}
+                        {% csrf_token %}
+                        <input type="text" class="form-control" name="circle_id">
+                        <button type="submit" name='request_circle' class="btn btn-primary">Join</button>
+                    </form> {% endcomment %}
                     <br>
                     <br>
                     <!-- Create Circle -->
                     <h1 class="text-muted">Create Circle</h1>
                     <hr>
-                    <form>
+                    {% comment %} <form action="" method="post">
+                        {{ create_circle_form }}
+                        {% csrf_token %}
+                        <button type="submit" name='create_circle' class="btn btn-primary">Join</button>
+                    </form> {% endcomment %}
+                    <form action="", method="post">
+                        {% csrf_token %}
                         <div class="mb-3">
-                            <label for="circleid" class="form-label">Circle Name</label>
-                            <input type="text" class="form-control" id="exampleInputEmail1">
-                            <label for="exampleDataList" class="form-label">Datalist example</label>
-                            <input class="form-control" list="datalistOptions" id="exampleDataList"
+                            <label for="circle_name" class="form-label">Circle Name</label>
+                            <input type="text" class="form-control" name="circle_name" id="circle_name">
+                            <label for="policy_id" class="form-label">Select Policy</label>
+                            <select id="policy_id" name="policy_id" class="form-select" multiple aria-label="multiple select example">
+                                <option value="1">Vaccination Status</option>
+                                <option value="2">People Met</option>
+                                <option value="3">Location Visited</option>
+                            </select>
+                            {% comment %} <input class="form-control" list="datalistOptions" id="exampleDataList"
                                 placeholder="Type to search...">
                             <datalist id="datalistOptions">
                                 <option value="Vaccination Status View">
@@ -34,9 +52,9 @@
                                 <option value="Location Visited View">
                                 <option value="Home View">
                                 <option value="Workplace View">
-                            </datalist>
+                            </datalist> {% endcomment %}
                         </div>
-                        <button type="submit" class="btn btn-primary">Create Circle</button>
+                        <button type="submit" name='create_circle' class="btn btn-primary">Create Circle</button>
                     </form>
                 </div>
                 <!-- Pending requests -->
@@ -53,12 +71,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Family</td>
-                                <td>Dhruv3</td>
-                                <td><button type="button" class="btn btn-outline-success">Accept</button></td>
-                                <td><button type="button" class="btn btn-outline-danger">Reject</button></td>
-                            </tr>
+                            {% comment %} <form action="" method="post">
+                                <tr>
+                                    <td>Family</td>
+                                    <td>Dhruv3</td>
+                                    <td><button type="button" class="btn btn-outline-success">Accept</button></td>
+                                    <td><button type="button" class="btn btn-outline-danger">Reject</button></td>
+                                </tr>
+                            </form> {% endcomment %}
                             <tr>
                                 <td>Family</td>
                                 <td>Dhruv4</td>

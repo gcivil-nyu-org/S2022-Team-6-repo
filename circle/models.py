@@ -36,3 +36,11 @@ class CirclePolicy(models.Model):
         unique_together = (('circle_id', 'policy_id'),)
     circle_id = models.ForeignKey(Circle, on_delete=models.CASCADE)
     policy_id = models.ForeignKey(Policy, on_delete=models.CASCADE)
+
+
+class RequestCircle(models.Model):
+    class Meta:
+        unique_together = (('circle_id', 'username'),)
+    request_id = models.AutoField(primary_key=True)
+    circle_id = models.ForeignKey(Circle, on_delete=models.CASCADE)
+    username = models.ForeignKey(UserData, on_delete=models.CASCADE)
