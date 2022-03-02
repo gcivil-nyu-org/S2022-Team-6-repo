@@ -6,7 +6,6 @@ from django.db import models
 class UserData(models.Model):
     firstname = models.CharField(max_length=100)
     lastname = models.CharField(max_length=100)
-    # Should be unique. Need to check if this is unique in backend code
     username = models.CharField(max_length=100, primary_key=True)
     email = models.CharField(max_length=100, default='a@b.com')
     dob = models.DateField()
