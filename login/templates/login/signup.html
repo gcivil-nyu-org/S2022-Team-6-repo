@@ -12,7 +12,8 @@
                                  <h2>SignUp</h2>
                        </div>
                     </div>
-                    <form action="#" name="registration">
+                    <form action="{% url 'createuser' %}" name="registration" method="POST">
+                     {% csrf_token %}
                        <div class="form-group">
                           <label for="exampleInputEmail1">First Name</label>
                           <input type="text"  name="firstname" class="form-control" id="firstname" aria-describedby="emailHelp" placeholder="Enter Firstname">
@@ -50,14 +51,11 @@
                           <input type="text" name="ZipWork" id="ZipWork"  class="form-control" aria-describedby="emailHelp" placeholder="Enter Zip Code (Work)">
                        </div>
                        <div class="form-group">
-                          <label for="exampleInputEmail1">Vaccination Status</label>
-                          <label for="one">Yes</label>
-                          <input type="radio" name="vaccination" id="vaccination"  class="form-control" aria-describedby="emailHelp">
-                          <label for="two">No</label>
-                          <input type="radio" name="vaccination" id="vaccination"  class="form-control" aria-describedby="emailHelp">
+                        <label for="vaccination">Vaccinated ?</label>
+                          <input type="checkbox" name="vaccination" id="vaccination" >
                        </div>
                        <div class="col-md-12 text-center mb-3">
-                          <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Get Started</button>
+                          <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Register</button>
                        </div>
                        <div class="col-md-12 ">
                           <div class="form-group">
