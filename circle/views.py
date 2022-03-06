@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.contrib import messages
+
 from .models import Circle, CircleUser, CirclePolicy, Policy, RequestCircle
 from login.models import UserData
 from .helper import *
@@ -62,8 +64,23 @@ def current_circle(request, username, circle_id):
 def create(request, username):
 
     if request.method == 'POST' and 'request_circle' in request.POST:
-        create_request(username, request.POST.get('circle_id'))
-        # TODO: Already member alert
+        circle_id = request.POST.get('circle_id')
+        try:
+            Circle.objects.get(circle_id=circle_id)
+            try:
+                RequestCircle.objects.get(
+                    circle_id=circle_id, username=username)
+                messages.error(request, 'Request Pending!')
+            except:
+                try:
+                    CircleUser.objects.get(
+                        username=username, circle_id=circle_id)
+                    messages.error(request, 'Already a Member!')
+                except:
+                    create_request(username, circle_id)
+                    messages.success(request, 'Request sent to Circle Admin')
+        except:
+            messages.error(request, 'Circle ID does not exist!')
 
     if request.method == 'POST' and 'create_circle' in request.POST:
         create_circle(username, request.POST.get('circle_name'),

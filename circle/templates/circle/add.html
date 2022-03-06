@@ -17,6 +17,19 @@
                         <input type="text" class="form-control" name="circle_id" id="circle_id">
                     </div>
                     <button type="submit" name="request_circle" class="btn btn-primary">Join</button>
+                    {% if messages %}
+                        {% for message in messages %}
+                            {% if message.tags == 'error' %}
+                                <div class="alert alert-danger my-2" role="alert">
+                                    {{message}}
+                                </div>
+                            {% elif message.tags == 'success' %}
+                                <div class="alert alert-success my-2" role="alert">
+                                    {{message}}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                 </form>
             </div>
         </div>

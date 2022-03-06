@@ -4,23 +4,13 @@ from login.models import UserData
 
 def create_request(username, circle_id):
 
-    try:
-        CircleUser.objects.get(
-            username=username, circle_id=request.POST.get('circle_id'))
-        already_member = True
-    except:
-        already_member = False
-
-    if not already_member:
-        requestcircle = RequestCircle()
-        requestcircle.circle_id = Circle.objects.get(
-            circle_id=circle_id
-        )
-        requestcircle.username = UserData.objects.get(
-            username=username)
-        requestcircle.save()
-
-    return already_member
+    requestcircle = RequestCircle()
+    requestcircle.circle_id = Circle.objects.get(
+        circle_id=circle_id
+    )
+    requestcircle.username = UserData.objects.get(
+        username=username)
+    requestcircle.save()
 
 
 def create_circle(username, circle_name, policy_id):
