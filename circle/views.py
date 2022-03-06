@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Circle, CircleUser, CirclePolicy, Policy, RequestCircle
 from login.models import UserData
-from .helper import get_notifications, get_circle_requests
+from .helper import *
+from .driver import *
 
 
 def circle(request, username):
@@ -12,10 +13,11 @@ def circle(request, username):
 
     context = {
         'page_name': 'Circle',
-        'circle_user_data': circle_user_data,
         'username': username,
         'request_user_data': request_user_data,
-        'requests': requests
+        'requests': requests,
+        # Other
+        'circle_user_data': circle_user_data,
     }
 
     return render(request, 'circle/circle.html', context)
@@ -38,13 +40,14 @@ def current_circle(request, username, circle_id):
         circle_request = None
 
     context = {
-        'page_name': 'Circle Info',
-        'circle_user_data': circle_user_data,
-        'circle_data': circle_data,
+        'page_name': circle_data.circle_id.circle_name,
+        'username': username,
         'request_user_data': request_user_data,
         'requests': requests,
+        # Other
+        'circle_user_data': circle_user_data,
+        'circle_data': circle_data,
         'circle_request': circle_request,
-        'username': username,
         'is_admin': circle_data.is_admin
     }
 
@@ -52,109 +55,53 @@ def current_circle(request, username, circle_id):
 
 
 def create(request, username):
-    circle_user_data = CircleUser.objects.filter(username=username)
 
-    circle = Circle.objects.filter(admin_username=username)
+    if request.method == 'POST' and 'request_circle' in request.POST:
+        create_request(username, request.POST.get('circle_id'))
+        # TODO: Already member alert
+
+    if request.method == 'POST' and 'create_circle' in request.POST:
+        create_circle(username, request.POST.get('circle_name'),
+                      request.POST.getlist('policy_id'))
+
+    circle_user_data = CircleUser.objects.filter(username=username)
 
     request_user_data, requests = get_notifications(username=username)
 
-    if request.method == 'POST' and 'request_circle' in request.POST:
-
-        try:
-            CircleUser.objects.get(
-                username=username, circle_id=request.POST.get('circle_id'))
-            already_member = True
-        except:
-            already_member = False
-
-        if not already_member:
-            requestcircle = RequestCircle()
-            requestcircle.circle_id = Circle.objects.get(
-                circle_id=request.POST.get('circle_id')
-            )
-            requestcircle.username = UserData.objects.get(
-                username=username)
-            requestcircle.save()
-
-    # TODO: Already member alert
-
-    if request.method == 'POST' and 'create_circle' in request.POST:
-        circle = Circle()
-        circleusers = CircleUser()
-        circle.circle_name = request.POST.get('circle_name')
-        circle.admin_username = UserData.objects.get(
-            username=username)
-        circle.save()
-        circleusers.circle_id = Circle.objects.get(
-            circle_id=circle.circle_id
-        )
-        circleusers.username = UserData.objects.get(
-            username=username)
-        circleusers.is_admin = True
-        circleusers.save()
-        for policy in request.POST.getlist('policy_id'):
-            circlepolicy = CirclePolicy()
-            circlepolicy.circle_id = Circle.objects.get(
-                circle_id=circle.circle_id
-            )
-            circlepolicy.policy_id = Policy.objects.get(
-                policy_id=int(policy)
-            )
-            circlepolicy.save()
-
     context = {
-        'page_name': 'Create',
-        'circle_user_data': circle_user_data,
+        'page_name': 'Add Circle',
+        'username': username,
         'request_user_data': request_user_data,
         'requests': requests,
-        'username': username
+        # Other
+        'circle_user_data': circle_user_data
     }
 
     return render(request, 'circle/add.html', context)
 
 
 def notify(request, username):
+
+    if request.method == 'POST' and 'accept_circle' in request.POST:
+        accept_request(request.POST.get(
+            'accept_circle'))
+
+    if request.method == 'POST' and 'reject_circle' in request.POST:
+        reject_request(request.POST.get(
+            'reject_circle'))
+
     request_user_data, requests = get_notifications(
         username=username, get_three=False)
 
-    if request.method == 'POST' and 'accept_circle' in request.POST:
-        circleusers = CircleUser()
-        current_request = RequestCircle.objects.get(request_id=request.POST.get(
-            'accept_circle'
-        ))
-
-        circleusers.circle_id = Circle.objects.get(
-            circle_id=current_request.circle_id.circle_id
-        )
-        circleusers.username = UserData.objects.get(
-            username=current_request.username.username
-        )
-        circleusers.is_admin = False
-        circleusers.is_member = True
-
-        circle = Circle.objects.get(
-            circle_id=current_request.circle_id.circle_id
-        )
-        circle.no_of_users += 1
-
-        circle.save()
-        circleusers.save()
-        current_request.delete()
-
-    if request.method == 'POST' and 'reject_circle' in request.POST:
-        temp = RequestCircle.objects.get(request_id=request.POST.get(
-            'reject_circle'
-        ))
-        temp.delete()
-
     context = {
+        'page_name': 'Notifications',
         'username': username,
         'request_user_data': request_user_data,
         'requests': requests
+        # Other
     }
 
     return render(request, 'circle/notifications.html', context)
-    return render(request, 'circle/add.html', context)
 
 
 def remove_user(request, circleid, username):
