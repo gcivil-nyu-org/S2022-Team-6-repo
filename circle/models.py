@@ -14,6 +14,9 @@ class Circle(models.Model):
     #circle_display_image = models.ImageField(upload_to = 'images/')
     # description = models.TextField(null=True, blank=True)
 
+    #def __str__(self):
+    #    return str(self.admin_username)
+
 
 class CircleUser(models.Model):
     class Meta:

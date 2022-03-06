@@ -5,5 +5,6 @@ urlpatterns = [
     path('<str:username>/', views.circle, name='circle'),
     path('current/<str:username>/<str:circleid>/',
          views.current_circle, name='current'),
-    path('create/<str:username>', views.create, name='create')
+    path('create/<str:username>', views.create, name='create'),
+    path('remove/<str:circleid>/<str:username>/', views.remove_user, name='remove')
 ]
