@@ -57,46 +57,7 @@
                         <button type="submit" name='create_circle' class="btn btn-primary">Create Circle</button>
                     </form>
                 </div>
-                <!-- Pending requests -->
-                <div class="col-md-6">
-                    <h1 class="text-muted">Pending Requests</h1>
-                    <hr>
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">Circle</th>
-                                <th scope="col">Username</th>
-                                <th scope="col">Accept</th>
-                                <th scope="col">Reject</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for request_data in request_user_data %}
-                            <form action="" method="post">
-                            {% csrf_token %}
-                                <tr>
-                                    <td>{{ request_data.circle_id.circle_name }}</td>
-                                    <td>{{ request_data.username.username }}</td>
-                                    <td><button name="accept_circle" value="{{request_data.request_id}}" type="submit" class="btn btn-outline-success">Accept</button></td>
-                                    <td><button name="reject_circle" value="{{request_data.request_id}}" type="submit" class="btn btn-outline-danger">Reject</button></td>
-                                </tr>
-                            </form>
-                            {% endfor %}
-                            {% comment %} <tr>
-                                <td>Family</td>
-                                <td>Dhruv4</td>
-                                <td><button type="button" class="btn btn-outline-success">Accept</button></td>
-                                <td><button type="button" class="btn btn-outline-danger">Reject</button></td>
-                            </tr>
-                            <tr>
-                                <td>Family</td>
-                                <td>Dhruv5</td>
-                                <td><button type="button" class="btn btn-outline-success">Accept</button></td>
-                                <td><button type="button" class="btn btn-outline-danger">Reject</button></td>
-                            </tr> {% endcomment %}
-                        </tbody>
-                    </table>
-                </div>
+                <!-- Pending requests --> 
             </div>
         </div>
     </section>

@@ -6,5 +6,7 @@ urlpatterns = [
     path('current/<str:username>/<str:circleid>/',
          views.current_circle, name='current'),
     path('create/<str:username>', views.create, name='create'),
-    path('remove/<str:circleid>/<str:username>/', views.remove_user, name='remove')
+    path('create/notifications/<str:username>', views.notify, name='notify'),
+    path('remove/<str:circleid>/<str:username>/',
+         views.remove_user, name='remove')
 ]
