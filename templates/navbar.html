@@ -33,35 +33,42 @@
                                 <span class="visually-hidden">New alerts</span>
                             </span>
                         </button>
-                        <!-- <a href="#" class="nav-link">
-                            <p class="text-success">Alerts</p>
-                        </a> -->
                     </li>
                 </ul>
                 <div class="dropdown">
                     <button class="btn btn-outline-primary dropdown-toggle position-relative mx-3" type="button"
                         id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                         Notifications
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            5
-                            <span class="visually-hidden">unread messages</span>
-                        </span>
+                        {% if requests != 0 %}
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ requests }}
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                        {% endif %}
                     </button>
                     <ul class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton1">
+                        {% if request_user_data %}
+                            {% for request in request_user_data %}
+                                <li>
+                                    <div class="alert alert-danger m-0" role="alert">
+                                        {{request.username.username}} requested to join {{request.circle_id.circle_name}}
+                                    </div>
+                                </li>
+                            {% endfor %}
+                            <li>
+                                <div role="alert">
+                                    <a href="{% url 'notify' username %}">
+                                        <button type="button" class="btn btn-outline-info">See all Notifications</button>
+                                    </a>
+                                </div>
+                            </li>
+                        {% else %}
                         <li>
                             <div class="alert alert-primary m-0" role="alert">
-                                Dhruv requested to join Family
+                                No Notifications
                             </div>
                         </li>
-                        <li>
-                            <div class="alert alert-primary m-0" role="alert">
-                                Dhruv2 requested to join Family
-                            </div>
-                        <li>
-                            <div class="alert alert-primary m-0" role="alert">
-                                Dhruv3 requested to join Family
-                            </div>
-                        </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
