@@ -41,27 +41,32 @@
                         <th class="table-light text-center" scope="col">Workplace Status</th>
                         <th class="table-light text-center" scope="col">Last Updated</th>
                         {% if is_admin %}
-                            <th class="table-light text-center" scope="col">Operations</th>
+                            <th class="table-light text-center" scope="col"></th>
                         {% endif %}
                     </tr>
                 </thead>
                 <tbody>
                     {% for data in circle_user_data %}
                         <tr>
-                            {% comment %} <th class="table-danger text-center" scope="row">{{forloop.counter}}</th> {% endcomment %}
                             <td class="table-danger text-center">{{data.username.username}} {% if data.is_admin %} (Admin) {% endif %}</td>
                             <td class="table-danger text-center">Risk</td>
                             <td class="table-danger text-center">Safe</td>
                             <td class="table-danger text-center">3 days ago</td>
                             {% if is_admin %}
-                            <form action="{% url 'remove' circle_data.circle_id.circle_id data.username.username%}" method="post">
-                            {% csrf_token %}
-                            <td class="table-danger text-center">
-                                <button type="submit">
-                                    <img src="{% static 'img/removeUser.jpeg'%}" title="Remove User">
-                                </button>
-                            </td>
-                            </form>
+                                {% if data.is_member %}
+                                    <form action="" method="post">
+                                    {% csrf_token %}
+                                    <td typle="submit" class="table-danger text-center" >
+                                        <button class="btn btn-outline-danger" type="submit" name="remove_user" value="{{data.username.username}}">
+                                            <i class="bi bi-x-lg"></i>
+                                        </button>
+                                    </td>
+                                    </form>
+                                {% else %}
+                                    <td typle="submit" class="table-danger text-center">
+                                </td>
+
+                                {% endif %}
                             {% endif %}
                         </tr>
                     {% endfor %}

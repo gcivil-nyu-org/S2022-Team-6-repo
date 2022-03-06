@@ -81,3 +81,15 @@ def accept_request(request_id):
 def reject_request(request_id):
     temp = RequestCircle.objects.get(request_id=request_id)
     temp.delete()
+
+
+def remove_user(admin_username, username, circle_id):
+
+    circle = Circle.objects.get(circle_id=circle_id)
+    circle.no_of_users -= 1
+    circle.save()
+
+    circleusers = CircleUser.objects.get(
+        circle_id=circle_id, username=username)
+
+    circleusers.delete()

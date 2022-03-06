@@ -24,6 +24,11 @@ def circle(request, username):
 
 
 def current_circle(request, username, circle_id):
+
+    if request.method == 'POST' and 'remove_user' in request.POST:
+        remove_user(username, request.POST.get(
+            'remove_user'), circle_id)
+
     circle_data = CircleUser.objects.get(
         circle_id=circle_id, username=username)
 
@@ -104,22 +109,22 @@ def notify(request, username):
     return render(request, 'circle/notifications.html', context)
 
 
-def remove_user(request, circleid, username):
-    adminuser = Circle.objects.get(circle_id=circleid)
-    if (adminuser.admin_username.username != username):
-        circle_data = CircleUser.objects.filter(
-            circle_id=circleid, username=username)
-        circle_data.delete()
-        adminuser.no_of_users -= 1
-        adminuser.save()
-    circle_data = CircleUser.objects.get(
-        circle_id=circleid, username=adminuser.admin_username.username)
-    circle_user_data = CircleUser.objects.filter(circle_id=circleid)
-    circle = Circle.objects.get(circle_id=circleid)
-    context = {
-        'page_name': 'Circle Info',
-        'circle_user_data': circle_user_data,
-        'circle_data': circle_data,
-        'isAdmin': True
-    }
-    return render(request, 'circle/current-circle.html', context)
+# def remove_user(request, circleid, username):
+#     adminuser = Circle.objects.get(circle_id=circleid)
+#     if (adminuser.admin_username.username != username):
+#         circle_data = CircleUser.objects.filter(
+#             circle_id=circleid, username=username)
+#         circle_data.delete()
+#         adminuser.no_of_users -= 1
+#         adminuser.save()
+#     circle_data = CircleUser.objects.get(
+#         circle_id=circleid, username=adminuser.admin_username.username)
+#     circle_user_data = CircleUser.objects.filter(circle_id=circleid)
+#     circle = Circle.objects.get(circle_id=circleid)
+#     context = {
+#         'page_name': 'Circle Info',
+#         'circle_user_data': circle_user_data,
+#         'circle_data': circle_data,
+#         'isAdmin': True
+#     }
+#     return render(request, 'circle/current-circle.html', context)
