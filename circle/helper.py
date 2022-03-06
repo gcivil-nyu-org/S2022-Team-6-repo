@@ -2,7 +2,7 @@ from .models import Circle, CircleUser, CirclePolicy, Policy, RequestCircle
 from login.models import UserData
 
 
-def get_notifications(username):
+def get_notifications(username, get_three=True):
     admin_user_data = CircleUser.objects.filter(
         username=username, is_admin=True)
 
@@ -14,9 +14,20 @@ def get_notifications(username):
                 request_user_data = list()
             request_user_data.extend(
                 RequestCircle.objects.filter(circle_id=admin.circle_id))
+
     if request_user_data:
         requests = len(request_user_data)
     else:
         requests = 0
 
-    return request_user_data, requests
+    if get_three and request_user_data:
+        if requests > 3:
+            return request_user_data[:3], requests
+        else:
+            return request_user_data, requests
+    else:
+        return request_user_data, requests
+
+
+def get_circle_requests(circle_id):
+    return len(RequestCircle.objects.filter(circle_id=circle_id))
