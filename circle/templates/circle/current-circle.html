@@ -38,6 +38,9 @@
                         <th class="table-light text-center" scope="col">Home Status</th>
                         <th class="table-light text-center" scope="col">Workplace Status</th>
                         <th class="table-light text-center" scope="col">Last Updated</th>
+                        {% if isAdmin %}
+                        <th class="table-light text-center" scope="col">Operations</th>
+                        {% endif %}
                     </tr>
                 </thead>
                 <tbody>
@@ -48,6 +51,16 @@
                         <td class="table-danger text-center">Risk</td>
                         <td class="table-danger text-center">Safe</td>
                         <td class="table-danger text-center">3 days ago</td>
+                        {% if isAdmin %}
+                        <form action="{% url 'remove' circle_data.circle_id.circle_id data.username.username%}" method="post">
+                        {% csrf_token %}>
+                        <td class="table-danger text-center">
+                            <button type="submit">
+                                <img src="{% static 'img/removeUser.jpeg'%}" title="Remove User">
+                            </button>
+                        </td>
+                        </form>
+                        {% endif %}
                     </tr>
                     {% endfor %}
                 </tbody>

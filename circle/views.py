@@ -29,13 +29,18 @@ def current_circle(request, username, circleid):
 
     request_user_data, requests = get_notifications(username=username)
 
+    circle = Circle.objects.get(circle_id=circleid)
+    isAdmin = False
+    if (circle.admin_username.username == username):
+        isAdmin = True
     context = {
         'page_name': 'Circle Info',
         'circle_user_data': circle_user_data,
         'circle_data': circle_data,
         'request_user_data': request_user_data[:3],
         'requests': requests,
-        'username': username
+        'username': username,
+        'isAdmin': isAdmin
     }
 
     return render(request, 'circle/current-circle.html', context)
@@ -132,3 +137,25 @@ def notify(request, username):
     }
 
     return render(request, 'circle/notifications.html', context)
+    return render(request, 'circle/add.html', context)
+
+
+def remove_user(request, circleid, username):
+    adminuser = Circle.objects.get(circle_id=circleid)
+    if (adminuser.admin_username.username != username):
+        circle_data = CircleUser.objects.filter(
+            circle_id=circleid, username=username)
+        circle_data.delete()
+        adminuser.no_of_users -= 1
+        adminuser.save()
+    circle_data = CircleUser.objects.get(
+        circle_id=circleid, username=adminuser.admin_username.username)
+    circle_user_data = CircleUser.objects.filter(circle_id=circleid)
+    circle = Circle.objects.get(circle_id=circleid)
+    context = {
+        'page_name': 'Circle Info',
+        'circle_user_data': circle_user_data,
+        'circle_data': circle_data,
+        'isAdmin': True
+    }
+    return render(request, 'circle/current-circle.html', context)
