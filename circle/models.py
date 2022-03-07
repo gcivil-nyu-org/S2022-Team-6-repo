@@ -10,11 +10,11 @@ class Circle(models.Model):
     # admin_id = models.CharField(max_length=100, default=0)
     no_of_users = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
-    pending_request = models.IntegerField(default=0)
+    # pending_request = models.IntegerField(default=0)
     #circle_display_image = models.ImageField(upload_to = 'images/')
     # description = models.TextField(null=True, blank=True)
 
-    #def __str__(self):
+    # def __str__(self):
     #    return str(self.admin_username)
 
 
@@ -25,6 +25,7 @@ class CircleUser(models.Model):
     username = models.ForeignKey(UserData, on_delete=models.CASCADE)
     is_admin = models.BooleanField(default=False)
     is_member = models.BooleanField(default=False)
+    # display_name = models.CharField(max_length=100)
 
 
 class Policy(models.Model):

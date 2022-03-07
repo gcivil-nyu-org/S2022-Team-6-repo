@@ -3,13 +3,13 @@ body{
     padding-bottom:4.2rem;
     background:rgba(0, 0, 0, 0.76);
     }
-    a{
-     text-decoration:none !important;
-     }
-     h1,h2,h3{
-     font-family: 'Times New Roman', cursive;
-     }
-      .myform{
+a{
+  text-decoration:none !important;
+}
+h1,h2,h3{
+  font-family: 'Times New Roman', cursive;
+}
+.myform{
     position: relative;
     display: -ms-flexbox;
     display: flex;
