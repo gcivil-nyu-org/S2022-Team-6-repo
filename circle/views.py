@@ -83,8 +83,28 @@ def create(request, username):
             messages.error(request, 'Circle ID does not exist!')
 
     if request.method == 'POST' and 'create_circle' in request.POST:
-        create_circle(username, request.POST.get('circle_name'),
-                      request.POST.getlist('policy_id'))
+        circle_name = request.POST.get('circle_name')
+
+        counter = 0
+        circleusers = CircleUser.objects.filter(username=username)
+
+        for circleuser in circleusers:
+            if circleuser.circle_id.circle_name == circle_name:
+                counter += 1
+
+        try:
+            if counter > 0:
+                raise Exception(
+                    'Circle Name already Exist - Adding Counter to end!!')
+
+            create_circle(username, circle_name,
+                          request.POST.getlist('policy_id'))
+        except Exception as e:
+            messages.error(
+                request, str(e))
+
+            create_circle(username, circle_name + '(' + str(counter) + ')',
+                          request.POST.getlist('policy_id'))
 
     circle_user_data = CircleUser.objects.filter(username=username)
 
@@ -124,24 +144,3 @@ def notify(request, username):
     }
 
     return render(request, 'circle/notifications.html', context)
-
-
-# def remove_user(request, circleid, username):
-#     adminuser = Circle.objects.get(circle_id=circleid)
-#     if (adminuser.admin_username.username != username):
-#         circle_data = CircleUser.objects.filter(
-#             circle_id=circleid, username=username)
-#         circle_data.delete()
-#         adminuser.no_of_users -= 1
-#         adminuser.save()
-#     circle_data = CircleUser.objects.get(
-#         circle_id=circleid, username=adminuser.admin_username.username)
-#     circle_user_data = CircleUser.objects.filter(circle_id=circleid)
-#     circle = Circle.objects.get(circle_id=circleid)
-#     context = {
-#         'page_name': 'Circle Info',
-#         'circle_user_data': circle_user_data,
-#         'circle_data': circle_data,
-#         'isAdmin': True
-#     }
-#     return render(request, 'circle/current-circle.html', context)

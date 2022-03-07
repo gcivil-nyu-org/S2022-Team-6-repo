@@ -25,6 +25,7 @@ class CircleUser(models.Model):
     username = models.ForeignKey(UserData, on_delete=models.CASCADE)
     is_admin = models.BooleanField(default=False)
     is_member = models.BooleanField(default=False)
+    # display_name = models.CharField(max_length=100)
 
 
 class Policy(models.Model):
