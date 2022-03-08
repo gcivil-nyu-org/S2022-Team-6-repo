@@ -6,16 +6,17 @@ from .models import Circle, CircleUser, CirclePolicy, Policy, RequestCircle
 from login.models import UserData
 from .helper import *
 from .driver import *
-
+import logging
+from django.core.signing import TimestampSigner
+from django.core import signing
 
 def circle(request, username):
-    circle_user_data = CircleUser.objects.filter(username=username)
-
-    request_user_data, requests = get_notifications(username=username)
-
+    username1 = signing.loads(username)
+    circle_user_data = CircleUser.objects.filter(username=username1)
+    request_user_data, requests = get_notifications(username=username1)
     context = {
         'page_name': 'Circle',
-        'username': username,
+        'username': username1,
         'request_user_data': request_user_data,
         'requests': requests,
         # Other
@@ -45,10 +46,11 @@ def current_circle(request, username, circle_id):
         is_admin = True
     else:
         circle_request = None
+        
 
     context = {
         'page_name': circle_data.circle_id.circle_name,
-        'username': username,
+        'username': 'username',
         'request_user_data': request_user_data,
         'requests': requests,
         # Other
