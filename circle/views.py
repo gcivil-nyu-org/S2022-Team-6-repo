@@ -50,7 +50,7 @@ def current_circle(request, username, circle_id):
 
     context = {
         'page_name': circle_data.circle_id.circle_name,
-        'username': 'username',
+        'username': username,
         'request_user_data': request_user_data,
         'requests': requests,
         # Other
