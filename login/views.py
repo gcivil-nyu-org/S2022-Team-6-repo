@@ -6,6 +6,14 @@ from django.views.generic.edit import CreateView
 from .models import UserData
 from circle.models import CircleUser
 from circle.views import circle
+from django.utils.http import urlencode
+from django.core.signing import TimestampSigner
+from django.core import signing
+import urllib.parse
+
+
+
+
 # Create your views here.
 
 
@@ -46,8 +54,13 @@ def signup(request):
             is_vaxxed = True
         userdata.is_vacinated = is_vaxxed
         userdata.save()
-        url = reverse('circle', kwargs={
-            'username': UserData.objects.get(username=request.POST.get('username')).username})
+        
+        signer = TimestampSigner()
+        user = UserData.objects.get(username =userdata.username)
+        username1 = user.username
+        value = signer.sign(str(user.username))
+        userEnc = signing.dumps(username1)
+        url = reverse('circle', kwargs={'username': userEnc})
         return HttpResponseRedirect(url)
 
     return render(request, 'login/signup.html', context)
@@ -56,18 +69,22 @@ def signup(request):
 def login(request):
     email_id = request.POST.get('email')
     password = request.POST.get('password')
+    print(email_id)
+    signer = TimestampSigner()
     if UserData.objects.filter(email=email_id).first():
         user = UserData.objects.get(email=email_id)
+        username1 = user.username
+        value = signer.sign(str(user.username))
+        userEnc = signing.dumps(username1)
         if user.password == password:
             circle_user_data = CircleUser.objects.filter(
                 username=user.username)
             context = {
                 'page_name': 'Circle',
                 'circle_user_data': circle_user_data,
-                'username': user.username
+                'username': 'username'
             }
-            url = reverse('circle', kwargs={
-                          'username': UserData.objects.get(email=email_id).username})
+            url = reverse('circle', kwargs={'username': userEnc})
             return HttpResponseRedirect(url)
 
         else:
