@@ -1,5 +1,7 @@
 # CoviGuard - Development
 
+[![Build Status](https://app.travis-ci.com/gcivil-nyu-org/S2022-Team-6-repo.svg?branch=develop)](https://app.travis-ci.com/gcivil-nyu-org/S2022-Team-6-repo)
+
 ## Development Environment
 - conda create --name coviguard python=3.9.5
 - conda activate coviguard
