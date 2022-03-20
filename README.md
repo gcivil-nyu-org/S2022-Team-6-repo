@@ -1,4 +1,5 @@
-# CoviGuard - Development
+# CoviGuard
+
 Main:
 [![Build Status](https://app.travis-ci.com/gcivil-nyu-org/S2022-Team-6-repo.svg?branch=main)](https://app.travis-ci.com/gcivil-nyu-org/S2022-Team-6-repo)
 [![Coverage Status](https://coveralls.io/repos/github/gcivil-nyu-org/S2022-Team-6-repo/badge.svg?branch=main)](https://coveralls.io/github/gcivil-nyu-org/S2022-Team-6-repo?branch=main)
