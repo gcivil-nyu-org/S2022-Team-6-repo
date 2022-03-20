@@ -8,49 +8,77 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Circle',
+            name="Circle",
             fields=[
-                ('circle_id', models.AutoField(primary_key=True, serialize=False)),
-                ('circle_name', models.CharField(max_length=100)),
-                ('admin_username', models.CharField(max_length=100)),
-                ('no_of_users', models.IntegerField(default=0)),
-                ('created', models.DateTimeField(auto_now_add=True)),
+                ("circle_id", models.AutoField(primary_key=True, serialize=False)),
+                ("circle_name", models.CharField(max_length=100)),
+                ("admin_username", models.CharField(max_length=100)),
+                ("no_of_users", models.IntegerField(default=0)),
+                ("created", models.DateTimeField(auto_now_add=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Policy',
+            name="Policy",
             fields=[
-                ('policy_id', models.IntegerField(default=0, primary_key=True, serialize=False)),
-                ('policy_name', models.CharField(max_length=20)),
-                ('policy_desc', models.CharField(max_length=1000)),
-                ('policy_level', models.IntegerField(default=0)),
+                (
+                    "policy_id",
+                    models.IntegerField(default=0, primary_key=True, serialize=False),
+                ),
+                ("policy_name", models.CharField(max_length=20)),
+                ("policy_desc", models.CharField(max_length=1000)),
+                ("policy_level", models.IntegerField(default=0)),
             ],
         ),
         migrations.CreateModel(
-            name='CirclePolicy',
+            name="CirclePolicy",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('policy_id', models.IntegerField(default=0)),
-                ('circle_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='circle.circle')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("policy_id", models.IntegerField(default=0)),
+                (
+                    "circle_id",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="circle.circle"
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='CircleUser',
+            name="CircleUser",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('user_id', models.CharField(max_length=100)),
-                ('username', models.CharField(max_length=100)),
-                ('is_admin', models.BooleanField(default=False)),
-                ('is_member', models.BooleanField(default=False)),
-                ('circle_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='circle.circle')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("user_id", models.CharField(max_length=100)),
+                ("username", models.CharField(max_length=100)),
+                ("is_admin", models.BooleanField(default=False)),
+                ("is_member", models.BooleanField(default=False)),
+                (
+                    "circle_id",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="circle.circle"
+                    ),
+                ),
             ],
             options={
-                'unique_together': {('circle_id', 'user_id')},
+                "unique_together": {("circle_id", "user_id")},
             },
         ),
     ]

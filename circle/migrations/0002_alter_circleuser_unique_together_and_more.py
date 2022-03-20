@@ -7,26 +7,28 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('login', '0002_userdata_email'),
-        ('circle', '0001_initial'),
+        ("login", "0002_userdata_email"),
+        ("circle", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='circleuser',
+            name="circleuser",
             unique_together=set(),
         ),
         migrations.AlterField(
-            model_name='circleuser',
-            name='username',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='login.userdata'),
+            model_name="circleuser",
+            name="username",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="login.userdata"
+            ),
         ),
         migrations.AlterUniqueTogether(
-            name='circleuser',
-            unique_together={('circle_id', 'username')},
+            name="circleuser",
+            unique_together={("circle_id", "username")},
         ),
         migrations.RemoveField(
-            model_name='circleuser',
-            name='user_id',
+            model_name="circleuser",
+            name="user_id",
         ),
     ]
