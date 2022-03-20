@@ -6,6 +6,7 @@ install:
         - pip install black
         - pip install flake8
         - pip install coverage
+        - pip install coveralls
 
 before_script:
         - python manage.py migrate
@@ -16,6 +17,6 @@ env:
 script:
         - black --check .
         - flake8 .
-        - coverage run --source=polls manage.py test
+        - coverage run --source=coviguard manage.py test
 after_script:
         - coveralls
