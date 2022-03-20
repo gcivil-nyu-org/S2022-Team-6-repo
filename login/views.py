@@ -1,15 +1,10 @@
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy, reverse
-from django.contrib.auth.forms import UserCreationForm
-from django.views.generic.edit import CreateView
+from django.shortcuts import render
+from django.urls import reverse
 from .models import UserData
 from circle.models import CircleUser
-from circle.views import circle
-from django.utils.http import urlencode
 from django.core.signing import TimestampSigner
 from django.core import signing
-import urllib.parse
 
 
 # Create your views here.
@@ -49,7 +44,6 @@ def signup(request):
         signer = TimestampSigner()
         user = UserData.objects.get(username=userdata.username)
         username1 = user.username
-        value = signer.sign(str(user.username))
         userEnc = signing.dumps(username1)
         url = reverse("circle", kwargs={"username": userEnc})
         return HttpResponseRedirect(url)
@@ -65,15 +59,9 @@ def login(request):
     if UserData.objects.filter(email=email_id).first():
         user = UserData.objects.get(email=email_id)
         username1 = user.username
-        value = signer.sign(str(user.username))
         userEnc = signing.dumps(username1)
         if user.password == password:
             circle_user_data = CircleUser.objects.filter(username=user.username)
-            context = {
-                "page_name": "Circle",
-                "circle_user_data": circle_user_data,
-                "username": "username",
-            }
             url = reverse("circle", kwargs={"username": userEnc})
             return HttpResponseRedirect(url)
 
