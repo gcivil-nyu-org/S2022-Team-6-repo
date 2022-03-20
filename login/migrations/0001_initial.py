@@ -7,21 +7,23 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='UserData',
+            name="UserData",
             fields=[
-                ('firstname', models.CharField(max_length=100)),
-                ('lastname', models.CharField(max_length=100)),
-                ('username', models.CharField(max_length=100, primary_key=True, serialize=False)),
-                ('dob', models.DateTimeField()),
-                ('phone', models.IntegerField(default=9999999999)),
-                ('work_address', models.CharField(max_length=200)),
-                ('home_adress', models.CharField(max_length=200)),
-                ('is_vacinated', models.BooleanField(default=False)),
+                ("firstname", models.CharField(max_length=100)),
+                ("lastname", models.CharField(max_length=100)),
+                (
+                    "username",
+                    models.CharField(max_length=100, primary_key=True, serialize=False),
+                ),
+                ("dob", models.DateTimeField()),
+                ("phone", models.IntegerField(default=9999999999)),
+                ("work_address", models.CharField(max_length=200)),
+                ("home_adress", models.CharField(max_length=200)),
+                ("is_vacinated", models.BooleanField(default=False)),
             ],
         ),
     ]

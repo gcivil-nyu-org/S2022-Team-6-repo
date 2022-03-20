@@ -1,5 +1,5 @@
-from .models import Circle, CircleUser, CirclePolicy, Policy, RequestCircle
-from login.models import UserData
+from .models import CircleUser, RequestCircle
+
 
 
 def get_notifications(username, get_three=True):
