@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('circle', '0005_requestcircle'),
+        ("circle", "0005_requestcircle"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='circle',
-            name='pending_request',
+            model_name="circle",
+            name="pending_request",
         ),
     ]

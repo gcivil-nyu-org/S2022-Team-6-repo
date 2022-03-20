@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('circle', '0003_alter_circle_admin_username_and_more'),
+        ("circle", "0003_alter_circle_admin_username_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='circle',
-            name='pending_request',
+            model_name="circle",
+            name="pending_request",
             field=models.IntegerField(default=0),
         ),
     ]
