@@ -1,13 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from django.contrib import messages
 
-from .models import Circle, CircleUser, CirclePolicy, Policy, RequestCircle
-from login.models import UserData
-from .helper import *
-from .driver import *
-import logging
-from django.core.signing import TimestampSigner
+from .models import Circle, CircleUser, RequestCircle
+from .helper import get_notifications, get_circle_requests
+from .driver import create_request, create_circle, accept_request, reject_request, remove_user
 from django.core import signing
 
 
@@ -38,11 +34,8 @@ def current_circle(request, username, circle_id):
 
     request_user_data, requests = get_notifications(username=username)
 
-    is_admin = False
-
     if circle_data.is_admin:
         circle_request = get_circle_requests(circle_id)
-        is_admin = True
     else:
         circle_request = None
 
@@ -68,17 +61,19 @@ def create(request, username):
         try:
             Circle.objects.get(circle_id=circle_id)
             try:
-                RequestCircle.objects.get(circle_id=circle_id, username=username)
-                messages.error(request, "Request Pending!")
-            except:
+                RequestCircle.objects.get(
+                    circle_id=circle_id, username=username)
+                messages.error(request, 'Request Pending!')
+            except Exception as e:
                 try:
-                    CircleUser.objects.get(username=username, circle_id=circle_id)
-                    messages.error(request, "Already a Member!")
-                except:
+                    CircleUser.objects.get(
+                        username=username, circle_id=circle_id)
+                    messages.error(request, 'Already a Member!')
+                except Exception as e:
                     create_request(username, circle_id)
-                    messages.success(request, "Request sent to Circle Admin")
-        except:
-            messages.error(request, "Circle ID does not exist!")
+                    messages.success(request, 'Request sent to Circle Admin')
+        except Exception as e:
+            messages.error(request, 'Circle ID does not exist!')
 
     if request.method == "POST" and "create_circle" in request.POST:
         circle_name = request.POST.get("circle_name")
