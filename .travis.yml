@@ -1,0 +1,22 @@
+language: python
+python:
+        - "3.8"
+install:
+        - pip3 install -r requirements.txt
+        - pip install black
+        - pip install flake8
+        - pip install coverage
+        - pip install coveralls
+
+before_script:
+        - python manage.py migrate
+        - python manage.py collectstatic --noinput
+env:
+        - SECRET_KEY='django-insecure-r09sr=+=c$+c9gropi_8@*4q99&fn@bxbp0s*wdpa)$)*b8vpc' DATABASES_PASSWORD='05db75d47494c8090697500361300f28c2d53bc6144b806e243387a783683665'
+        
+script:
+        - black --check .
+        - flake8 .
+        - coverage run --source=coviguard manage.py test
+after_script:
+        - coveralls
