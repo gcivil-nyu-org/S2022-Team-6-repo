@@ -6,9 +6,9 @@ from django.db import models
 class UserData(models.Model):
     firstname = models.CharField(max_length=100)
     lastname = models.CharField(max_length=100)
-    password = models.CharField(max_length=50, default='coviguard')
+    password = models.CharField(max_length=50, default="coviguard")
     username = models.CharField(max_length=100, primary_key=True)
-    email = models.CharField(max_length=100, default='a@b.com')
+    email = models.CharField(max_length=100, default="a@b.com")
     dob = models.DateField()
     phone = models.IntegerField(default=9999999999)
     work_address = models.CharField(max_length=200)
