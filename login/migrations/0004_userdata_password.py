@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('login', '0003_alter_userdata_dob'),
+        ("login", "0003_alter_userdata_dob"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='userdata',
-            name='password',
-            field=models.CharField(default='coviguard', max_length=50),
+            model_name="userdata",
+            name="password",
+            field=models.CharField(default="coviguard", max_length=50),
         ),
     ]

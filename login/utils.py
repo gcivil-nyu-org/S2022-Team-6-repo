@@ -15,7 +15,7 @@ def h_decode(h):
 
 
 class HashIdConverter:
-    regex = '[a-zA-Z0-9]{8,}'
+    regex = "[a-zA-Z0-9]{8,}"
 
     def to_python(self, value):
         return h_decode(value)
