@@ -1,7 +1,6 @@
 from .models import CircleUser, RequestCircle
 
 
-
 def get_notifications(username, get_three=True):
     admin_user_data = CircleUser.objects.filter(username=username, is_admin=True)
 
@@ -14,7 +13,6 @@ def get_notifications(username, get_three=True):
             request_user_data.extend(
                 RequestCircle.objects.filter(circle_id=admin.circle_id)
             )
-
     if request_user_data:
         requests = len(request_user_data)
     else:

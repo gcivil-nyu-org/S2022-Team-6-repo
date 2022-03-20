@@ -41,7 +41,6 @@ def signup(request):
         userdata.is_vacinated = is_vaxxed
         userdata.save()
 
-        signer = TimestampSigner()
         user = UserData.objects.get(username=userdata.username)
         username1 = user.username
         userEnc = signing.dumps(username1)
@@ -55,13 +54,11 @@ def login(request):
     email_id = request.POST.get("email")
     password = request.POST.get("password")
     print(email_id)
-    signer = TimestampSigner()
     if UserData.objects.filter(email=email_id).first():
         user = UserData.objects.get(email=email_id)
         username1 = user.username
         userEnc = signing.dumps(username1)
         if user.password == password:
-            circle_user_data = CircleUser.objects.filter(username=user.username)
             url = reverse("circle", kwargs={"username": userEnc})
             return HttpResponseRedirect(url)
 
