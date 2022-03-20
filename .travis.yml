@@ -11,8 +11,8 @@ before_script:
         - python manage.py migrate
         - python manage.py collectstatic --noinput
 env:
-        - SECRET_KEY='django-insecure-r09sr=+=c$+c9gropi_8@*4q99&fn@bxbp0s*wdpa)$)*b8vpc'
-        - DATABASES_PASSWORD='05db75d47494c8090697500361300f28c2d53bc6144b806e243387a783683665'
+        - SECRET_KEY='django-insecure-r09sr=+=c$+c9gropi_8@*4q99&fn@bxbp0s*wdpa)$)*b8vpc' DATABASES_PASSWORD='05db75d47494c8090697500361300f28c2d53bc6144b806e243387a783683665'
+        
 script:
         - black .
         - black --check .
