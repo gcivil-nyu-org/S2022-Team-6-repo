@@ -2,8 +2,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from .models import UserData
-from circle.models import CircleUser
-from django.core.signing import TimestampSigner
 from django.core import signing
 
 
