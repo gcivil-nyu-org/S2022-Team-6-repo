@@ -3,7 +3,13 @@ from django.contrib import messages
 
 from .models import Circle, CircleUser, RequestCircle
 from .helper import get_notifications, get_circle_requests
-from .driver import create_request, create_circle, accept_request, reject_request, remove_user
+from .driver import (
+    create_request,
+    create_circle,
+    accept_request,
+    reject_request,
+    remove_user,
+)
 from django.core import signing
 
 
@@ -61,19 +67,17 @@ def create(request, username):
         try:
             Circle.objects.get(circle_id=circle_id)
             try:
-                RequestCircle.objects.get(
-                    circle_id=circle_id, username=username)
-                messages.error(request, 'Request Pending!')
+                RequestCircle.objects.get(circle_id=circle_id, username=username)
+                messages.error(request, "Request Pending!")
             except Exception as e:
                 try:
-                    CircleUser.objects.get(
-                        username=username, circle_id=circle_id)
-                    messages.error(request, 'Already a Member!')
+                    CircleUser.objects.get(username=username, circle_id=circle_id)
+                    messages.error(request, "Already a Member!", str(e))
                 except Exception as e:
                     create_request(username, circle_id)
-                    messages.success(request, 'Request sent to Circle Admin')
+                    messages.success(request, "Request sent to Circle Admin", str(e))
         except Exception as e:
-            messages.error(request, 'Circle ID does not exist!')
+            messages.error(request, "Circle ID does not exist!", str(e))
 
     if request.method == "POST" and "create_circle" in request.POST:
         circle_name = request.POST.get("circle_name")
