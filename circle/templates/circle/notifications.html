@@ -1,0 +1,43 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+
+<section>
+    <div class="container-fluid my-5">
+        <div class="rows">
+            <div class="bg-light col-md-6 m-auto border border-secondary border-3 rounded rounded-3 p-3">
+                    <h1 class="text-muted">Pending Requests</h1>
+                    <hr>
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Circle</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">Accept</th>
+                                <th scope="col">Reject</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for request_data in request_user_data %}
+                                <form action="" method="post">
+                                {% csrf_token %}
+                                    <tr>
+                                        <td>{{ request_data.circle_id.circle_name }}</td>
+                                        <td>{{ request_data.username.username }}</td>
+                                        <td><button name="accept_circle" value="{{request_data.request_id}}" type="submit" class="btn btn-outline-success">Accept</button></td>
+                                        <td><button name="reject_circle" value="{{request_data.request_id}}" type="submit" class="btn btn-outline-danger">Reject</button></td>
+                                    </tr>
+                                </form>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+
+{% endblock %}

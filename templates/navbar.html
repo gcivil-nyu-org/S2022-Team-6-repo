@@ -1,0 +1,79 @@
+<!-- Navbar -->
+{% load static %}
+    <nav class="navbar navbar-expand-lg bg-light navbar-light py-3">
+        <div class="container-sm">
+            <a class="navbar-brand" href="{% url 'index' %}">
+                <img src="{%static 'img/5.png'%}" width="50" height="50" alt="">
+                CoviGuard
+            </a>
+            <a href="#" class="navbar-brand"></a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navmenu">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a href="{% url 'circle' username %}" class="nav-link">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Self-Track</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Monitor</a>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn btn-light position-relative">
+                            <p class="text-danger">Alerts</p>
+
+
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                                <span class="visually-hidden">New alerts</span>
+                            </span>
+                        </button>
+                    </li>
+                </ul>
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle position-relative mx-3" type="button"
+                        id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        Notifications
+                        {% if requests != 0 %}
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ requests }}
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                        {% endif %}
+                    </button>
+                    <ul class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton1">
+                        {% if request_user_data %}
+                            {% for request in request_user_data %}
+                                <li>
+                                    <div class="alert alert-danger m-0" role="alert">
+                                        {{request.username.username}} requested to join {{request.circle_id.circle_name}}
+                                    </div>
+                                </li>
+                            {% endfor %}
+                            <li>
+                                <div role="alert">
+                                    <a href="{% url 'notify' username %}">
+                                        <button type="button" class="btn btn-outline-info">See all Notifications</button>
+                                    </a>
+                                </div>
+                            </li>
+                        {% else %}
+                        <li>
+                            <div class="alert alert-primary m-0" role="alert">
+                                No Notifications
+                            </div>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
