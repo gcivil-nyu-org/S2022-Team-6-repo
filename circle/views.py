@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.contrib import messages
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 from .models import Circle, CircleUser, RequestCircle
 from .helper import get_notifications, get_circle_requests
@@ -13,13 +15,21 @@ from .driver import (
 from django.core import signing
 
 
-def circle(request, username):
-    username1 = signing.loads(username)
-    circle_user_data = CircleUser.objects.filter(username=username1)
-    request_user_data, requests = get_notifications(username=username1)
+def circle(request, user_enc):
+    try:
+        username = signing.loads(user_enc)
+    except:
+        url = reverse('login:error')
+        return HttpResponseRedirect(url)
+
+    circle_user_data = CircleUser.objects.filter(username=username)
+
+    request_user_data, requests = get_notifications(username=username)
+
     context = {
         "page_name": "Circle",
-        "username": username1,
+        "username": username,
+        "user_enc": user_enc,
         "request_user_data": request_user_data,
         "requests": requests,
         # Other
@@ -29,7 +39,12 @@ def circle(request, username):
     return render(request, "circle/circle.html", context)
 
 
-def current_circle(request, username, circle_id):
+def current_circle(request, user_enc, username, circle_id):
+    try:
+        _ = signing.loads(user_enc)
+    except:
+        url = reverse('login:error')
+        return HttpResponseRedirect(url)
 
     if request.method == "POST" and "remove_user" in request.POST:
         remove_user(username, request.POST.get("remove_user"), circle_id)
@@ -50,6 +65,7 @@ def current_circle(request, username, circle_id):
         "username": username,
         "request_user_data": request_user_data,
         "requests": requests,
+        "user_enc": user_enc,
         # Other
         "circle_user_data": circle_user_data,
         "circle_data": circle_data,
@@ -60,7 +76,13 @@ def current_circle(request, username, circle_id):
     return render(request, "circle/current-circle.html", context)
 
 
-def create(request, username):
+def create(request, user_enc):
+
+    try:
+        username = signing.loads(user_enc)
+    except:
+        url = reverse('login:error')
+        return HttpResponseRedirect(url)
 
     if request.method == "POST" and "request_circle" in request.POST:
         circle_id = request.POST.get("circle_id")
@@ -110,6 +132,7 @@ def create(request, username):
     context = {
         "page_name": "Add Circle",
         "username": username,
+        "user_enc": user_enc,
         "request_user_data": request_user_data,
         "requests": requests,
         # Other
@@ -119,7 +142,13 @@ def create(request, username):
     return render(request, "circle/add.html", context)
 
 
-def notify(request, username):
+def notify(request, user_enc):
+
+    try:
+        username = signing.loads(user_enc)
+    except:
+        url = reverse('login:error')
+        return HttpResponseRedirect(url)
 
     if request.method == "POST" and "accept_circle" in request.POST:
         accept_request(request.POST.get("accept_circle"))
@@ -132,6 +161,7 @@ def notify(request, username):
     context = {
         "page_name": "Notifications",
         "username": username,
+        "user_enc": user_enc,
         "request_user_data": request_user_data,
         "requests": requests
         # Other

@@ -15,9 +15,10 @@
                <form action="" method="post">
                   {% csrf_token %}
                   <div class="form-group">
-                     <label for="exampleInputEmail1">Email Address</label>
-                     <input type="email" name="email"  class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter Email Address">
+                     <label for="exampleInputEmail1">Username</label>
+                     <input type="text" name="username"  class="form-control" id="username" placeholder="Enter Username">
                   </div>
+                  <br>
                   <div class="form-group">
                      <label for="exampleInputEmail1">Password</label>
                      <input type="password" name="password" id="password"  class="form-control" aria-describedby="emailHelp" placeholder="Enter Password">
@@ -25,6 +26,15 @@
                   <div class="form-group">
                      <p class="text-center">By signing up you accept our <a href="#">Terms Of Use</a></p>
                   </div>
+                  {% if messages %}
+                     {% for message in messages %}
+                        {% if message.tags == 'error' %}
+                           <div class="alert alert-danger my-2" role="alert">
+                              {{message}}
+                           </div>
+                        {% endif %}
+                     {% endfor %}
+                  {% endif %}   
                   <div class="col-md-12 text-center">
                      <button type="submit" name="sign-in" class=" btn btn-block mybtn btn-primary tx-tfm">Login</button>
                   </div>

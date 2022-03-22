@@ -15,7 +15,7 @@
             <div class="collapse navbar-collapse" id="navmenu">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a href="{% url 'circle:dashboard' username %}" class="nav-link">Dashboard</a>
+                        <a href="{% url 'circle:dashboard' user_enc %}" class="nav-link">Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">Profile</a>
@@ -60,7 +60,7 @@
                             {% endfor %}
                             <li>
                                 <div role="alert">
-                                    <a href="{% url 'notify' username %}">
+                                    <a href="{% url 'notify' user_enc %}">
                                         <button type="button" class="btn btn-outline-info">See all Notifications</button>
                                     </a>
                                 </div>
