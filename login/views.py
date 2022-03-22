@@ -5,17 +5,28 @@ from .models import UserData
 from django.core import signing
 
 
-# Create your views here.
-
-
 def index(request):
     context = {"page_name": "CoviGuard", "css_name": "login"}
     return render(request, "login/index.html", context)
 
 
 def signin(request):
-    context = {"page_name": "SignIn"}
+    if request.method == 'POST' and 'sign-in' in request.POST:
+        email_id = request.POST.get("email")
+        password = request.POST.get("password")
+        if UserData.objects.filter(email=email_id).first():
+            user = UserData.objects.get(email=email_id)
+            username = user.username
+            userEnc = signing.dumps(username)
+            if user.password == password:
+                url = reverse('circle:dashboard', kwargs={'username': userEnc})
+                return HttpResponseRedirect(url)
+            else:
+                return HttpResponse('Incorrect Password')
+        else:
+            return HttpResponse('No User Found or Incorrect password')
 
+    context = {"page_name": "Sign in"}
     return render(request, "login/signin.html", context)
 
 
@@ -42,25 +53,7 @@ def signup(request):
         user = UserData.objects.get(username=userdata.username)
         username1 = user.username
         userEnc = signing.dumps(username1)
-        url = reverse("circle", kwargs={"username": userEnc})
+        url = reverse('circle:dashboard', kwargs={'username': userEnc})
         return HttpResponseRedirect(url)
 
     return render(request, "login/signup.html", context)
-
-
-def login(request):
-    email_id = request.POST.get("email")
-    password = request.POST.get("password")
-    print(email_id)
-    if UserData.objects.filter(email=email_id).first():
-        user = UserData.objects.get(email=email_id)
-        username1 = user.username
-        userEnc = signing.dumps(username1)
-        if user.password == password:
-            url = reverse("circle", kwargs={"username": userEnc})
-            return HttpResponseRedirect(url)
-
-        else:
-            return HttpResponse("Incorrect Password")
-    else:
-        return HttpResponse("No User Found or Incorrect password")
