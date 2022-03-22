@@ -26,7 +26,7 @@ def signin(request):
                 return HttpResponseRedirect(url)
             else:
                 raise Exception("Invalid Password")
-        except Exception as e:
+        except Exception:
             messages.error(request, "Invalid Username or Password")
 
     context = {"page_name": "Sign in"}

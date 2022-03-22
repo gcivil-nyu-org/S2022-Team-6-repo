@@ -18,7 +18,7 @@ from django.core import signing
 def circle(request, user_enc):
     try:
         username = signing.loads(user_enc)
-    except:
+    except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
 
@@ -42,7 +42,7 @@ def circle(request, user_enc):
 def current_circle(request, user_enc, username, circle_id):
     try:
         _ = signing.loads(user_enc)
-    except:
+    except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
 
@@ -87,7 +87,7 @@ def create(request, user_enc):
 
     try:
         username = signing.loads(user_enc)
-    except:
+    except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
 
@@ -98,14 +98,14 @@ def create(request, user_enc):
             try:
                 RequestCircle.objects.get(circle_id=circle_id, username=username)
                 messages.error(request, "Request Pending!")
-            except Exception as e:
+            except Exception:
                 try:
                     CircleUser.objects.get(username=username, circle_id=circle_id)
                     messages.error(request, "Already a Member!")
-                except Exception as e:
+                except Exception:
                     create_request(username, circle_id)
                     messages.success(request, "Request sent to Circle Admin")
-        except Exception as e:
+        except Exception:
             messages.error(request, "Circle ID does not exist!", str(e))
 
     if request.method == "POST" and "create_circle" in request.POST:
@@ -123,7 +123,7 @@ def create(request, user_enc):
                 raise Exception("Circle Name already Exist - Adding Counter to end!!")
 
             create_circle(username, circle_name, request.POST.getlist("policy_id"))
-        except Exception as e:
+        except Exception:
             messages.error(request, str(e))
 
             create_circle(
@@ -153,7 +153,7 @@ def notify(request, user_enc):
 
     try:
         username = signing.loads(user_enc)
-    except:
+    except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
 
