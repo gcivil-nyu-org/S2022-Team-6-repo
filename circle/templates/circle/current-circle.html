@@ -53,23 +53,56 @@
                         <td class="table-danger text-center">Safe</td>
                         <td class="table-danger text-center">3 days ago</td>
                         {% if is_admin %}
-                            {% if data.is_member %}
-                                <form action="" method="post">
-                                {% csrf_token %}
-                                <td typle="submit" class="table-danger text-center" >
-                                    <button class="btn btn-outline-danger" type="submit" name="remove_user" value="{{data.username.username}}">
-                                        <i class="bi bi-x-lg"></i>
-                                    </button>
+                            <th class="table-light text-center" scope="col"></th>
+                        {% endif %}
+                        {% if 1 in policylist %}
+                            <th class="table-light text-center" scope="col">Vaccination Status</th>
+                        {% endif %}
+                        {% if 2 in policylist %}
+                            <th class="table-light text-center" scope="col">People Met</th>
+                        {% endif %}
+                        {% if 3 in policylist %}
+                            <th class="table-light text-center" scope="col">Location Visited</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in circle_user_data %}
+                        <tr>
+                            <td class="table-danger text-center">{{data.username.username}} {% if data.is_admin %} (Admin) {% endif %}</td>
+                            <td class="table-danger text-center">Risk</td>
+                            <td class="table-danger text-center">Safe</td>
+                            <td class="table-danger text-center">3 days ago</td>
+                            {% if is_admin %}
+                                {% if data.is_member %}
+                                    <form action="" method="post">
+                                    {% csrf_token %}
+                                    <td typle="submit" class="table-danger text-center" >
+                                        <button class="btn btn-outline-danger" type="submit" name="remove_user" value="{{data.username.username}}">
+                                            <i class="bi bi-x-lg"></i>
+                                        </button>
+                                    </td>
+                                    </form>
+                                {% else %}
+                                    <td typle="submit" class="table-danger text-center">
+
                                 </td>
                                 </form>
                             {% else %}
                                 <td class="table-danger text-center"></td>
                             {% endif %}
-                        {% endif %}
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</section>
+                            {% if 1 in policylist %}
+                                <td class="table-danger text-center">Has Policy 1</td>
+                            {% endif %}
+                            {% if 2 in policylist %}
+                                <td class="table-danger text-center">Has Policy 2</td>
+                            {% endif %}
+                            {% if 3 in policylist %}
+                                <td class="table-danger text-center">Has Policy 3</td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+    </section>
 {% endblock content %}

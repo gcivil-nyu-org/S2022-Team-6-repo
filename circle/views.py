@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from .models import Circle, CircleUser, RequestCircle
+from .models import Circle, CirclePolicy, CircleUser, RequestCircle
 from .helper import get_notifications, get_circle_requests
 from .driver import (
     create_request,
@@ -53,6 +53,13 @@ def current_circle(request, user_enc, username, circle_id):
 
     circle_user_data = CircleUser.objects.filter(circle_id=circle_id)
 
+    circle_policy = CirclePolicy.objects.filter(circle_id=circle_id)
+
+    policylist = []
+    for i in circle_policy:
+        policylist.append(i.policy_id.policy_id)
+    print(policylist)
+
     request_user_data, requests = get_notifications(username=username)
 
     if circle_data.is_admin:
@@ -71,6 +78,7 @@ def current_circle(request, user_enc, username, circle_id):
         "circle_data": circle_data,
         "circle_request": circle_request,
         "is_admin": circle_data.is_admin,
+        "policylist": policylist,
     }
 
     return render(request, "circle/current-circle.html", context)
