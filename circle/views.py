@@ -55,10 +55,9 @@ def current_circle(request, user_enc, username, circle_id):
 
     circle_policy = CirclePolicy.objects.filter(circle_id=circle_id)
 
-    policylist = []
-    for i in circle_policy:
-        policylist.append(i.policy_id.policy_id)
-    print(policylist)
+    policies = []
+    for policy in circle_policy:
+        policies.append(policy.policy_id)
 
     request_user_data, requests = get_notifications(username=username)
 
@@ -78,7 +77,7 @@ def current_circle(request, user_enc, username, circle_id):
         "circle_data": circle_data,
         "circle_request": circle_request,
         "is_admin": circle_data.is_admin,
-        "policylist": policylist,
+        "policies": policies,
     }
 
     return render(request, "circle/current-circle.html", context)
