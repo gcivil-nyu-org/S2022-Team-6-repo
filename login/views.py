@@ -1,11 +1,10 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from .models import UserData
+from django.contrib import messages
 from django.core import signing
 
-
-# Create your views here.
+from .models import UserData
 
 
 def index(request):
@@ -14,8 +13,23 @@ def index(request):
 
 
 def signin(request):
-    context = {"page_name": "SignIn"}
+    if request.method == 'POST' and 'sign-in' in request.POST:
+        try:
+            username = request.POST.get("username")
+            password = request.POST.get("password")
+            user = UserData.objects.get(username=username)
 
+            user_enc = signing.dumps(username)
+
+            if user.password == password:
+                url = reverse('circle:dashboard', kwargs={'user_enc': user_enc})
+                return HttpResponseRedirect(url)
+            else:
+                raise Exception("Invalid Password")
+        except Exception as e:
+            messages.error(request, "Invalid Username or Password")
+
+    context = {"page_name": "Sign in"}
     return render(request, "login/signin.html", context)
 
 
@@ -42,25 +56,11 @@ def signup(request):
         user = UserData.objects.get(username=userdata.username)
         username1 = user.username
         userEnc = signing.dumps(username1)
-        url = reverse("circle", kwargs={"username": userEnc})
+        url = reverse('circle:dashboard', kwargs={'username': userEnc})
         return HttpResponseRedirect(url)
 
     return render(request, "login/signup.html", context)
 
 
-def login(request):
-    email_id = request.POST.get("email")
-    password = request.POST.get("password")
-    print(email_id)
-    if UserData.objects.filter(email=email_id).first():
-        user = UserData.objects.get(email=email_id)
-        username1 = user.username
-        userEnc = signing.dumps(username1)
-        if user.password == password:
-            url = reverse("circle", kwargs={"username": userEnc})
-            return HttpResponseRedirect(url)
-
-        else:
-            return HttpResponse("Incorrect Password")
-    else:
-        return HttpResponse("No User Found or Incorrect password")
+def error(request):
+    return render(request, "login/error.html")
