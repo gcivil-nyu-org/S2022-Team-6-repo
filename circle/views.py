@@ -18,8 +18,8 @@ from django.core import signing
 def circle(request, user_enc):
     try:
         username = signing.loads(user_enc)
-    except:
-        url = reverse('login:error')
+    except Exception:
+        url = reverse("login:error")
         return HttpResponseRedirect(url)
 
     circle_user_data = CircleUser.objects.filter(username=username)
@@ -42,8 +42,8 @@ def circle(request, user_enc):
 def current_circle(request, user_enc, username, circle_id):
     try:
         _ = signing.loads(user_enc)
-    except:
-        url = reverse('login:error')
+    except Exception:
+        url = reverse("login:error")
         return HttpResponseRedirect(url)
 
     if request.method == "POST" and "remove_user" in request.POST:
@@ -55,10 +55,9 @@ def current_circle(request, user_enc, username, circle_id):
 
     circle_policy = CirclePolicy.objects.filter(circle_id=circle_id)
 
-    policylist = []
-    for i in circle_policy:
-        policylist.append(i.policy_id.policy_id)
-    print(policylist)
+    policies = []
+    for policy in circle_policy:
+        policies.append(policy.policy_id)
 
     request_user_data, requests = get_notifications(username=username)
 
@@ -78,7 +77,7 @@ def current_circle(request, user_enc, username, circle_id):
         "circle_data": circle_data,
         "circle_request": circle_request,
         "is_admin": circle_data.is_admin,
-        "policylist": policylist,
+        "policies": policies,
     }
 
     return render(request, "circle/current-circle.html", context)
@@ -88,8 +87,8 @@ def create(request, user_enc):
 
     try:
         username = signing.loads(user_enc)
-    except:
-        url = reverse('login:error')
+    except Exception:
+        url = reverse("login:error")
         return HttpResponseRedirect(url)
 
     if request.method == "POST" and "request_circle" in request.POST:
@@ -99,15 +98,15 @@ def create(request, user_enc):
             try:
                 RequestCircle.objects.get(circle_id=circle_id, username=username)
                 messages.error(request, "Request Pending!")
-            except Exception as e:
+            except Exception:
                 try:
                     CircleUser.objects.get(username=username, circle_id=circle_id)
-                    messages.error(request, "Already a Member!", str(e))
-                except Exception as e:
+                    messages.error(request, "Already a Member!")
+                except Exception:
                     create_request(username, circle_id)
-                    messages.success(request, "Request sent to Circle Admin", str(e))
-        except Exception as e:
-            messages.error(request, "Circle ID does not exist!", str(e))
+                    messages.success(request, "Request sent to Circle Admin")
+        except Exception:
+            messages.error(request, "Circle ID does not exist!")
 
     if request.method == "POST" and "create_circle" in request.POST:
         circle_name = request.POST.get("circle_name")
@@ -124,8 +123,8 @@ def create(request, user_enc):
                 raise Exception("Circle Name already Exist - Adding Counter to end!!")
 
             create_circle(username, circle_name, request.POST.getlist("policy_id"))
-        except Exception as e:
-            messages.error(request, str(e))
+        except Exception as ex:
+            messages.error(request, str(ex))
 
             create_circle(
                 username,
@@ -154,8 +153,8 @@ def notify(request, user_enc):
 
     try:
         username = signing.loads(user_enc)
-    except:
-        url = reverse('login:error')
+    except Exception:
+        url = reverse("login:error")
         return HttpResponseRedirect(url)
 
     if request.method == "POST" and "accept_circle" in request.POST:

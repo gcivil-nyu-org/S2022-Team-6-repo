@@ -1,4 +1,4 @@
-import environ
+# import environ
 import os
 import boto3
 import pandas as pd
@@ -9,16 +9,19 @@ class s3Config:
         self.s3_client = boto3.client(
             "s3",
             aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
-            aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"])
+            aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],
+        )
 
     def read_data(self, key):
-        response = self.s3_client.get_object(Bucket=os.environ["AWS_S3_BUCKET"], Key=key)
+        response = self.s3_client.get_object(
+            Bucket=os.environ["AWS_S3_BUCKET"], Key=key
+        )
         status = response.get("ResponseMetadata", {}).get("HTTPStatusCode")
 
         if status == 200:
             dataframe = pd.read_csv(response.get("Body"))
         else:
-            raise Exception('No bucket')
+            raise Exception("No bucket")
 
         return dataframe
 
