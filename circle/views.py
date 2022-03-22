@@ -106,7 +106,7 @@ def create(request, user_enc):
                     create_request(username, circle_id)
                     messages.success(request, "Request sent to Circle Admin")
         except Exception:
-            messages.error(request, "Circle ID does not exist!", str(e))
+            messages.error(request, "Circle ID does not exist!")
 
     if request.method == "POST" and "create_circle" in request.POST:
         circle_name = request.POST.get("circle_name")
@@ -123,8 +123,8 @@ def create(request, user_enc):
                 raise Exception("Circle Name already Exist - Adding Counter to end!!")
 
             create_circle(username, circle_name, request.POST.getlist("policy_id"))
-        except Exception:
-            messages.error(request, str(e))
+        except Exception as ex:
+            messages.error(request, str(ex))
 
             create_circle(
                 username,

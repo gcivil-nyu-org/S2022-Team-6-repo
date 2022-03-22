@@ -1,10 +1,12 @@
 from django.shortcuts import render
+
 # from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 
 from .driver import get_s3_client, get_data
-from circle.models import CircleUser
+
+# from circle.models import CircleUser, Circle
 from circle.helper import get_notifications
 
 
