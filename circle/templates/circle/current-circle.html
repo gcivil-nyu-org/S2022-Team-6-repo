@@ -43,6 +43,15 @@
                         {% if is_admin %}
                             <th class="table-light text-center" scope="col"></th>
                         {% endif %}
+                        {% if 1 in policylist %}
+                            <th class="table-light text-center" scope="col">Vaccination Status</th>
+                        {% endif %}
+                        {% if 2 in policylist %}
+                            <th class="table-light text-center" scope="col">People Met</th>
+                        {% endif %}
+                        {% if 3 in policylist %}
+                            <th class="table-light text-center" scope="col">Location Visited</th>
+                        {% endif %}
                     </tr>
                 </thead>
                 <tbody>
@@ -67,6 +76,15 @@
                                 </td>
 
                                 {% endif %}
+                            {% endif %}
+                            {% if 1 in policylist %}
+                                <td class="table-danger text-center">Has Policy 1</td>
+                            {% endif %}
+                            {% if 2 in policylist %}
+                                <td class="table-danger text-center">Has Policy 2</td>
+                            {% endif %}
+                            {% if 3 in policylist %}
+                                <td class="table-danger text-center">Has Policy 3</td>
                             {% endif %}
                         </tr>
                     {% endfor %}
