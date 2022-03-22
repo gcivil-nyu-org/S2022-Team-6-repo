@@ -19,7 +19,7 @@ def circle(request, user_enc):
     try:
         username = signing.loads(user_enc)
     except:
-        url = reverse('login:error')
+        url = reverse("login:error")
         return HttpResponseRedirect(url)
 
     circle_user_data = CircleUser.objects.filter(username=username)
@@ -43,7 +43,7 @@ def current_circle(request, user_enc, username, circle_id):
     try:
         _ = signing.loads(user_enc)
     except:
-        url = reverse('login:error')
+        url = reverse("login:error")
         return HttpResponseRedirect(url)
 
     if request.method == "POST" and "remove_user" in request.POST:
@@ -88,7 +88,7 @@ def create(request, user_enc):
     try:
         username = signing.loads(user_enc)
     except:
-        url = reverse('login:error')
+        url = reverse("login:error")
         return HttpResponseRedirect(url)
 
     if request.method == "POST" and "request_circle" in request.POST:
@@ -154,7 +154,7 @@ def notify(request, user_enc):
     try:
         username = signing.loads(user_enc)
     except:
-        url = reverse('login:error')
+        url = reverse("login:error")
         return HttpResponseRedirect(url)
 
     if request.method == "POST" and "accept_circle" in request.POST:

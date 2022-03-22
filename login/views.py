@@ -13,7 +13,7 @@ def index(request):
 
 
 def signin(request):
-    if request.method == 'POST' and 'sign-in' in request.POST:
+    if request.method == "POST" and "sign-in" in request.POST:
         try:
             username = request.POST.get("username")
             password = request.POST.get("password")
@@ -22,7 +22,7 @@ def signin(request):
             user_enc = signing.dumps(username)
 
             if user.password == password:
-                url = reverse('circle:dashboard', kwargs={'user_enc': user_enc})
+                url = reverse("circle:dashboard", kwargs={"user_enc": user_enc})
                 return HttpResponseRedirect(url)
             else:
                 raise Exception("Invalid Password")
@@ -56,7 +56,7 @@ def signup(request):
         user = UserData.objects.get(username=userdata.username)
         username1 = user.username
         userEnc = signing.dumps(username1)
-        url = reverse('circle:dashboard', kwargs={'username': userEnc})
+        url = reverse("circle:dashboard", kwargs={"username": userEnc})
         return HttpResponseRedirect(url)
 
     return render(request, "login/signup.html", context)

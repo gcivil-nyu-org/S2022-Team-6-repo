@@ -18,7 +18,7 @@ def base(request, user_enc):
         response, client_object = get_s3_client()
         historical, live, average = get_data(client_object)
     except:
-        url = reverse('login:error')
+        url = reverse("login:error")
         return HttpResponseRedirect(url)
 
     circle_user_data = CircleUser.objects.filter(username=username)
