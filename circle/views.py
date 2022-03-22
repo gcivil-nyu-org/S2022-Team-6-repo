@@ -101,10 +101,10 @@ def create(request, user_enc):
             except Exception as e:
                 try:
                     CircleUser.objects.get(username=username, circle_id=circle_id)
-                    messages.error(request, "Already a Member!", str(e))
+                    messages.error(request, "Already a Member!")
                 except Exception as e:
                     create_request(username, circle_id)
-                    messages.success(request, "Request sent to Circle Admin", str(e))
+                    messages.success(request, "Request sent to Circle Admin")
         except Exception as e:
             messages.error(request, "Circle ID does not exist!", str(e))
 
