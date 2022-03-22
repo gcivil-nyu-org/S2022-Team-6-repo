@@ -4,3 +4,5 @@ coviguard/.env
 *.csv
 upload-data-s3.ipynb
 .ipynb_checkpoints
+*.zip
+lambda
