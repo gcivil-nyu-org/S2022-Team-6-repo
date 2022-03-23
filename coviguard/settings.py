@@ -36,16 +36,20 @@ ALLOWED_HOSTS = ["ddah.herokuapp.com"]
 # Application definition
 
 INSTALLED_APPS = [
-    "login.apps.LoginConfig",
-    "circle.apps.CircleConfig",
-    "alert.apps.AlertConfig",
-    "monitor.apps.MonitorConfig",
+    #"login.apps.LoginConfig",
+    #"circle.apps.CircleConfig",
+    #"alert.apps.AlertConfig",
+    #"monitor.apps.MonitorConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'alert',
+    'circle',
+    'login',
+    'monitor'
 ]
 
 MIDDLEWARE = [
