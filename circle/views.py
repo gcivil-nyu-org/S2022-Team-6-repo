@@ -177,6 +177,7 @@ def notify(request, user_enc):
 
     return render(request, "circle/notifications.html", context)
 
+
 def exit_circle(request, username, circle_id, user_enc):
     admin_user = CircleUser.objects.filter(circle_id=circle_id, is_admin=True)
     remove_user(admin_user[0].username.username, username, circle_id)
@@ -193,6 +194,7 @@ def exit_circle(request, username, circle_id, user_enc):
         "circle_user_data": circle_user_data,
     }
     return render(request, "circle/circle.html", context)
+
 
 def delete_circle(request, username, circle_id, user_enc):
     remove_circle(circle_id)
