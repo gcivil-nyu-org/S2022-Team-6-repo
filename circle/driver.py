@@ -69,3 +69,7 @@ def remove_user(admin_username, username, circle_id):
     circleusers = CircleUser.objects.get(circle_id=circle_id, username=username)
 
     circleusers.delete()
+
+def remove_circle(circle_id):
+    circle = Circle.objects.get(circle_id=circle_id)
+    circle.delete()

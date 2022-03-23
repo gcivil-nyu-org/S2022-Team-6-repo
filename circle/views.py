@@ -11,6 +11,7 @@ from .driver import (
     accept_request,
     reject_request,
     remove_user,
+    remove_circle,
 )
 from django.core import signing
 
@@ -175,3 +176,35 @@ def notify(request, user_enc):
     }
 
     return render(request, "circle/notifications.html", context)
+
+def exit_circle(request, username, circle_id, user_enc):
+    admin_user = CircleUser.objects.filter(circle_id=circle_id, is_admin=True)
+    remove_user(admin_user[0].username.username, username, circle_id)
+
+    circle_user_data = CircleUser.objects.filter(username=username)
+    request_user_data, requests = get_notifications(username=username)
+    context = {
+        "page_name": "Circle",
+        "username": username,
+        "user_enc": user_enc,
+        "request_user_data": request_user_data,
+        "requests": requests,
+        # Other
+        "circle_user_data": circle_user_data,
+    }
+    return render(request, "circle/circle.html", context)
+
+def delete_circle(request, username, circle_id, user_enc):
+    remove_circle(circle_id)
+    circle_user_data = CircleUser.objects.filter(username=username)
+    request_user_data, requests = get_notifications(username=username)
+    context = {
+        "page_name": "Circle",
+        "username": username,
+        "user_enc": user_enc,
+        "request_user_data": request_user_data,
+        "requests": requests,
+        # Other
+        "circle_user_data": circle_user_data,
+    }
+    return render(request, "circle/circle.html", context)

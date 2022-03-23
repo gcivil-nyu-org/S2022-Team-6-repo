@@ -11,4 +11,6 @@ urlpatterns = [
     ),
     path("create/<str:user_enc>/", views.create, name="create"),
     path("create/notifications/<str:user_enc>/", views.notify, name="notify"),
+    path("exit/<str:username>/<str:circle_id>/<str:user_enc>", views.exit_circle, name="exitcircle"),
+    path("deletecircle/<str:username>/<str:circle_id>/<str:user_enc>", views.delete_circle, name="deletecircle"),
 ]
