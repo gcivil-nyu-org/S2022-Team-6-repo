@@ -12,6 +12,8 @@ from circle.helper import get_notifications
 
 from django.core import signing
 
+import pandas as pd
+
 
 def base(request, user_enc):
 
@@ -27,11 +29,27 @@ def base(request, user_enc):
 
     request_user_data, requests = get_notifications(username=username)
 
+    df = historical[historical.county == "New York City"].copy(deep=True)
+
+    df_2020 = df[(df.date < "2021-01-01") & (df.date >= "2020-08-01")].copy(deep=True)
+    df_2021 = df[(df.date < "2022-01-01") & (df.date >= "2021-08-01")].copy(deep=True)
+
+    # df_2020['date'] = pd.to_datetime(df_2020['date']).dt.date
+    # df_2021['date'] = pd.to_datetime(df_2021['date']).dt.date
+
+    df_2020 = (df_2020[["date", "cases"]].values).tolist()
+    df_2021 = (df_2021[["date", "cases"]].values).tolist()
+
+    # print(df_2020)
+
     context = {
         "page_name": "Monitor",
         "user_enc": user_enc,
         "username": username,
         "request_user_data": request_user_data,
         "requests": requests,
+        "monitor": True,
+        "df_2020": df_2020,
+        "df_2021": df_2021,
     }
     return render(request, "monitor/index.html", context)
