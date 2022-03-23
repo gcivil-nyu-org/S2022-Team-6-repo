@@ -5,8 +5,9 @@ from django.test import SimpleTestCase
 from django.urls import reverse, resolve
 from .views import base
 
+
 class TestUrls(SimpleTestCase):
     def test_base_url_is_resolved(self):
-        url = reverse("monitor:user_monitor",args=['asda723h'])
+        url = reverse("monitor:user_monitor", args=["asda723h"])
         print(resolve(url))
-        self.assertEquals(resolve(url).func,base)
+        self.assertEquals(resolve(url).func, base)
