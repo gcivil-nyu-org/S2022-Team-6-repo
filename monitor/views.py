@@ -12,7 +12,7 @@ from circle.helper import get_notifications
 
 from django.core import signing
 
-import pandas as pd
+# import pandas as pd
 
 
 def base(request, user_enc):
