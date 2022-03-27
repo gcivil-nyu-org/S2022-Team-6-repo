@@ -20,4 +20,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("login.urls")),
     path("circle/", include("circle.urls")),
+    path("selftrack/", include("selftrack.urls")),
 ]

@@ -38,6 +38,7 @@ ALLOWED_HOSTS = ["ddah.herokuapp.com"]
 INSTALLED_APPS = [
     "login.apps.LoginConfig",
     "circle.apps.CircleConfig",
+    "selftrack.apps.SelftrackConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
