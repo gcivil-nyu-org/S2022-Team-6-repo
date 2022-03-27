@@ -1,94 +1,97 @@
 {% extends 'main.html' %}
 {% load static %}
 {% block content %}
-    <!-- intro -->
-    <section class="bg-light p-1">
-        <div class="container my-5">
-            <div class="row">
-                <div class="col-sm-3">
-                    <img src="{% static 'img/famliy.jpg'%}" class="img-fluid rounded-circle" alt="...">
-                </div>
-                <div class="col-sm-9">
-                    <h1 class="fw-bold text-uppercase text-secondary align-self-start">
-                        {{circle_data.circle_id.circle_name}}
-                    </h1>
-                    <hr>
-                    <p class="text-muted d-block">Admin:
-                        <spam class="text-dark fw-bold">{{circle_data.circle_id.admin_username.username}}</spam>
+<!-- intro -->
+<section class="bg-light p-1">
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-sm-3">
+                <img src="{% static "img/famliy.jpg"%}" class="img-fluid rounded-circle" alt="...">
+            </div>
+            <div class="col-sm-9">
+                <h1 class="fw-bold text-uppercase text-secondary align-self-start">
+                    {{circle_data.circle_id.circle_name}}
+                </h1>
+                <hr>
+                <p class="text-muted d-block">Admin:
+                    <spam class="text-dark fw-bold">{{circle_data.circle_id.admin_username.username}}</spam>
+                </p>
+                <p class="text-muted d-block">Number of Members:
+                    <span class="text-dark fw-bold">{{circle_data.circle_id.no_of_users}}</span>
+                </p>
+                {% if is_admin %}
+                    <p class="text-muted d-block">Pending Requests:
+                        <spam class="text-muted fw-bold">{{circle_request}}</spam>
                     </p>
-                    <p class="text-muted d-block">Number of Members:
-                        <span class="text-dark fw-bold">{{circle_data.circle_id.no_of_users}}</span>
-                    </p>
-                    {% if is_admin %}
-                        <p class="text-muted d-block">Pending Requests:
-                            <spam class="text-muted fw-bold">{{circle_request}}</spam>
-                        </p>
-                    {% endif %}
-                </div>
+                {% endif %}
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    {% comment %} <!-- table --> {% endcomment %}
-    <section>
-        <div class="container-fluid">
-            <table class="table table-hover table-success">
-                <thead>
+{% comment %} <!-- table --> {% endcomment %}
+<section>
+    <div class="container-fluid">
+        <table class="table table-hover table-success">
+            <thead>
+                <tr>
+                    <th class="table-light text-center" scope="col">Username</th>
+                    <th class="table-light text-center" scope="col">Home Status</th>
+                    <th class="table-light text-center" scope="col">Workplace Status</th>
+                    <th class="table-light text-center" scope="col">Last Updated</th>
+                    {% for policy in policies %}
+                        <th class="table-light text-center" scope="col">{{ policy.policy_name }}</th>
+                    {% endfor %}
+                    {% if is_admin %}
+                        <th class="table-light text-center" scope="col"></th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in circle_user_data %}
                     <tr>
-                        {% comment %} <th class="table-light text-center" scope="col">Number</th> {% endcomment %}
-                        <th class="table-light text-center" scope="col">Username</th>
-                        <th class="table-light text-center" scope="col">Home Status</th>
-                        <th class="table-light text-center" scope="col">Workplace Status</th>
-                        <th class="table-light text-center" scope="col">Last Updated</th>
+                        <td class="table-danger text-center">{{data.username.username}} {% if data.is_admin %} (Admin) {% endif %}</td>
+                        <td class="table-danger text-center">Risk</td>
+                        <td class="table-danger text-center">Safe</td>
+                        <td class="table-danger text-center">3 days ago</td>
+                        {% for policy in policies %}
+                            <td class="table-danger text-center">Has Policy {{ policy.policy_id }}</td>
+                        {% endfor %}
                         {% if is_admin %}
-                            <th class="table-light text-center" scope="col"></th>
-                        {% endif %}
-                        {% if 1 in policylist %}
-                            <th class="table-light text-center" scope="col">Vaccination Status</th>
-                        {% endif %}
-                        {% if 2 in policylist %}
-                            <th class="table-light text-center" scope="col">People Met</th>
-                        {% endif %}
-                        {% if 3 in policylist %}
-                            <th class="table-light text-center" scope="col">Location Visited</th>
+                            {% if data.is_member %}
+                            <td class="table-danger text-center">
+                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#{{ data.username.username }}">
+                                    <i class="bi bi-x-lg"></i>
+                                </button>
+                            </td>
+                            <!-- Modal -->
+                            <div class="modal fade" id="{{ data.username.username }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            Are you sure you want to remove {{data.username.username}}?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <form action="" method="post">
+                                                {% csrf_token %}
+                                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                                <button class="btn btn-outline-danger" type="submit" name="remove_user" value="{{data.username.username}}">
+                                                    Yes
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                                <td class="table-danger text-center"></td>
+                            {% endif %}
                         {% endif %}
                     </tr>
-                </thead>
-                <tbody>
-                    {% for data in circle_user_data %}
-                        <tr>
-                            <td class="table-danger text-center">{{data.username.username}} {% if data.is_admin %} (Admin) {% endif %}</td>
-                            <td class="table-danger text-center">Risk</td>
-                            <td class="table-danger text-center">Safe</td>
-                            <td class="table-danger text-center">3 days ago</td>
-                            {% if is_admin %}
-                                {% if data.is_member %}
-                                    <form action="" method="post">
-                                    {% csrf_token %}
-                                    <td typle="submit" class="table-danger text-center" >
-                                        <button class="btn btn-outline-danger" type="submit" name="remove_user" value="{{data.username.username}}">
-                                            <i class="bi bi-x-lg"></i>
-                                        </button>
-                                    </td>
-                                    </form>
-                                {% else %}
-                                    <td typle="submit" class="table-danger text-center">
-                                </td>
-
-                                {% endif %}
-                            {% endif %}
-                            {% if 1 in policylist %}
-                                <td class="table-danger text-center">Has Policy 1</td>
-                            {% endif %}
-                            {% if 2 in policylist %}
-                                <td class="table-danger text-center">Has Policy 2</td>
-                            {% endif %}
-                            {% if 3 in policylist %}
-                                <td class="table-danger text-center">Has Policy 3</td>
-                            {% endif %}
-                        </tr>
-                    {% endfor %}
+                {% endfor %}
                 </tbody>
             </table>
     </section>
+
+
 {% endblock content %}
