@@ -16,6 +16,10 @@ def selftracksave(request, username):
         userdata.username = username
         userdata.usermet = request.POST.get("usermet")
         userdata.locationgone = request.POST.get("locationgone")
-        data = Selftrack(username=username,usermet=userdata.usermet,locationgone=userdata.locationgone)
+        data = Selftrack(
+            username=username,
+            usermet=userdata.usermet,
+            locationgone=userdata.locationgone,
+        )
         data.save()
     return render(request, "self_track.html")
