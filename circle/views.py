@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import logout
 
-from .models import Circle, CirclePolicy, CircleUser, RequestCircle
+from .models import Circle, CirclePolicy, CircleUser, RequestCircle, RecentCircle
 from .helper import get_notifications, get_circle_requests
 from .driver import (
     create_request,
@@ -13,6 +13,9 @@ from .driver import (
     reject_request,
     remove_user,
     remove_circle,
+    recent_circle,
+    add_recent_circle,
+    get_recent_circles,
 )
 from django.core import signing
 
@@ -28,14 +31,18 @@ def circle(request):
 
     request_user_data, requests = get_notifications(username=username)
 
+    recent_circle_list = recent_circle(username)
+
+    recent_circles = get_recent_circles(recent_circle_list, username)
+
     context = {
         "page_name": "Circle",
         "username": username,
         "request_user_data": request_user_data,
         "requests": requests,
-        "update_settings": True,
         # Other
         "circle_user_data": circle_user_data,
+        "recent_circles": recent_circles,
     }
 
     return render(request, "circle/circle.html", context)
@@ -52,6 +59,8 @@ def current_circle(request, username, circle_id):
         remove_user(username, request.POST.get("remove_user"), circle_id)
 
     circle_data = CircleUser.objects.get(circle_id=circle_id, username=username)
+
+    add_recent_circle(circle_data)
 
     circle_user_data = CircleUser.objects.filter(circle_id=circle_id)
 
