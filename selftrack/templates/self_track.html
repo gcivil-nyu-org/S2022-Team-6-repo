@@ -1,0 +1,33 @@
+{% extends 'main-no-nav.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-5 mx-auto">
+        <div id="first">
+            <div class="myform form ">
+                 <div class="logo mb-3">
+                     <div class="col-md-12 text-center">
+                        <h2>Self Tracking</h2>
+                     </div>
+                </div>
+               <form action="{% url 'selftrack' username %}" method="post" name="selftrack">
+                  {% csrf_token %}
+                       <div class="form-group">
+                          <label for="exampleInputEmail1">People you Met</label>
+                          <input type="text" name="usermet"  class="form-control" id="usermet" aria-describedby="emailHelp" placeholder="Enter people you met">
+                       </div>
+                       <div class="form-group">
+                          <label for="exampleInputEmail1">Places Visited</label>
+                          <input type="text" name="locationgone" id="placesvisited"  class="form-control" aria-describedby="emailHelp" placeholder="Enter Places Visited">
+                       </div>
+                       <div class="col-md-12 text-center ">
+                          <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Submit</button>
+                       </div>
+                    </form>
+            </div>
+        </div>
+        </div>
+    </div>
+  </div>
+{% endblock content %}
