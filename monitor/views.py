@@ -15,10 +15,10 @@ from django.core import signing
 # import pandas as pd
 
 
-def base(request, user_enc):
+def base(request):
 
     try:
-        username = signing.loads(user_enc)
+        username = signing.loads(request.session["user_key"])
         response, client_object = get_s3_client()
         historical, live, average = get_data(client_object)
     except Exception:
@@ -44,7 +44,6 @@ def base(request, user_enc):
 
     context = {
         "page_name": "Monitor",
-        "user_enc": user_enc,
         "username": username,
         "request_user_data": request_user_data,
         "requests": requests,

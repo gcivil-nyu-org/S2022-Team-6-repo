@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.contrib.auth import logout
 
 from .models import Circle, CirclePolicy, CircleUser, RequestCircle
 from .helper import get_notifications, get_circle_requests
@@ -16,9 +17,9 @@ from .driver import (
 from django.core import signing
 
 
-def circle(request, user_enc):
+def circle(request):
     try:
-        username = signing.loads(user_enc)
+        username = signing.loads(request.session["user_key"])
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
@@ -30,9 +31,9 @@ def circle(request, user_enc):
     context = {
         "page_name": "Circle",
         "username": username,
-        "user_enc": user_enc,
         "request_user_data": request_user_data,
         "requests": requests,
+        "update_settings": True,
         # Other
         "circle_user_data": circle_user_data,
     }
@@ -40,9 +41,9 @@ def circle(request, user_enc):
     return render(request, "circle/circle.html", context)
 
 
-def current_circle(request, user_enc, username, circle_id):
+def current_circle(request, username, circle_id):
     try:
-        _ = signing.loads(user_enc)
+        _ = signing.loads(request.session["user_key"])
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
@@ -72,7 +73,6 @@ def current_circle(request, user_enc, username, circle_id):
         "username": username,
         "request_user_data": request_user_data,
         "requests": requests,
-        "user_enc": user_enc,
         # Other
         "circle_user_data": circle_user_data,
         "circle_data": circle_data,
@@ -84,10 +84,10 @@ def current_circle(request, user_enc, username, circle_id):
     return render(request, "circle/current-circle.html", context)
 
 
-def create(request, user_enc):
+def create(request):
 
     try:
-        username = signing.loads(user_enc)
+        username = signing.loads(request.session["user_key"])
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
@@ -140,7 +140,6 @@ def create(request, user_enc):
     context = {
         "page_name": "Add Circle",
         "username": username,
-        "user_enc": user_enc,
         "request_user_data": request_user_data,
         "requests": requests,
         # Other
@@ -150,10 +149,10 @@ def create(request, user_enc):
     return render(request, "circle/add.html", context)
 
 
-def notify(request, user_enc):
+def notify(request):
 
     try:
-        username = signing.loads(user_enc)
+        username = signing.loads(request.session["user_key"])
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
@@ -169,7 +168,6 @@ def notify(request, user_enc):
     context = {
         "page_name": "Notifications",
         "username": username,
-        "user_enc": user_enc,
         "request_user_data": request_user_data,
         "requests": requests
         # Other
@@ -178,7 +176,7 @@ def notify(request, user_enc):
     return render(request, "circle/notifications.html", context)
 
 
-def exit_circle(request, username, circle_id, user_enc):
+def exit_circle(request, username, circle_id):
     admin_user = CircleUser.objects.filter(circle_id=circle_id, is_admin=True)
     remove_user(admin_user[0].username.username, username, circle_id)
 
@@ -187,7 +185,6 @@ def exit_circle(request, username, circle_id, user_enc):
     context = {
         "page_name": "Circle",
         "username": username,
-        "user_enc": user_enc,
         "request_user_data": request_user_data,
         "requests": requests,
         # Other
@@ -196,14 +193,13 @@ def exit_circle(request, username, circle_id, user_enc):
     return render(request, "circle/circle.html", context)
 
 
-def delete_circle(request, username, circle_id, user_enc):
+def delete_circle(request, username, circle_id):
     remove_circle(circle_id)
     circle_user_data = CircleUser.objects.filter(username=username)
     request_user_data, requests = get_notifications(username=username)
     context = {
         "page_name": "Circle",
         "username": username,
-        "user_enc": user_enc,
         "request_user_data": request_user_data,
         "requests": requests,
         # Other
