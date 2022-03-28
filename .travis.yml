@@ -17,6 +17,7 @@ env:
 script:
         - black --check .
         - flake8 .
-        - coverage run --source=coviguard manage.py test
+        - python coviguard/manage.py collectstatic
+        - coverage run --source=coviguard,circle manage.py test
 after_script:
         - coveralls

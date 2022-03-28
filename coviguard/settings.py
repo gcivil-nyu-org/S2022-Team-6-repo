@@ -14,6 +14,7 @@ from pathlib import Path
 import django_heroku
 import environ
 import os
+import sys
 
 environ.Env.read_env()
 
@@ -92,6 +93,12 @@ DATABASES = {
         "PORT": "5432",
     }
 }
+
+if "test" in sys.argv:
+    DATABASES["default"] = {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "mydatabase",
+    }
 
 
 # Password validation
