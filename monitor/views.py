@@ -36,7 +36,8 @@ def base(request, user_enc):
 
     # df_2020['date'] = pd.to_datetime(df_2020['date']).dt.date
     # df_2021['date'] = pd.to_datetime(df_2021['date']).dt.date
-
+    # df_2020_1 = (df_2020[["date", "cases"]].values).tolist()
+    df_2021_1 = (df_2021[["county", "cases"]].values).tolist()
     df_2020 = (df_2020[["date", "cases"]].values).tolist()
     df_2021 = (df_2021[["date", "cases"]].values).tolist()
 
@@ -51,5 +52,6 @@ def base(request, user_enc):
         "monitor": True,
         "df_2020": df_2020,
         "df_2021": df_2021,
+        "df_2021_1": df_2021_1
     }
     return render(request, "monitor/index.html", context)
