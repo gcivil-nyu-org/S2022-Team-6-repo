@@ -2,7 +2,6 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from circle.models import Circle, CircleUser
 from login.models import UserData
-import json
 import datetime
 
 
