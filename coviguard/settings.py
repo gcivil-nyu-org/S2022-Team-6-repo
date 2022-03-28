@@ -14,6 +14,7 @@ from pathlib import Path
 import django_heroku
 import environ
 import os
+import sys
 
 environ.Env.read_env()
 
@@ -38,6 +39,7 @@ ALLOWED_HOSTS = ["ddah.herokuapp.com"]
 INSTALLED_APPS = [
     "login.apps.LoginConfig",
     "circle.apps.CircleConfig",
+    "selftrack.apps.SelftrackConfig",
     "alert.apps.AlertConfig",
     "monitor.apps.MonitorConfig",
     "django.contrib.admin",
@@ -97,6 +99,12 @@ DATABASES = {
     }
 }
 
+if "test" in sys.argv:
+    DATABASES["default"] = {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "mydatabase",
+    }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -142,4 +150,4 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-django_heroku.settings(locals())
+django_heroku.settings(locals(), test_runner=False)
