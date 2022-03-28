@@ -11,7 +11,7 @@
                         <h2>Self Tracking</h2>
                      </div>
                 </div>
-               <form action="{% url 'selftracksave' username %}" method="post" name="selftrack">
+               <form action="{% url 'selftrack' username %}" method="post" name="selftrack">
                   {% csrf_token %}
                        <div class="form-group">
                           <label for="exampleInputEmail1">People you Met</label>

@@ -11,11 +11,11 @@ def selftrack(request, username):
 
 def selftracksave(request, username):
 
-    if request.method == "POST" and "signup-button" in request.POST:
+    if request.method == "POST":
         userdata = Selftrack()
         userdata.username = username
         userdata.usermet = request.POST.get("usermet")
         userdata.locationgone = request.POST.get("locationgone")
-        userdata.save()
-
+        data = Selftrack(username=username,usermet=userdata.usermet,locationgone=userdata.locationgone)
+        data.save()
     return render(request, "self_track.html")
