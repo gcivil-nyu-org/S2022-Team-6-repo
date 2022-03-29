@@ -11,7 +11,7 @@ class TestViews(TestCase):
             date_uploaded=datetime.datetime.now(),
             username="person1",
             user_met="met1",
-            location_visited="11225"
+            location_visited="11225",
         )
         self.selftrack_url = reverse(
             "selftracking:selftrack",
