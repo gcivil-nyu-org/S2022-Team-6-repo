@@ -1,5 +1,43 @@
 {% extends 'main-extend-nav.html' %}
 {% load static %}
 {% block content %}
-<p>my profile</p>
+<br><br><br><br><br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-5 mx-auto">
+            <div id="first">
+                <div class="myform form ">
+                    <div class="logo mb-3">
+                        <div class="col-md-12 text-center">
+                            <h1>{{username}}</h1>
+                        </div>
+                    </div>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="dob">Date Of Birth</label>
+                            <input type="date" name="dob" id="dob"  class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="number">Phone Number</label>
+                            <input type="tel" name="number" id="number"  class="form-control">
+                        </div>
+                        <div class="form-group">
+                        <label for="zip-home">Zip Code (Home)</label>
+                        <input type="text" name="zip-home" id="zip-home"  class="form-control">
+                        </div>
+                        <div class="form-group">
+                        <label for="zip-work">Zip Code (Work)</label>
+                        <input type="text" name="zip-work" id="zip-work"  class="form-control">
+                        </div>
+                        <div class="form-group">
+                        <label for="vaccination">Vaccinated ?</label>
+                        <input type="checkbox" name="vaccination" id="vaccination" >
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

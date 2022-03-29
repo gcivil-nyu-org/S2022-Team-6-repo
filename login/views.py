@@ -6,36 +6,51 @@ from django.core import signing
 
 from .models import UserData
 
-# CURRENT_SESSION_VALID = False
-
 
 def profile(request, username):
+
+    try:
+        userdata = UserData.objects.get(username=username)
+    except Exception:
+        # invlaid user url #
+        url = reverse("login:error")
+        return HttpResponseRedirect(url)
+
+    # valid user url #
     try:
         current_username = signing.loads(request.session["user_key"])
-        if not current_username == username:
-            print("error")
-            raise Exception()
+        # user is logged in #
     except Exception:
-        try:
-            userdata = UserData.objects.get(username=username)
-            context = {
-                "page_name": username,
-                "session_valid": False,
-            }
-            return render(request, "login/profile.html", context)
-        except Exception:
-            url = reverse("login:error")
-            return HttpResponseRedirect(url)
-
-    userdata = UserData.objects.get(username=current_username)
+        # user is not logged in #
+        context = {
+            "page_name": username,
+            "session_valid": False,
+            "username": username,
+        }
+        # TODO: Display data
+        return render(request, "login/profile.html", context)
 
     context = {
-        "page_name": current_username,
+        "page_name": username,
         "session_valid": True,
-        "username": username,
+        "username": current_username,
+        "profile_username": username,
     }
 
-    return render(request, "login/user_profile.html", context)
+    # user is logged in #
+    try:
+        if username != current_username:
+            raise Exception()
+
+        # TODO: Form
+
+        # user is logged in & user is looking for his own profile #
+        return render(request, "login/user_profile.html", context)
+
+    except Exception:
+        # user is logged in looking for other profile #
+        # TODO: Display data
+        return render(request, "login/profile.html", context)
 
 
 def index(request):
@@ -82,22 +97,22 @@ def signin(request):
 
 def signup(request):
 
+    context = {"page_name": "SignUp"}
+
     try:
         if request.method == "POST" and "signup-button" in request.POST:
+
+            if request.POST.get("password") != request.POST.get("confirmpassword"):
+                messages.error(request, "Password Do Not Match!!")
+                return render(request, "login/signup.html", context)
+
             userdata = UserData()
             userdata.firstname = request.POST.get("firstname")
             userdata.lastname = request.POST.get("lastname")
             userdata.username = request.POST.get("username")
-            userdata.password = request.POST.get("password")
             userdata.email = request.POST.get("email")
-            userdata.dob = request.POST.get("DoB")
-            userdata.phone = request.POST.get("phonenumber")
-            userdata.work_address = request.POST.get("ZipWork")
-            userdata.home_adress = request.POST.get("ZipHome")
-            is_vaxxed = False
-            if request.POST.get("vaccination") == 1:
-                is_vaxxed = True
-            userdata.is_vacinated = is_vaxxed
+            userdata.password = request.POST.get("password")
+
             userdata.save()
 
             return HttpResponseRedirect(reverse("login:signin"))
@@ -105,7 +120,6 @@ def signup(request):
         url = reverse("login:error")
         return HttpResponseRedirect(url)
 
-    context = {"page_name": "SignUp"}
     return render(request, "login/signup.html", context)
 
 
