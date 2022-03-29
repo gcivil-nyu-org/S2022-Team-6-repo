@@ -6,15 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('circle', '0006_remove_circle_pending_request'),
+        ("circle", "0006_remove_circle_pending_request"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='RecentCircle',
+            name="RecentCircle",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('recent_circle', models.TextField(null=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("recent_circle", models.TextField(null=True)),
             ],
         ),
     ]

@@ -8,6 +8,6 @@ from .views import base
 
 class TestUrls(SimpleTestCase):
     def test_base_url_is_resolved(self):
-        url = reverse("monitor:user_monitor", args=["asda723h"])
+        url = reverse("monitor:user_monitor")
         print(resolve(url))
         self.assertEquals(resolve(url).func, base)

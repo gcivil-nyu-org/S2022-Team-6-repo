@@ -16,27 +16,21 @@ class TestUrls(SimpleTestCase):
         self.assertEquals(resolve(url).func, circle)
 
     def test_user_circle_url(self):
-        url = reverse(
-            "circle:user_circle", args=["username_enc", "username", "circleid"]
-        )
+        url = reverse("circle:user_circle", args=["username", "circleid"])
         self.assertEquals(resolve(url).func, current_circle)
 
     def test_create_circle_url(self):
-        url = reverse("circle:create", args=["username_enc"])
+        url = reverse("circle:create")
         self.assertEquals(resolve(url).func, create)
 
     def test_notify_url(self):
-        url = reverse("circle:notify", args=["username_enc"])
+        url = reverse("circle:notify")
         self.assertEquals(resolve(url).func, notify)
 
     def test_exit_circle_url(self):
-        url = reverse(
-            "circle:exitcircle", args=["username", "circleid", "username_enc"]
-        )
+        url = reverse("circle:exitcircle", args=["username", "circleid"])
         self.assertEquals(resolve(url).func, exit_circle)
 
     def test_delete_circle_url(self):
-        url = reverse(
-            "circle:deletecircle", args=["username", "circleid", "username_enc"]
-        )
+        url = reverse("circle:deletecircle", args=["username", "circleid"])
         self.assertEquals(resolve(url).func, delete_circle)

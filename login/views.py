@@ -13,20 +13,25 @@ def index(request):
     current_session_valid = False
     if "user_key" in request.session.keys():
         current_session_valid = True
-
-    context = {
-        "page_name": "CoviGuard",
-        "css_name": "login",
-        "session_valid": current_session_valid,
-    }
+        username = signing.loads(request.session["user_key"])
+        print(username)
+    if current_session_valid:
+        context = {
+            "page_name": "CoviGuard",
+            "css_name": "login",
+            "session_valid": current_session_valid,
+            "username": username,
+        }
+    else:
+        context = {
+            "page_name": "CoviGuard",
+            "css_name": "login",
+            "session_valid": current_session_valid,
+        }
     return render(request, "login/index.html", context)
 
 
 def signin(request):
-
-    # if "user_key" in request.session.keys():
-    #     CURRENT_SESSION_VALID = True
-
     if request.method == "POST" and "sign-in" in request.POST:
         try:
             username = request.POST.get("username")
@@ -36,7 +41,7 @@ def signin(request):
             user_enc = signing.dumps(username)
             request.session["user_key"] = user_enc
             if user.password == password:
-                url = reverse("circle:dashboard")
+                url = reverse("circle:dashboard", kwargs={"username": username})
                 return HttpResponseRedirect(url)
             else:
                 raise Exception("Invalid Password")
@@ -48,9 +53,6 @@ def signin(request):
 
 
 def signup(request):
-
-    # if "user_key" in request.session.keys():
-    #     CURRENT_SESSION_VALID = True
 
     try:
         if request.method == "POST" and "signup-button" in request.POST:

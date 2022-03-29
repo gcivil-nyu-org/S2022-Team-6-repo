@@ -7,19 +7,21 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('login', '0004_userdata_password'),
-        ('circle', '0008_recentcircle_username_and_more'),
+        ("login", "0004_userdata_password"),
+        ("circle", "0008_recentcircle_username_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='recentcircle',
-            name='recent_circle',
+            model_name="recentcircle",
+            name="recent_circle",
             field=models.TextField(null=True),
         ),
         migrations.AlterField(
-            model_name='recentcircle',
-            name='username',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='login.userdata'),
+            model_name="recentcircle",
+            name="username",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="login.userdata"
+            ),
         ),
     ]

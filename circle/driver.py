@@ -36,7 +36,9 @@ def get_recent_circles(recent_circle_list, username):
     recent_circles = list()
 
     for circle in recent_circle_list:
-        recent_circles.append(CircleUser.objects.get(circle_id=circle, username=username))
+        recent_circles.append(
+            CircleUser.objects.get(circle_id=circle, username=username)
+        )
 
     return recent_circles
 

@@ -20,7 +20,7 @@ from .driver import (
 from django.core import signing
 
 
-def circle(request):
+def circle(request, username):
     try:
         username = signing.loads(request.session["user_key"])
     except Exception:
@@ -44,7 +44,7 @@ def circle(request):
         "circle_user_data": circle_user_data,
         "recent_circles": recent_circles,
     }
-
+    print(reverse("circle:dashboard", kwargs={"username": username}))
     return render(request, "circle/circle.html", context)
 
 

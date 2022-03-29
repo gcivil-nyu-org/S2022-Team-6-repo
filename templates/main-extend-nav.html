@@ -36,7 +36,7 @@
         <ul class="navbar-nav ms-auto">
 
           {% if session_valid %}
-            <li class="nav-item"><a href="{% url 'circle:dashboard' %}" class="nav-link">Dashboard</a></li>
+            <li class="nav-item"><a href="{% url 'circle:dashboard' username %}" class="nav-link">Dashboard</a></li>
           {% endif %}
           <li class="nav-item"><a href="#functionalities" class="nav-link">Functionalities</a></li>
           <li class="nav-item"><a href="#why" class="nav-link">Why CoviGuard?</a></li>
