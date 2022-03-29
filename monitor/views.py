@@ -40,16 +40,16 @@ def base(request):
     # df_2021['date'] = pd.to_datetime(df_2021['date']).dt.date
     # df_2020_1 = (df_2020[["date", "cases"]].values).tolist()
     df_2021_1 = (historical[["county", "cases"]].values).tolist()
-    print(df_2021_1[0]," ", type(df_2021_1[0][0]))
+    print(df_2021_1[0], " ", type(df_2021_1[0][0]))
     counties = []
     cases = []
     for i in range(len(df_2021_1)):
-        if(type(df_2021_1[i][0]) is not str):
-            #print("Inside Nan", df_2021_1[i][0])
+        if type(df_2021_1[i][0]) is not str:
+            # print("Inside Nan", df_2021_1[i][0])
             df_2021_1[i][0] = "Others"
         counties.append(df_2021_1[i][0])
         cases.append(df_2021_1[i][1])
-        #if(math.isnan(float(df_2021_1[i][0]))):
+        # if(math.isnan(float(df_2021_1[i][0]))):
     df_2020 = (df_2020[["date", "cases"]].values).tolist()
     df_2021 = (df_2021[["date", "cases"]].values).tolist()
 
@@ -65,6 +65,6 @@ def base(request):
         "df_2021": df_2021,
         "df_2021_1": df_2021_1,
         "counties": counties,
-        "cases": cases
+        "cases": cases,
     }
     return render(request, "monitor/index.html", context)
