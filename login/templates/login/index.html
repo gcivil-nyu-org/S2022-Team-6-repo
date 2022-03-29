@@ -6,16 +6,23 @@
     <div class="container">
       <div class="d-sm-flex align-items-center justify-content-between">
         <div>
-          <h1>Become a <span class="text-warning">#CoviGuardian </span></h1>
+          <h1>{% if session_valid %} Welcome {% else %} Become a {% endif %}<span class="text-warning">#CoviGuardian </span></h1>
           <p class="lead my-4">Lorem ipsum dolor sit amet,
             consectetur adipisicing elit. Explicabo,
-            corporis quis ! Nostrum aperiam incidunt asperiores quis ratione porro libero illum. </p>
+            corporis quis ! Nostrum aperiam incidunt asperiores quis ratione porro libero illum.
+          </p>
+          {% if not session_valid %}
             <a href="{% url 'login:signup' %}">
               <button class="btn btn-primary btn-lg">Get started</button>
             </a>
-          <br><br>
-          <p class="lead my-6"><small>Already a member? <a href="{% url 'login:signin' %}" class="link-warning">Sign in here</a></small>
-          </p>
+            <br><br>
+            <p class="lead my-6">
+              <small>
+              Already a member? 
+              <a href="{% url 'login:signin' %}" class="link-warning">Sign in here</a>
+              </small>
+            </p>
+          {% endif %}
         </div><img class="img-fluid d-none d-sm-block" src="{% static 'img/5.png' %}" alt="" />
       </div>
     </div>
