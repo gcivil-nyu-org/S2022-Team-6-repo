@@ -9,18 +9,31 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('login', '0004_userdata_password'),
+        ("login", "0004_userdata_password"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='SelfTrack',
+            name="SelfTrack",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date_uploaded', models.DateTimeField(auto_now_add=True)),
-                ('user_met', models.CharField(max_length=100)),
-                ('location_visited', models.CharField(max_length=100)),
-                ('username', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='login.userdata')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("date_uploaded", models.DateTimeField(auto_now_add=True)),
+                ("user_met", models.CharField(max_length=100)),
+                ("location_visited", models.CharField(max_length=100)),
+                (
+                    "username",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="login.userdata"
+                    ),
+                ),
             ],
         ),
     ]

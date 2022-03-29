@@ -10,7 +10,7 @@ from .models import UserData
 def profile(request, username):
 
     try:
-        userdata = UserData.objects.get(username=username)
+        _ = UserData.objects.get(username=username)
     except Exception:
         # invlaid user url #
         url = reverse("login:error")

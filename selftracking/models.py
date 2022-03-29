@@ -1,6 +1,7 @@
 from django.db import models
 from login.models import UserData
 
+
 # Create your models here.
 class SelfTrack(models.Model):
     date_uploaded = models.DateTimeField(auto_now_add=True)
