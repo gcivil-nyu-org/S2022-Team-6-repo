@@ -9,12 +9,40 @@ from .models import UserData
 # CURRENT_SESSION_VALID = False
 
 
+def profile(request, username):
+    try:
+        current_username = signing.loads(request.session["user_key"])
+        if not current_username == username:
+            print("error")
+            raise Exception()
+    except Exception:
+        try:
+            userdata = UserData.objects.get(username=username)
+            context = {
+                "page_name": username,
+                "session_valid": False,
+            }
+            return render(request, "login/profile.html", context)
+        except Exception:
+            url = reverse("login:error")
+            return HttpResponseRedirect(url)
+
+    userdata = UserData.objects.get(username=current_username)
+
+    context = {
+        "page_name": current_username,
+        "session_valid": True,
+        "username": username,
+    }
+
+    return render(request, "login/user_profile.html", context)
+
+
 def index(request):
     current_session_valid = False
     if "user_key" in request.session.keys():
         current_session_valid = True
         username = signing.loads(request.session["user_key"])
-        print(username)
     if current_session_valid:
         context = {
             "page_name": "CoviGuard",

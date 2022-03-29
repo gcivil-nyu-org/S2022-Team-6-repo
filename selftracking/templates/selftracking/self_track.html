@@ -1,4 +1,4 @@
-{% extends 'main-no-nav.html' %}
+{% extends 'main.html' %}
 
 {% block content %}
 <div class="container">
@@ -11,7 +11,7 @@
                         <h2>Self Tracking</h2>
                      </div>
                 </div>
-               <form action="{% url 'selftrack' username %}" method="post" name="selftrack">
+               <form action="" method="post">
                   {% csrf_token %}
                        <div class="form-group">
                           <label for="exampleInputEmail1">People you Met</label>
@@ -22,7 +22,7 @@
                           <input type="text" name="locationgone" id="placesvisited"  class="form-control" aria-describedby="emailHelp" placeholder="Enter Places Visited">
                        </div>
                        <div class="col-md-12 text-center ">
-                          <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Submit</button>
+                          <button type="submit" name="track" class=" btn btn-block mybtn btn-primary tx-tfm">Submit</button>
                        </div>
                     </form>
             </div>
