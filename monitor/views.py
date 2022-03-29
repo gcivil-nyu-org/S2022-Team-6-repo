@@ -39,7 +39,7 @@ def base(request):
     # df_2021['date'] = pd.to_datetime(df_2021['date']).dt.date
     # df_2020_1 = (df_2020[["date", "cases"]].values).tolist()
     home_location = UserData.objects.filter(username=username)
-    if (len(home_location) == 0):
+    if len(home_location) == 0:
         home_location = "New York City"
     df_2021_1 = historical[historical.county == home_location].copy(deep=True)
     df_2021_1 = (df_2021_1[["date", "cases"]].values).tolist()
