@@ -8,3 +8,5 @@ class SelfTrack(models.Model):
     username = models.ForeignKey(UserData, on_delete=models.CASCADE)
     user_met = models.CharField(max_length=100)
     location_visited = models.CharField(max_length=100)
+    streak = models.IntegerField(default=0)
+    largest_streak = models.IntegerField(default=0)

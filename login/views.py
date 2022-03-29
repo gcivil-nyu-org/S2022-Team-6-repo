@@ -10,7 +10,7 @@ from .models import UserData
 def profile(request, username):
 
     try:
-        _ = UserData.objects.get(username=username)
+        userdata = UserData.objects.get(username=username)
     except Exception:
         # invlaid user url #
         url = reverse("login:error")
@@ -22,34 +22,45 @@ def profile(request, username):
         # user is logged in #
     except Exception:
         # user is not logged in #
+        # TODO: Display data
         context = {
             "page_name": username,
             "session_valid": False,
             "username": username,
+            "FirstName": userdata.firstname,
+            "LastName": userdata.lastname,
+            "Email": userdata.email,
         }
-        # TODO: Display data
         return render(request, "login/profile.html", context)
-
-    context = {
-        "page_name": username,
-        "session_valid": True,
-        "username": current_username,
-        "profile_username": username,
-    }
 
     # user is logged in #
     try:
         if username != current_username:
             raise Exception()
 
-        # TODO: Form
+            # TODO: Form
 
+        context = {
+            "page_name": username,
+            "session_valid": True,
+            "username": current_username,
+            "profile_username": username,
+        }
         # user is logged in & user is looking for his own profile #
         return render(request, "login/user_profile.html", context)
 
     except Exception:
         # user is logged in looking for other profile #
         # TODO: Display data
+        context = {
+            "page_name": username,
+            "session_valid": True,
+            "username": current_username,
+            "profile_username": username,
+            "FirstName": userdata.firstname,
+            "LastName": userdata.lastname,
+            "Email": userdata.email,
+        }
         return render(request, "login/profile.html", context)
 
 

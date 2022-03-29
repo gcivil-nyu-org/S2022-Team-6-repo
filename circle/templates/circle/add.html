@@ -14,7 +14,7 @@
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="circle_id" class="form-label">Circle ID</label>
-                        <input type="text" class="form-control" name="circle_id" id="circle_id">
+                        <input type="text" class="form-control" name="circle_id" id="circle_id" required>
                     </div>
                     <button type="submit" name="request_circle" class="btn btn-primary">Join</button>
                     {% if messages %}
@@ -47,7 +47,7 @@
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="circle_name" class="form-label">Circle Name</label>
-                        <input type="text" class="form-control" name="circle_name" id="circle_name">
+                        <input type="text" class="form-control" name="circle_name" id="circle_name" required>
                         <label for="policy_id" class="form-label">Select Policy</label>
                         <select id="policy_id" name="policy_id" class="form-select" multiple aria-label="multiple select example">
                             <option value="1">Vaccination Status</option>
