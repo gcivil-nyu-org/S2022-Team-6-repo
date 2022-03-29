@@ -15,7 +15,10 @@
     <script>
     _df_2020 = {{ df_2020 | safe }};
     _df_2021 = {{ df_2021 | safe }};
+    debugger;
     _df_2021_1 = {{ df_2021_1 | safe }};
+    counties = {{ counties | safe }};
+    cases = {{ cases | safe }};
 
     {% comment %} for (let i = 0; i < _df_2020.length; i++) { 
         console.log(colors[i]);
@@ -102,7 +105,7 @@
                     title: {
                         text: 'County'
                     },
-                    categories: ["NEW YORK CITY"]
+                    categories: counties
                 },
                 yAxis: {
                     title: {
@@ -119,7 +122,8 @@
                     series: {
                         marker: {
                             enabled: true
-                        }
+                        },
+                        turboThreshold: 50000
                     }
                 },
 
@@ -127,7 +131,7 @@
 
                 series: [{
                     name: "Winter 2021",
-                    data: _df_2021_1
+                    data: cases
                 }],
 
                 responsive: {
