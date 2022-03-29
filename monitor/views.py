@@ -14,47 +14,34 @@ from django.core import signing
 from login.models import UserData
 
 # import pandas as pd
+from .helper import convert_datetime
 
 
 def base(request):
 
     try:
         username = signing.loads(request.session["user_key"])
-        response, client_object = get_s3_client()
-        historical, live, average = get_data(client_object)
+        _, client_object = get_s3_client()
+        historical, _, _ = get_data(client_object)
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
 
-    # circle_user_data = CircleUser.objects.filter(username=username)
+    df = historical[
+        (historical.date < "2022-01-01") & (historical.date >= "2021-08-01")
+    ]
+
+    df_2021 = df[df.county == "New York City"]
+    df_2021 = (df_2021[["date", "cases"]].values).tolist()
+    categories = [convert_datetime(df_2021[i][0]) for i in range(0, 153)]
+
+    home_location = "New York City"
+    work_location = "Orleans"
+
+    df_2021_home = (df[df.county == home_location][["date", "cases"]].values).tolist()
+    df_2021_work = (df[df.county == work_location][["date", "cases"]].values).tolist()
 
     request_user_data, requests = get_notifications(username=username)
-
-    df = historical[historical.county == "New York City"].copy(deep=True)
-
-    df_2020 = df[(df.date < "2021-01-01") & (df.date >= "2020-08-01")].copy(deep=True)
-    df_2021 = df[(df.date < "2022-01-01") & (df.date >= "2021-08-01")].copy(deep=True)
-
-    # df_2020['date'] = pd.to_datetime(df_2020['date']).dt.date
-    # df_2021['date'] = pd.to_datetime(df_2021['date']).dt.date
-    # df_2020_1 = (df_2020[["date", "cases"]].values).tolist()
-    home_location = UserData.objects.filter(username=username)
-    if len(home_location) == 0:
-        home_location = "New York City"
-    df_2021_1 = historical[historical.county == home_location].copy(deep=True)
-    df_2021_1 = (df_2021_1[["date", "cases"]].values).tolist()
-    print(df_2021_1[0], " ", type(df_2021_1[0][0]))
-    counties = []
-    cases = []
-    for i in range(len(df_2021_1)):
-        if type(df_2021_1[i][1]) is not str:
-            # print("Inside Nan", df_2021_1[i][0])
-            df_2021_1[i][0] = "Others"
-        counties.append(df_2021_1[i][1])
-        cases.append(df_2021_1[i][2])
-        # if(math.isnan(float(df_2021_1[i][0]))):
-    df_2020 = (df_2020[["date", "cases"]].values).tolist()
-    df_2021 = (df_2021[["date", "cases"]].values).tolist()
 
     context = {
         "page_name": "Monitor",
@@ -62,10 +49,10 @@ def base(request):
         "request_user_data": request_user_data,
         "requests": requests,
         "monitor": True,
-        "df_2020": df_2020,
+        # other
         "df_2021": df_2021,
-        "df_2021_1": df_2021_1,
-        "counties": counties,
-        "cases": cases,
+        "categories_2021": categories,
+        "df_2021_home": df_2021_home,
+        "df_2021_work": df_2021_work,
     }
     return render(request, "monitor/index.html", context)
