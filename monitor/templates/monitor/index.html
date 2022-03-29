@@ -4,7 +4,8 @@
 {% block content %}
 <div>
 <div id="container"></div>
-<div id="countyChart"></div>
+<div id="countyChart1"></div>
+<div id="countyChart2"></div>
 </div>
 
 <!-- Chartjs libraries -->
@@ -91,7 +92,7 @@
                 }
             });
         });
-        const countyChart = Highcharts.chart('countyChart', {
+        const countyChart1 = Highcharts.chart('countyChart1', {
                 chart: {
                     type: 'spline'
                 },
@@ -99,7 +100,68 @@
                     text: 'Covid Cases'
                 },
                 subtitle: {
-                    text: 'NYC Covid Cases Winter of 2020 & 2021 ffff'
+                    text: 'Home Location Covid Cases'
+                },
+                xAxis: {
+                    title: {
+                        text: 'County'
+                    },
+                    categories: counties
+                },
+                yAxis: {
+                    title: {
+                        text: 'Covid Cases'
+                    },
+                    min: 0
+                },
+                tooltip: {
+                    headerFormat: '<b>{series.name}</b><br>',
+                    pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+                },
+
+                plotOptions: {
+                    series: {
+                        marker: {
+                            enabled: true
+                        },
+                        turboThreshold: 50000
+                    }
+                },
+
+                colors: ['#6CF', '#39F', '#06C', '#036', '#000'],
+
+                series: [{
+                    name: "Winter 2021",
+                    data: cases
+                }],
+
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 100
+                        },
+                        chartOptions: {
+                            plotOptions: {
+                                series: {
+                                    marker: {
+                                        radius: 2.5
+                                    }
+                                }
+                            }
+                        }
+                    }]
+                }
+            });
+            debugger;
+            const countyChart2 = Highcharts.chart('countyChart2', {
+                chart: {
+                    type: 'spline'
+                },
+                title: {
+                    text: 'Covid Cases'
+                },
+                subtitle: {
+                    text: 'Workspace Covid Cases'
                 },
                 xAxis: {
                     title: {

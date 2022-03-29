@@ -11,6 +11,7 @@ from circle.helper import get_notifications
 
 
 from django.core import signing
+from login.models import UserData
 
 # import pandas as pd
 
@@ -37,21 +38,23 @@ def base(request):
     # df_2020['date'] = pd.to_datetime(df_2020['date']).dt.date
     # df_2021['date'] = pd.to_datetime(df_2021['date']).dt.date
     # df_2020_1 = (df_2020[["date", "cases"]].values).tolist()
-    df_2021_1 = (historical[["county", "cases"]].values).tolist()
+    home_location = UserData.objects.filter(username=username)
+    if (len(home_location) == 0):
+        home_location = "New York City"
+    df_2021_1 = historical[historical.county == home_location].copy(deep=True)
+    df_2021_1 = (df_2021_1[["date", "cases"]].values).tolist()
     print(df_2021_1[0], " ", type(df_2021_1[0][0]))
     counties = []
     cases = []
     for i in range(len(df_2021_1)):
-        if type(df_2021_1[i][0]) is not str:
+        if type(df_2021_1[i][1]) is not str:
             # print("Inside Nan", df_2021_1[i][0])
             df_2021_1[i][0] = "Others"
-        counties.append(df_2021_1[i][0])
-        cases.append(df_2021_1[i][1])
+        counties.append(df_2021_1[i][1])
+        cases.append(df_2021_1[i][2])
         # if(math.isnan(float(df_2021_1[i][0]))):
     df_2020 = (df_2020[["date", "cases"]].values).tolist()
     df_2021 = (df_2021[["date", "cases"]].values).tolist()
-
-    # print(df_2020)
 
     context = {
         "page_name": "Monitor",
