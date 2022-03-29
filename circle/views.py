@@ -2,9 +2,8 @@ from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.contrib.auth import logout
 
-from .models import Circle, CirclePolicy, CircleUser, RequestCircle, RecentCircle
+from .models import Circle, CirclePolicy, CircleUser, RequestCircle
 from .helper import get_notifications, get_circle_requests
 from .driver import (
     create_request,

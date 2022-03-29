@@ -49,7 +49,7 @@ def add_recent_circle(circle_data):
     jsonDec = json.decoder.JSONDecoder()
     recent_circle_list = jsonDec.decode(recentcircle.recent_circle)
 
-    if not circle_data.circle_id.circle_id in recent_circle_list:
+    if circle_data.circle_id.circle_id not in recent_circle_list:
 
         if len(recent_circle_list) == 3:
             recent_circle_list.pop(0)

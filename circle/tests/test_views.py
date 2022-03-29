@@ -3,7 +3,6 @@ from django.urls import reverse
 from circle.models import Circle, CircleUser, RecentCircle
 from login.models import UserData
 import datetime
-from importlib import import_module
 
 
 class TestView(TestCase):
