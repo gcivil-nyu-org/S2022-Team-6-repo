@@ -21,7 +21,9 @@ from django.core import signing
 
 def circle(request, username):
     try:
-        username = signing.loads(request.session["user_key"])
+        current_username = signing.loads(request.session["user_key"])
+        if current_username != username:
+            raise Exception()
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
@@ -49,7 +51,10 @@ def circle(request, username):
 
 def current_circle(request, username, circle_id):
     try:
-        _ = signing.loads(request.session["user_key"])
+        current_username = signing.loads(request.session["user_key"])
+        if current_username != username:
+            raise Exception()
+        CircleUser.objects.get(circle_id=circle_id, username=current_username)
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
