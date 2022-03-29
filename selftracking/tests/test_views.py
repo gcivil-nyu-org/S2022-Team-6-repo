@@ -7,6 +7,7 @@ import datetime
 
 class TestViews(TestCase):
     def setUp(self):
+        self.client = Client()
         self.userdata = UserData.objects.create(
             firstname="Chinmay",
             lastname="Kulkarni",
@@ -32,3 +33,16 @@ class TestViews(TestCase):
         response = self.client.get(self.selftrack_url)
         self.assertEqual(response.status_code, 302)
         # self.assertTemplateUsed(response, "selftracking/self_track.html")
+
+    def test_getself_track(self):
+        # Issue a GET request.
+        response = self.client.get("selftracking/self_track.html")
+        self.assertEqual(response.status_code, 404)
+
+    def test_add_selftrack(self):
+
+        response = self.client.post(
+            {"username": "name", "user_met": "pass", "location_visited": "1225"}
+        )
+
+        self.assertNotEqual(response.status_code, 302)
