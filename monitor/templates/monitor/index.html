@@ -2,8 +2,10 @@
 {% load static %}
 
 {% block content %}
-
+<div>
 <div id="container"></div>
+<div id="countyChart"></div>
+</div>
 
 <!-- Chartjs libraries -->
     <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -13,6 +15,10 @@
     <script>
     _df_2020 = {{ df_2020 | safe }};
     _df_2021 = {{ df_2021 | safe }};
+    debugger;
+    _df_2021_1 = {{ df_2021_1 | safe }};
+    counties = {{ counties | safe }};
+    cases = {{ cases | safe }};
 
     {% comment %} for (let i = 0; i < _df_2020.length; i++) { 
         console.log(colors[i]);
@@ -85,6 +91,67 @@
                 }
             });
         });
+        const countyChart = Highcharts.chart('countyChart', {
+                chart: {
+                    type: 'spline'
+                },
+                title: {
+                    text: 'Covid Cases'
+                },
+                subtitle: {
+                    text: 'NYC Covid Cases Winter of 2020 & 2021 ffff'
+                },
+                xAxis: {
+                    title: {
+                        text: 'County'
+                    },
+                    categories: counties
+                },
+                yAxis: {
+                    title: {
+                        text: 'Covid Cases'
+                    },
+                    min: 0
+                },
+                tooltip: {
+                    headerFormat: '<b>{series.name}</b><br>',
+                    pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+                },
+
+                plotOptions: {
+                    series: {
+                        marker: {
+                            enabled: true
+                        },
+                        turboThreshold: 50000
+                    }
+                },
+
+                colors: ['#6CF', '#39F', '#06C', '#036', '#000'],
+
+                series: [{
+                    name: "Winter 2021",
+                    data: cases
+                }],
+
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 100
+                        },
+                        chartOptions: {
+                            plotOptions: {
+                                series: {
+                                    marker: {
+                                        radius: 2.5
+                                    }
+                                }
+                            }
+                        }
+                    }]
+                }
+            });
+            debugger;
     </script>
 
 {% endblock content %}
