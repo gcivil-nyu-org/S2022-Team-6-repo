@@ -3,7 +3,7 @@
 # Create your tests here.
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
-from .views import base
+from monitor.views import base
 
 
 class TestUrls(SimpleTestCase):
