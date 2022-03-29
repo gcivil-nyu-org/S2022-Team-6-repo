@@ -34,13 +34,48 @@
       </button>
       <div class="collapse navbar-collapse" id="navmenu">
         <ul class="navbar-nav ms-auto">
+
+          {% if session_valid %}
+            <li class="nav-item"><a href="{% url 'circle:dashboard' username %}" class="nav-link">Dashboard</a></li>
+          {% endif %}
           <li class="nav-item"><a href="#functionalities" class="nav-link">Functionalities</a></li>
           <li class="nav-item"><a href="#why" class="nav-link">Why CoviGuard?</a></li>
           <li class="nav-item"><a href="#developers" class="nav-link">Developers</a></li>
         </ul>
-        <a href="{% url 'login:signup' %}" class="nav-link">
-        <button class="btn btn-outline-success mx-3" type="submit">SignUp</button>
-        </a>
+        {% if session_valid %}
+          <div class="dropdown">
+              <button class="btn btn-outline-secondary dropdown-toggle position-relative mx-3" type="button"
+                  id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bi bi-gear"></i>
+                  {% if update_settings %}
+                      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                          <i class="bi bi-exclamation-lg"></i>
+                          <span class="visually-hidden">unread messages</span>
+                      </span>
+                  {% endif %}
+              </button>
+              <ul class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton1">
+                  <li>
+                      <div class="alert alert-light m-0" role="alert">
+                          <a href="#" class="text-decoration-none">
+                              Profile
+                          </a>
+                      </div>
+                  </li>
+                  <li>
+                      <div class="alert alert-light m-0" role="alert">
+                          <a href="{% url 'login:logout' %}" class="text-decoration-none">
+                              Sign-Out
+                          </a>
+                      </div>
+                  </li>
+              </ul>
+          </div>
+        {% else %}
+          <a href="{% url 'login:signup' %}" class="nav-link">
+          <button class="btn btn-outline-success mx-3" type="submit">SignUp</button>
+          </a>
+        {% endif %}
       </div>
     </div>
   </nav>

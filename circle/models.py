@@ -52,3 +52,8 @@ class RequestCircle(models.Model):
     request_id = models.AutoField(primary_key=True)
     circle_id = models.ForeignKey(Circle, on_delete=models.CASCADE)
     username = models.ForeignKey(UserData, on_delete=models.CASCADE)
+
+
+class RecentCircle(models.Model):
+    username = models.ForeignKey(UserData, on_delete=models.CASCADE)
+    recent_circle = models.TextField(null=True)

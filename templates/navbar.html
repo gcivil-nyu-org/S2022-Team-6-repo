@@ -15,7 +15,10 @@
             <div class="collapse navbar-collapse" id="navmenu">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a href="{% url 'circle:dashboard' user_enc %}" class="nav-link">Dashboard</a>
+                        <a href="{% url 'login:index' %}" class="nav-link">Main</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'circle:dashboard' username %}" class="nav-link">Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">Profile</a>
@@ -24,56 +27,93 @@
                         <a href="{% url 'selftrack' username %}" class="nav-link">Self-Track</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{% url 'monitor:user_monitor' user_enc %}" class="nav-link">Monitor</a>
+                        <a href="{% url 'monitor:user_monitor' %}" class="nav-link">Monitor</a>
                     </li>
                     <li class="nav-item">
                         <button type="button" class="btn btn-light position-relative">
                             <p class="text-danger">Alerts</p>
-
-
                             <span
                                 class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
                                 <span class="visually-hidden">New alerts</span>
                             </span>
                         </button>
                     </li>
-                </ul>
-                <div class="dropdown">
-                    <button class="btn btn-outline-primary dropdown-toggle position-relative mx-3" type="button"
-                        id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                        Notifications
-                        {% if requests != 0 %}
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                {{ requests }}
-                                <span class="visually-hidden">unread messages</span>
-                            </span>
-                        {% endif %}
-                    </button>
-                    <ul class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton1">
-                        {% if request_user_data %}
-                            {% for request in request_user_data %}
+                    <li class="nav-item text-dark">
+                        <a href="{% url 'circle:create' %}" class="nav-link">
+                            <i class="bi bi-plus-lg"></i>
+                        </a>
+                    </li>
+
+                    <li>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-primary dropdown-toggle position-relative mx-3" type="button"
+                                id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-bell"></i>
+                                {% if requests != 0 %}
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{ requests }}
+                                        <span class="visually-hidden">unread messages</span>
+                                    </span>
+                                {% endif %}
+                            </button>
+                            <ul class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton1">
+                                {% if request_user_data %}
+                                    {% for request in request_user_data %}
+                                        <li>
+                                            <div class="alert alert-danger m-0" role="alert">
+                                                {{request.username.username}} requested to join {{request.circle_id.circle_name}}
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                    <li>
+                                        <div role="alert">
+                                            <a href="{% url 'circle:notify' %}">
+                                                <button type="button" class="btn btn-outline-info">See all Notifications</button>
+                                            </a>
+                                        </div>
+                                    </li>
+                                {% else %}
                                 <li>
-                                    <div class="alert alert-danger m-0" role="alert">
-                                        {{request.username.username}} requested to join {{request.circle_id.circle_name}}
+                                    <div class="alert alert-primary m-0" role="alert">
+                                        No Notifications
                                     </div>
                                 </li>
-                            {% endfor %}
-                            <li>
-                                <div role="alert">
-                                    <a href="{% url 'circle:notify' user_enc %}">
-                                        <button type="button" class="btn btn-outline-info">See all Notifications</button>
-                                    </a>
-                                </div>
-                            </li>
-                        {% else %}
-                        <li>
-                            <div class="alert alert-primary m-0" role="alert">
-                                No Notifications
-                            </div>
-                        </li>
-                        {% endif %}
-                    </ul>
-                </div>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-secondary dropdown-toggle position-relative mx-3" type="button"
+                                id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-gear"></i>
+                                {% if update_settings %}
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        <i class="bi bi-exclamation-lg"></i>
+                                        <span class="visually-hidden">unread messages</span>
+                                    </span>
+                                {% endif %}
+                            </button>
+                            <ul class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton1">
+                                <li>
+                                    <div class="alert alert-light m-0" role="alert">
+                                        <a href="#" class="text-decoration-none">
+                                            Profile
+                                        </a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="alert alert-light m-0" role="alert">
+                                        <a href="{% url 'login:logout' %}" class="text-decoration-none">
+                                            Sign-Out
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>

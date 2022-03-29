@@ -6,9 +6,28 @@ from django.core import signing
 
 from .models import UserData
 
+# CURRENT_SESSION_VALID = False
+
 
 def index(request):
-    context = {"page_name": "CoviGuard", "css_name": "login"}
+    current_session_valid = False
+    if "user_key" in request.session.keys():
+        current_session_valid = True
+        username = signing.loads(request.session["user_key"])
+        print(username)
+    if current_session_valid:
+        context = {
+            "page_name": "CoviGuard",
+            "css_name": "login",
+            "session_valid": current_session_valid,
+            "username": username,
+        }
+    else:
+        context = {
+            "page_name": "CoviGuard",
+            "css_name": "login",
+            "session_valid": current_session_valid,
+        }
     return render(request, "login/index.html", context)
 
 
@@ -20,9 +39,9 @@ def signin(request):
             user = UserData.objects.get(username=username)
 
             user_enc = signing.dumps(username)
-
+            request.session["user_key"] = user_enc
             if user.password == password:
-                url = reverse("circle:dashboard", kwargs={"user_enc": user_enc})
+                url = reverse("circle:dashboard", kwargs={"username": username})
                 return HttpResponseRedirect(url)
             else:
                 raise Exception("Invalid Password")
@@ -34,32 +53,38 @@ def signin(request):
 
 
 def signup(request):
-    context = {"page_name": "SignUp"}
 
-    if request.method == "POST" and "signup-button" in request.POST:
-        userdata = UserData()
-        userdata.firstname = request.POST.get("firstname")
-        userdata.lastname = request.POST.get("lastname")
-        userdata.username = request.POST.get("username")
-        userdata.password = request.POST.get("password")
-        userdata.email = request.POST.get("email")
-        userdata.dob = request.POST.get("DoB")
-        userdata.phone = request.POST.get("phonenumber")
-        userdata.work_address = request.POST.get("ZipWork")
-        userdata.home_adress = request.POST.get("ZipHome")
-        is_vaxxed = False
-        if request.POST.get("vaccination") == 1:
-            is_vaxxed = True
-        userdata.is_vacinated = is_vaxxed
-        userdata.save()
+    try:
+        if request.method == "POST" and "signup-button" in request.POST:
+            userdata = UserData()
+            userdata.firstname = request.POST.get("firstname")
+            userdata.lastname = request.POST.get("lastname")
+            userdata.username = request.POST.get("username")
+            userdata.password = request.POST.get("password")
+            userdata.email = request.POST.get("email")
+            userdata.dob = request.POST.get("DoB")
+            userdata.phone = request.POST.get("phonenumber")
+            userdata.work_address = request.POST.get("ZipWork")
+            userdata.home_adress = request.POST.get("ZipHome")
+            is_vaxxed = False
+            if request.POST.get("vaccination") == 1:
+                is_vaxxed = True
+            userdata.is_vacinated = is_vaxxed
+            userdata.save()
 
-        user = UserData.objects.get(username=userdata.username)
-        username1 = user.username
-        userEnc = signing.dumps(username1)
-        url = reverse("circle:dashboard", kwargs={"username": userEnc})
+            return HttpResponseRedirect(reverse("login:signin"))
+    except Exception:
+        url = reverse("login:error")
         return HttpResponseRedirect(url)
 
+    context = {"page_name": "SignUp"}
     return render(request, "login/signup.html", context)
+
+
+def logout(request):
+    del request.session["user_key"]
+
+    return HttpResponseRedirect(reverse("login:index"))
 
 
 def error(request):
