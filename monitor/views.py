@@ -11,8 +11,6 @@ from circle.helper import get_notifications
 
 
 from django.core import signing
-import math
-import string
 
 # import pandas as pd
 
