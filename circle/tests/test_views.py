@@ -20,6 +20,15 @@ class TestView(TestCase):
             args=["EashanKaushik"],
         )
 
+        self.user_circle_url = reverse(
+            "circle:user_circle",
+            args=["EashanKaushik", "1"],
+        )
+
+        self.create_url = reverse(
+            "circle:create",
+        )
+
         self.userdata = UserData.objects.create(
             firstname="Chinmay",
             lastname="Kulkarni",
@@ -49,3 +58,11 @@ class TestView(TestCase):
         response = self.client.get(self.dashboard_url)
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, "circle/circle.html")
+
+        response = self.client.get(self.user_circle_url)
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, "circle/current-circle.html")
+
+        response = self.client.get(self.create_url)
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, "circle/add.html")
