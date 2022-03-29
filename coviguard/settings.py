@@ -39,7 +39,7 @@ ALLOWED_HOSTS = ["ddah.herokuapp.com"]
 INSTALLED_APPS = [
     "login.apps.LoginConfig",
     "circle.apps.CircleConfig",
-    "selftrack.apps.SelftrackConfig",
+    "selftracking.apps.SelftrackingConfig",
     "alert.apps.AlertConfig",
     "monitor.apps.MonitorConfig",
     "django.contrib.admin",
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "phonenumber_field",
 ]
 
 MIDDLEWARE = [
