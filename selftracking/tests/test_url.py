@@ -1,7 +1,6 @@
-from django.test import SimpleTestCase, TestCase, Client
+from django.test import SimpleTestCase
 from django.urls import reverse, resolve
 from selftracking.views import selftrack
-from selftracking.models import SelfTrack
 
 
 class TestUrls(SimpleTestCase):

@@ -1,6 +1,5 @@
 from django.test import TestCase, Client
 from selftracking.models import SelfTrack
-from selftracking.views import selftrack
 from django.urls import reverse
 import datetime
 
@@ -12,7 +11,7 @@ class TestViews(TestCase):
             date_uploaded=datetime.datetime.now(),
             username="person1",
             user_met="met1",
-            location_visited="11225",
+            location_visited="11225"
         )
         self.selftrack_url = reverse(
             "selftracking:selftrack",
