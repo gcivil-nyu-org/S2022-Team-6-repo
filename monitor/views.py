@@ -12,7 +12,7 @@ from circle.helper import get_notifications
 
 from django.core import signing
 
-# import pandas as pd
+# import pandas as pdcondaavtivate
 from .helper import convert_datetime
 
 
