@@ -38,7 +38,7 @@ def selftrack(request, username):
 
             if not new_user:
                 if uploaded_yesterday:
-                    selftrack.streak += 1
+                    selftrack.streak = get_current_streak(username) + 1
                 else:
                     selftrack.streak = 0
 
