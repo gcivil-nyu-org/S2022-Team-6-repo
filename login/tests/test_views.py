@@ -85,7 +85,7 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "login/index.html")
 
-    def test_check_profile(self):
+    def test_check_profile_fake(self):
         response = self.client.get(self.profile_url_fake)
         # print(response.status_code)
         # print(response)
