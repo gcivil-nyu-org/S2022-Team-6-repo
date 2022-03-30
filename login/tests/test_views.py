@@ -28,6 +28,10 @@ class TestViews(TestCase):
             "login:profile",
             args=["EashanKaushik"],
         )
+        self.profile_url_error = reverse(
+            "login:profile",
+            args=["WrongUser"],
+        )
         self.index_url = reverse("login:index")
 
         self.userdata = UserData.objects.create(
@@ -47,9 +51,11 @@ class TestViews(TestCase):
         self.assertTemplateUsed(response, "login/user_profile.html")
 
     def test_signin(self):
-        response = self.client.get(self.sigin_url)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "login/signin.html")
+        response = self.client.post(
+            self.sigin_url,
+            data={"sign-in": "", "username": "EashanKaushik", "password": "coviguard"},
+        )
+        self.assertEqual(response.status_code, 302)
 
     def test_signup(self):
         response = self.client.get(self.sigup_url)
@@ -70,3 +76,26 @@ class TestViews(TestCase):
         response = self.client.get(self.index_url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "login/index.html")
+
+    def test_check_profile_error(self):
+        response = self.client.get(self.profile_url_error)
+        self.assertEqual(response.status_code, 302)
+
+    def test_user_not_logged_in(self):
+        self.session.pop("user_key")
+        self.session.save()
+        response = self.client.get(self.index_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "login/index.html")
+
+    def test_signin_withWorngPassword(self):
+        response = self.client.post(
+            self.sigin_url,
+            data={
+                "sign-in": "",
+                "username": "EashanKaushik",
+                "password": "wrongPassword",
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "login/signin.html")
