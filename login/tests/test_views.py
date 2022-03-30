@@ -104,7 +104,7 @@ class TestViews(TestCase):
         self.current_session_valid = False
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "login/index.html")
-        
+
     def test_check_profile_error(self):
         response = self.client.get(self.profile_url_error)
         self.assertEqual(response.status_code, 302)
