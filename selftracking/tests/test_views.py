@@ -37,6 +37,8 @@ class TestViews(TestCase):
     def test_getself_track(self):
         # Issue a GET request.
         response = self.client.get("selftracking/self_track.html")
+        print(response)
+        # self.assertTemplateUsed(response, "selftracking/self_track.html")
         self.assertEqual(response.status_code, 404)
 
     def test_add_selftrack(self):
