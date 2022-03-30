@@ -28,6 +28,10 @@ class TestViews(TestCase):
             "login:profile",
             args=["EashanKaushik"],
         )
+        self.profile_url_error = reverse(
+            "login:profile",
+            args=["WrongUser"],
+        )
         self.index_url = reverse("login:index")
 
         self.userdata = UserData.objects.create(
@@ -40,6 +44,20 @@ class TestViews(TestCase):
             work_address="1122",
             home_adress="1122",
         )
+        self.userdata2 = UserData.objects.create(
+            firstname="Chinmay",
+            lastname="Kulkarni",
+            password="coviguard",
+            username=None,
+            email="test@gmail.com",
+            dob=datetime.datetime.now(),
+            work_address="1122",
+            home_adress="1122",
+        )
+        self.profile_url_fake = reverse(
+            "login:profile",
+            args=[None],
+        )
 
     def test_check_profile(self):
         response = self.client.get(self.profile_url)
@@ -47,9 +65,11 @@ class TestViews(TestCase):
         self.assertTemplateUsed(response, "login/user_profile.html")
 
     def test_signin(self):
-        response = self.client.get(self.sigin_url)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "login/signin.html")
+        response = self.client.post(
+            self.sigin_url,
+            data={"sign-in": "", "username": "EashanKaushik", "password": "coviguard"},
+        )
+        self.assertEqual(response.status_code, 302)
 
     def test_signup(self):
         response = self.client.get(self.sigup_url)
@@ -70,3 +90,40 @@ class TestViews(TestCase):
         response = self.client.get(self.index_url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "login/index.html")
+
+    def test_check_profile_fake(self):
+        response = self.client.get(self.profile_url_fake)
+        # print(response.status_code)
+        # print(response)
+        self.assertEqual(response.status_code, 302)
+        url = reverse("login:error")
+        self.assertEqual(url, response.url)
+
+    def test_index_url_false(self):
+        response = self.client.get(self.index_url)
+        self.current_session_valid = False
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "login/index.html")
+
+    def test_check_profile_error(self):
+        response = self.client.get(self.profile_url_error)
+        self.assertEqual(response.status_code, 302)
+
+    def test_user_not_logged_in(self):
+        self.session.pop("user_key")
+        self.session.save()
+        response = self.client.get(self.index_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "login/index.html")
+
+    def test_signin_withWorngPassword(self):
+        response = self.client.post(
+            self.sigin_url,
+            data={
+                "sign-in": "",
+                "username": "EashanKaushik",
+                "password": "wrongPassword",
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "login/signin.html")
