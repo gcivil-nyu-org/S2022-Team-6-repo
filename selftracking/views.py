@@ -18,7 +18,7 @@ def selftrack(request, username):
     new_user = False
     try:
         username = signing.loads(request.session["user_key"])
-    except Exception:
+    except Exception:  # pragma: no cover
         url = reverse("login:error")
         return HttpResponseRedirect(url)
 
