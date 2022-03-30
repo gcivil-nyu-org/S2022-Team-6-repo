@@ -9,14 +9,12 @@ function closeNav() {
     document.getElementById("main").style.marginLeft= "0";
 }
 
-// function.scroll(function() {
-//     if(window.scrollTop() > 20){
-//         document.getElementById("mySidebar").style.top = 0
+function changeCss () {
+    var side_bar = document.querySelector(".sidebar");
+    this.scrollY > 30 ? side_bar.style.top = "0px" : side_bar.style.top = "92px";
+}
 
-//     }else if(window.scrollTop() < 20){
-//         document.getElementById("mySidebar").style.top = 20
-//     }
-// });
+window.addEventListener("scroll", changeCss , false);
 
 document.addEventListener('DOMContentLoaded', function () {
     
