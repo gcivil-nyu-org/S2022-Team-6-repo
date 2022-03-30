@@ -53,7 +53,7 @@ class TestViews(TestCase):
         # self.assertTemplateUsed(response, "selftracking/self_track.html")
 
     def test_add_self_track_real(self):
-        response = self.client.get(self.selftrack_url)
+        response = self.client.get(self.selftrack_url_real)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "selftracking/self_track.html")
 

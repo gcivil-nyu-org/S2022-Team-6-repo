@@ -40,7 +40,9 @@ def base(request):
     df_2021_home = (df[df.county == home_location][["date", "cases"]].values).tolist()
     df_2021_work = (df[df.county == work_location][["date", "cases"]].values).tolist()
 
+
     request_user_data, requests = get_notifications(username=username)
+
 
     context = {
         "page_name": "Monitor",
