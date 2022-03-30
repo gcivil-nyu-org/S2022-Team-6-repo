@@ -2,31 +2,44 @@
 {% load static %}
 
 {% block content %}
-    
-        <div class="container-fluid">
-            <div class="container">
-                <div class="row">
-                    <div class="col-11 mx-auto p-0 my-5 border-dark">
-                        <div id="mainchart"></div>
-                    </div>
+
+<div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+    <a href="#">General</a>
+    <a href="#">Home</a>
+    <a href="#">Workplace</a>
+  </div>
+  
+  <div id="main">
+    <button class="openbtn" onclick="openNav()">☰</button>
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-11 mx-auto p-0 my-5 border-dark">
+                    <div id="mainchart"></div>
                 </div>
             </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-11 mx-auto p-0 my-5 border-dark">
-                        <div id="homechart"></div>
-                    </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-11 mx-auto p-0 my-5 border-dark">
+                    <div id="homechart"></div>
                 </div>
             </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-11 mx-auto p-0 my-5 border-dark">
-                        <div id="workchart"></div>
-                    </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-11 mx-auto p-0 my-5 border-dark">
+                    <div id="workchart"></div>
                 </div>
             </div>
         </div>
     </div>
+</div> 
+    
+  </div>
+    
+        
 
 
 {% endblock content %}

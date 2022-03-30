@@ -1,4 +1,22 @@
 
+function openNav() {
+    document.getElementById("mySidebar").style.width = "250px";
+    document.getElementById("main").style.marginLeft = "250px";
+}
+  
+function closeNav() {
+    document.getElementById("mySidebar").style.width = "0";
+    document.getElementById("main").style.marginLeft= "0";
+}
+
+// function.scroll(function() {
+//     if(window.scrollTop() > 20){
+//         document.getElementById("mySidebar").style.top = 0
+
+//     }else if(window.scrollTop() < 20){
+//         document.getElementById("mySidebar").style.top = 20
+//     }
+// });
 
 document.addEventListener('DOMContentLoaded', function () {
     
