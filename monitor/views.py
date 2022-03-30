@@ -11,7 +11,6 @@ from circle.helper import get_notifications
 
 
 from django.core import signing
-from login.models import UserData
 
 # import pandas as pd
 from .helper import convert_datetime
