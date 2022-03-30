@@ -40,6 +40,20 @@ class TestViews(TestCase):
             work_address="1122",
             home_adress="1122",
         )
+        self.userdata2 = UserData.objects.create(
+            firstname="Chinmay",
+            lastname="Kulkarni",
+            password="coviguard",
+            username=None,
+            email="test@gmail.com",
+            dob=datetime.datetime.now(),
+            work_address="1122",
+            home_adress="1122",
+        )
+        self.profile_url_fake = reverse(
+            "login:profile",
+            args=[None],
+        )
 
     def test_check_profile(self):
         response = self.client.get(self.profile_url)
@@ -68,5 +82,19 @@ class TestViews(TestCase):
 
     def test_index_url(self):
         response = self.client.get(self.index_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "login/index.html")
+
+    def test_check_profile_fake(self):
+        response = self.client.get(self.profile_url_fake)
+        # print(response.status_code)
+        # print(response)
+        self.assertEqual(response.status_code, 302)
+        url = reverse("login:error")
+        self.assertEqual(url, response.url)
+
+    def test_index_url_false(self):
+        response = self.client.get(self.index_url)
+        self.current_session_valid = False
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "login/index.html")

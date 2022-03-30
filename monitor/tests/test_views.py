@@ -23,8 +23,20 @@ class TestViews(TestCase):
             home_adress="1122",
         )
         self.user_monitor_url = reverse("monitor:user_monitor")
+        self.client2 = Client()
+        self.session2 = self.client2.session
+        self.session2["user_key"] = None
+        self.session2.save()
 
     def test_user_monitor(self):
         response = self.client.get(self.user_monitor_url)
         self.assertEqual(response.status_code, 302)
         # self.assertTemplateUsed(response, "monitor/index.html")
+
+    def test_user2_monitor(self):
+        response = self.client2.get(self.user_monitor_url)
+        self.assertEqual(response.status_code, 302)
+        url = reverse("login:error")
+        # print(response.url)
+        # print(url)
+        self.assertEqual(url, response.url)

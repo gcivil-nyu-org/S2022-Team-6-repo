@@ -46,6 +46,14 @@ class TestViews(TestCase):
             "selftracking:selftrack",
             args=["EashanKaushik"],
         )
+        self.client2 = Client()
+        self.session2 = self.client2.session
+        self.session2["user_key"] = None
+        self.session2.save()
+        self.selftrack_url_real2 = reverse(
+            "selftracking:selftrack",
+            args=[None],
+        )
 
     def test_add_self_track(self):
         response = self.client.get(self.selftrack_url)
@@ -60,7 +68,7 @@ class TestViews(TestCase):
     def test_getself_track(self):
         # Issue a GET request.
         response = self.client.get("selftracking/self_track.html")
-        print(response)
+        # print(response)
         # self.assertTemplateUsed(response, "selftracking/self_track.html")
         self.assertEqual(response.status_code, 404)
 
@@ -76,3 +84,11 @@ class TestViews(TestCase):
         response = self.client.get(self.selftrack_url_real)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "selftracking/self_track.html")
+
+    def test_user2_monitor(self):
+        response = self.client2.get(self.selftrack_url_real2)
+        self.assertEqual(response.status_code, 302)
+        url = reverse("login:error")
+        # print(response.url)
+        # print(url)
+        self.assertEqual(url, response.url)
