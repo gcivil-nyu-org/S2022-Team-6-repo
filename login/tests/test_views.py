@@ -1,5 +1,4 @@
 from django.test import TestCase, Client
-from selftracking.models import SelfTrack
 from django.urls import reverse
 from login.models import UserData
 import datetime
@@ -8,6 +7,29 @@ import datetime
 class TestViews(TestCase):
     def setUp(self):
         self.client = Client()
+        self.session = self.client.session
+        self.session[
+            "user_key"
+        ] = "IkVhc2hhbkthdXNoaWsi:1nYapk:h76qaIXuhZkcmoL0DPN_lCrB_88Cs2ezsLn1vMXe0cY"
+        self.session.save()
+        self.sigin_url = reverse(
+            "login:signin",
+        )
+        self.sigup_url = reverse(
+            "login:signup",
+        )
+        self.error_url = reverse(
+            "login:error",
+        )
+        self.logout_url = reverse(
+            "login:logout",
+        )
+        self.profile_url = reverse(
+            "login:profile",
+            args=["EashanKaushik"],
+        )
+        self.index_url = reverse("login:index")
+
         self.userdata = UserData.objects.create(
             firstname="Chinmay",
             lastname="Kulkarni",
@@ -18,18 +40,33 @@ class TestViews(TestCase):
             work_address="1122",
             home_adress="1122",
         )
-        self.SelfTrackData = SelfTrack.objects.create(
-            date_uploaded=datetime.datetime.now(),
-            username=self.userdata,
-            user_met="met1",
-            location_visited="11225",
-        )
-        self.selftrack_url = reverse(
-            "selftracking:selftrack",
-            args=["cs55"],
-        )
 
-    def test_add_self_track(self):
-        response = self.client.get(self.selftrack_url)
+    def test_check_profile(self):
+        response = self.client.get(self.profile_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "login/user_profile.html")
+
+    def test_signin(self):
+        response = self.client.get(self.sigin_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "login/signin.html")
+
+    def test_signup(self):
+        response = self.client.get(self.sigup_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "login/signup.html")
+
+    def test_errr(self):
+        response = self.client.get(self.error_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "login/error.html")
+
+    def test_logout(self):
+        response = self.client.get(self.logout_url)
         self.assertEqual(response.status_code, 302)
-        # self.assertTemplateUsed(response, "selftracking/self_track.html")
+        # self.assertTemplateUsed(response, "login/error.html")
+
+    def test_index_url(self):
+        response = self.client.get(self.index_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "login/index.html")
