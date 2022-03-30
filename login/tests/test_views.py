@@ -28,6 +28,7 @@ class TestViews(TestCase):
             "login:profile",
             args=["EashanKaushik"],
         )
+        self.index_url = reverse("login:index")
 
         self.userdata = UserData.objects.create(
             firstname="Chinmay",
@@ -59,3 +60,13 @@ class TestViews(TestCase):
         response = self.client.get(self.error_url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "login/error.html")
+
+    def test_logout(self):
+        response = self.client.get(self.logout_url)
+        self.assertEqual(response.status_code, 302)
+        # self.assertTemplateUsed(response, "login/error.html")
+
+    def test_index_url(self):
+        response = self.client.get(self.index_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "login/index.html")
