@@ -8,10 +8,10 @@ document.addEventListener('DOMContentLoaded', function () {
             type: 'spline'
         },
         title: {
-            text: 'Covid Cases'
+            text: 'NYC Covid Cases'
         },
         subtitle: {
-            text: 'NYC Covid Cases Winter of 2021'
+            text: 'Winter of 2021'
         },
         xAxis: [
             {
@@ -68,10 +68,10 @@ document.addEventListener('DOMContentLoaded', function () {
             type: 'spline'
         },
         title: {
-            text: 'Covid Cases'
+            text: 'Home Location Covid Cases'
         },
         subtitle: {
-            text: 'Home Location Covid Cases'
+            text: 'Winter 2021'
         },
         xAxis: [
             {
@@ -130,10 +130,10 @@ document.addEventListener('DOMContentLoaded', function () {
             type: 'spline'
         },
         title: {
-            text: 'Covid Cases'
+            text: 'Workspace Covid Cases'
         },
         subtitle: {
-            text: 'Workspace Covid Cases'
+            text: 'Winter 2021'
         },
         xAxis: [
             {
