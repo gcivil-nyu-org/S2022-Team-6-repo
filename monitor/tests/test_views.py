@@ -26,5 +26,5 @@ class TestViews(TestCase):
 
     def test_user_monitor(self):
         response = self.client.get(self.user_monitor_url)
-        self.assertEqual(response.status_code, 302)
-        # self.assertTemplateUsed(response, "monitor/index.html")
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "monitor/index.html")
