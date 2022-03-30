@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.contrib import messages
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
-from .models import Circle, CircleUser, RequestCircle
+from .models import Circle, CirclePolicy, CircleUser, RequestCircle
 from .helper import get_notifications, get_circle_requests
 from .driver import (
     create_request,
@@ -9,34 +11,68 @@ from .driver import (
     accept_request,
     reject_request,
     remove_user,
+    remove_circle,
+    recent_circle,
+    add_recent_circle,
+    get_recent_circles,
 )
 from django.core import signing
 
 
 def circle(request, username):
-    username1 = signing.loads(username)
-    circle_user_data = CircleUser.objects.filter(username=username1)
-    request_user_data, requests = get_notifications(username=username1)
+    try:
+        current_username = signing.loads(request.session["user_key"])
+        if current_username != username:
+            raise Exception()
+    except Exception:
+        url = reverse("login:error")
+        return HttpResponseRedirect(url)
+
+    circle_user_data = CircleUser.objects.filter(username=username)
+
+    request_user_data, requests = get_notifications(username=username)
+
+    recent_circle_list = recent_circle(username)
+
+    recent_circles = get_recent_circles(recent_circle_list, username)
+
     context = {
         "page_name": "Circle",
-        "username": username1,
+        "username": username,
         "request_user_data": request_user_data,
         "requests": requests,
         # Other
         "circle_user_data": circle_user_data,
+        "recent_circles": recent_circles,
     }
-
+    print(reverse("circle:dashboard", kwargs={"username": username}))
     return render(request, "circle/circle.html", context)
 
 
 def current_circle(request, username, circle_id):
+    try:
+        current_username = signing.loads(request.session["user_key"])
+        if current_username != username:
+            raise Exception()
+        CircleUser.objects.get(circle_id=circle_id, username=current_username)
+    except Exception:
+        url = reverse("login:error")
+        return HttpResponseRedirect(url)
 
     if request.method == "POST" and "remove_user" in request.POST:
         remove_user(username, request.POST.get("remove_user"), circle_id)
 
     circle_data = CircleUser.objects.get(circle_id=circle_id, username=username)
 
+    add_recent_circle(circle_data)
+
     circle_user_data = CircleUser.objects.filter(circle_id=circle_id)
+
+    circle_policy = CirclePolicy.objects.filter(circle_id=circle_id)
+
+    policies = []
+    for policy in circle_policy:
+        policies.append(policy.policy_id)
 
     request_user_data, requests = get_notifications(username=username)
 
@@ -55,12 +91,19 @@ def current_circle(request, username, circle_id):
         "circle_data": circle_data,
         "circle_request": circle_request,
         "is_admin": circle_data.is_admin,
+        "policies": policies,
     }
 
     return render(request, "circle/current-circle.html", context)
 
 
-def create(request, username):
+def create(request):
+
+    try:
+        username = signing.loads(request.session["user_key"])
+    except Exception:
+        url = reverse("login:error")
+        return HttpResponseRedirect(url)
 
     if request.method == "POST" and "request_circle" in request.POST:
         circle_id = request.POST.get("circle_id")
@@ -69,15 +112,15 @@ def create(request, username):
             try:
                 RequestCircle.objects.get(circle_id=circle_id, username=username)
                 messages.error(request, "Request Pending!")
-            except Exception as e:
+            except Exception:
                 try:
                     CircleUser.objects.get(username=username, circle_id=circle_id)
-                    messages.error(request, "Already a Member!", str(e))
-                except Exception as e:
+                    messages.error(request, "Already a Member!")
+                except Exception:
                     create_request(username, circle_id)
-                    messages.success(request, "Request sent to Circle Admin", str(e))
-        except Exception as e:
-            messages.error(request, "Circle ID does not exist!", str(e))
+                    messages.success(request, "Request sent to Circle Admin")
+        except Exception:
+            messages.error(request, "Circle ID does not exist!")
 
     if request.method == "POST" and "create_circle" in request.POST:
         circle_name = request.POST.get("circle_name")
@@ -94,8 +137,8 @@ def create(request, username):
                 raise Exception("Circle Name already Exist - Adding Counter to end!!")
 
             create_circle(username, circle_name, request.POST.getlist("policy_id"))
-        except Exception as e:
-            messages.error(request, str(e))
+        except Exception as ex:
+            messages.error(request, str(ex))
 
             create_circle(
                 username,
@@ -119,7 +162,13 @@ def create(request, username):
     return render(request, "circle/add.html", context)
 
 
-def notify(request, username):
+def notify(request):
+
+    try:
+        username = signing.loads(request.session["user_key"])
+    except Exception:
+        url = reverse("login:error")
+        return HttpResponseRedirect(url)
 
     if request.method == "POST" and "accept_circle" in request.POST:
         accept_request(request.POST.get("accept_circle"))
@@ -138,3 +187,35 @@ def notify(request, username):
     }
 
     return render(request, "circle/notifications.html", context)
+
+
+def exit_circle(request, username, circle_id):
+    admin_user = CircleUser.objects.filter(circle_id=circle_id, is_admin=True)
+    remove_user(admin_user[0].username.username, username, circle_id)
+
+    circle_user_data = CircleUser.objects.filter(username=username)
+    request_user_data, requests = get_notifications(username=username)
+    context = {
+        "page_name": "Circle",
+        "username": username,
+        "request_user_data": request_user_data,
+        "requests": requests,
+        # Other
+        "circle_user_data": circle_user_data,
+    }
+    return render(request, "circle/circle.html", context)
+
+
+def delete_circle(request, username, circle_id):
+    remove_circle(circle_id)
+    circle_user_data = CircleUser.objects.filter(username=username)
+    request_user_data, requests = get_notifications(username=username)
+    context = {
+        "page_name": "Circle",
+        "username": username,
+        "request_user_data": request_user_data,
+        "requests": requests,
+        # Other
+        "circle_user_data": circle_user_data,
+    }
+    return render(request, "circle/circle.html", context)

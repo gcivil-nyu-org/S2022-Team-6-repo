@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="" />
+	<meta name="keywords" content="" />
+	<meta name="author" content="Bootstrap Website Templates">
+
+	<title>CoviGuard - 404 Error</title>
+	<!-- CSS -->
+    <link href="{% static 'assets/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+	<link rel="stylesheet" href="{% static 'css/error-style.css' %}" />
+
+	<!-- Custom Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
+</head>
+
+<body style="height: 100%">
+	<div class="container h-100 d-flex justify-content-center text-center">
+		<div class="jumbotron my-auto">
+			<div class="brand">
+				<span class="glyphicon glyphicon-king" aria-hidden="true"></span>
+				<h3 class="text-uppercase">CoviGuard</h3>
+			</div>
+			<h1 class="head"><span>404</span></h1>
+			<p>Oops! The Page you requested was not found!</p>
+			<a href="{% url 'login:index' %}" class="btn-outline"> Back to Home</a>
+		</div>
+	</div>
+
+	<script src="{% static 'assets/dist/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

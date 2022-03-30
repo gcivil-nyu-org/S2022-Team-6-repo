@@ -1,5 +1,65 @@
-from .models import Circle, CircleUser, CirclePolicy, Policy, RequestCircle
+from .models import (
+    Circle,
+    CircleUser,
+    CirclePolicy,
+    Policy,
+    RequestCircle,
+    RecentCircle,
+)
 from login.models import UserData
+import json
+
+
+def recent_circle(username):
+    user_data = UserData.objects.get(username=username)
+
+    recent_circle_list = list()
+
+    if len(RecentCircle.objects.filter(username=user_data)) == 0:
+
+        recentcircle = RecentCircle()
+        recentcircle.username = user_data
+        recentcircle.recent_circle = json.dumps([])
+        recentcircle.save()
+
+    else:
+        recentcircle = RecentCircle.objects.get(username=user_data)
+
+        jsonDec = json.decoder.JSONDecoder()
+        recent_circle_list = jsonDec.decode(recentcircle.recent_circle)
+
+    return recent_circle_list
+
+
+def get_recent_circles(recent_circle_list, username):
+
+    recent_circles = list()
+
+    for circle in recent_circle_list:
+        recent_circles.append(
+            CircleUser.objects.get(circle_id=circle, username=username)
+        )
+
+    return recent_circles
+
+
+def add_recent_circle(circle_data):
+    recentcircle = RecentCircle.objects.get(username=circle_data.username)
+
+    jsonDec = json.decoder.JSONDecoder()
+    recent_circle_list = jsonDec.decode(recentcircle.recent_circle)
+
+    if circle_data.circle_id.circle_id not in recent_circle_list:
+
+        if len(recent_circle_list) == 3:
+            recent_circle_list.pop(0)
+            recent_circle_list.append(circle_data.circle_id.circle_id)
+        else:
+            recent_circle_list.append(circle_data.circle_id.circle_id)
+
+        recentcircle.recent_circle = json.dumps(recent_circle_list)
+
+        recentcircle.save()
 
 
 def create_request(username, circle_id):
@@ -69,3 +129,8 @@ def remove_user(admin_username, username, circle_id):
     circleusers = CircleUser.objects.get(circle_id=circle_id, username=username)
 
     circleusers.delete()
+
+
+def remove_circle(circle_id):
+    circle = Circle.objects.get(circle_id=circle_id)
+    circle.delete()
