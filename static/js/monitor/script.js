@@ -1,3 +1,17 @@
+let isNavBarOpen = false;
+
+
+function toggleNav() {
+    if (!isNavBarOpen) {
+        openNav();
+        isNavBarOpen = true;
+    }
+    else {
+        closeNav();
+        isNavBarOpen = false;
+    }
+}
+
 
 function openNav() {
     document.getElementById("mySidebar").style.width = "250px";
@@ -10,8 +24,11 @@ function closeNav() {
 }
 
 function changeCss () {
-    var side_bar = document.querySelector(".sidebar");
+    //var side_bar = document.querySelector(".sidebar");
+    let side_bar = document.querySelector("#mySidebar");
+    let toggle_bar = document.querySelector("#toggleBtn")
     this.scrollY > 30 ? side_bar.style.top = "0px" : side_bar.style.top = "92px";
+    this.scrollY > 30 ? toggle_bar.style.top = "0px" : toggle_bar.style.top = "132px";
 }
 
 window.addEventListener("scroll", changeCss , false);
@@ -25,9 +42,6 @@ document.addEventListener('DOMContentLoaded', function () {
         title: {
             text: 'NYC Covid Cases'
         },
-        subtitle: {
-            text: 'Winter of 2021'
-        },
         xAxis: [
             {
                 'categories': _categories_2021,
@@ -36,6 +50,12 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             }
         ],
+
+        exporting: { enabled: false },
+
+        credits: {
+            enabled: false
+          },
 
         yAxis: {
             title: {
@@ -55,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         series: [
         {
-            name: "Winter 2021",
+            showInLegend: false,
             data: _df_2021
         }],
 
