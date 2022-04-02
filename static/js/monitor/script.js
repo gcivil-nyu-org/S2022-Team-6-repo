@@ -31,6 +31,51 @@ function changeCss () {
     this.scrollY > 30 ? toggle_bar.style.top = "0px" : toggle_bar.style.top = "132px";
 }
 
+function showMainChart() {
+    let mainChart = document.querySelector("#mainchart");
+    let homechart = document.querySelector("#homechart");
+    let workchart = document.querySelector("#workchart");
+    if (mainChart.getAttribute("class") == "hideChart") {
+        mainChart.removeAttribute("class");
+    }
+    if (homechart.getAttribute("class") != "hideChart") {
+        homechart.setAttribute("class", "hideChart");
+    }
+    if (workchart.getAttribute("class") != "hideChart") {
+        workchart.setAttribute("class", "hideChart");
+    }
+}
+
+function showHomeChart() {
+    let mainChart = document.querySelector("#mainchart");
+    let homechart = document.querySelector("#homechart");
+    let workchart = document.querySelector("#workchart");
+    if (!mainChart.getAttribute("class")) {
+        mainChart.setAttribute("class", "hideChart");
+    }
+    if (homechart.getAttribute("class") == "hideChart") {
+        homechart.removeAttribute("class");
+    }
+    if (!workchart.getAttribute("class")) {
+        workchart.setAttribute("class", "hideChart");
+    }
+}
+
+function showWorkChart() {
+    let mainChart = document.querySelector("#mainchart");
+    let homechart = document.querySelector("#homechart");
+    let workchart = document.querySelector("#workchart");
+    if (!mainChart.getAttribute("class")) {
+        mainChart.setAttribute("class", "hideChart");
+    }
+    if (!homechart.getAttribute("class")) {
+        homechart.setAttribute("class", "hideChart");
+    }
+    if (workchart.getAttribute("class") == "hideChart") {
+        workchart.removeAttribute("class");
+    }
+}
+
 window.addEventListener("scroll", changeCss , false);
 
 document.addEventListener('DOMContentLoaded', function () {
