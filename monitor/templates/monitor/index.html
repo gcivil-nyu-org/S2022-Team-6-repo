@@ -4,14 +4,14 @@
 {% block content %}
 
 <div id="mySidebar" class="sidebar" style="top: 92px;">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-    <a href="#">General</a>
-    <a href="#">Home</a>
-    <a href="#">Workplace</a>
+    <!-- a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a -->
+    <a href="#" onclick="showMainChart()">General</a>
+    <a href="#" onclick="showHomeChart()">Home</a>
+    <a href="#" onclick="showWorkChart()">Workplace</a>
 </div>
   
 <div id="main">
-    <button class="openbtn" onclick="openNav()">☰</button>
+    <button id="toggleBtn" class="openbtn" onclick="toggleNav()">☰</button>
     <div class="container-fluid">
         <div class="container">
             <div class="row">
@@ -23,14 +23,14 @@
         <div class="container">
             <div class="row">
                 <div class="col-11 mx-auto p-0 my-5 border-dark">
-                    <div id="homechart"></div>
+                    <div id="homechart" class="hideChart"></div>
                 </div>
             </div>
         </div>
         <div class="container">
             <div class="row">
                 <div class="col-11 mx-auto p-0 my-5 border-dark">
-                    <div id="workchart"></div>
+                    <div id="workchart" class="hideChart"></div>
                 </div>
             </div>
         </div>

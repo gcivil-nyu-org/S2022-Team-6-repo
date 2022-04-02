@@ -48,3 +48,7 @@ background-color: #444;
 transition: margin-left .5s;
 padding: 16px;
 }
+
+.hideChart {
+    display: none;
+}
