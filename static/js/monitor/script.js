@@ -1,5 +1,8 @@
 let isNavBarOpen = false;
-
+let mainChartSelector = document.querySelector("#mainchart_1");
+let homechartSelector = document.querySelector("#homechart_1");
+let workchartSelector = document.querySelector("#workchart_1");
+let chart,homechart,workchart;
 
 function toggleNav() {
     if (!isNavBarOpen) {
@@ -10,6 +13,9 @@ function toggleNav() {
         closeNav();
         isNavBarOpen = false;
     }
+    chart.reflow();
+    homechart.reflow();
+    workchart.reflow();
 }
 
 
@@ -32,47 +38,47 @@ function changeCss () {
 }
 
 function showMainChart() {
-    let mainChart = document.querySelector("#mainchart");
-    let homechart = document.querySelector("#homechart");
-    let workchart = document.querySelector("#workchart");
-    if (mainChart.getAttribute("class") == "hideChart") {
-        mainChart.removeAttribute("class");
+    //let mainChart = document.querySelector("#mainchart");
+    //let homechart = document.querySelector("#homechart");
+    //let workchart = document.querySelector("#workchart");
+    if (mainChartSelector.classList && mainChartSelector.classList.contains('hideChart')) {
+        mainChartSelector.classList.remove('hideChart');
     }
-    if (homechart.getAttribute("class") != "hideChart") {
-        homechart.setAttribute("class", "hideChart");
+    if (homechartSelector.classList && !homechartSelector.classList.contains('hideChart')) {
+        homechartSelector.classList.add('hideChart');
     }
-    if (workchart.getAttribute("class") != "hideChart") {
-        workchart.setAttribute("class", "hideChart");
+    if (workchartSelector.classList && !workchartSelector.classList.contains('hideChart')) {
+        workchartSelector.classList.add('hideChart');
     }
 }
 
 function showHomeChart() {
-    let mainChart = document.querySelector("#mainchart");
-    let homechart = document.querySelector("#homechart");
-    let workchart = document.querySelector("#workchart");
-    if (!mainChart.getAttribute("class")) {
-        mainChart.setAttribute("class", "hideChart");
+    //let mainChart = document.querySelector("#mainchart");
+    //let homechart = document.querySelector("#homechart");
+    //let workchart = document.querySelector("#workchart");
+    if (mainChartSelector.classList && !mainChartSelector.classList.contains('hideChart')) {
+        mainChartSelector.classList.add('hideChart');
     }
-    if (homechart.getAttribute("class") == "hideChart") {
-        homechart.removeAttribute("class");
+    if (homechartSelector.classList && homechartSelector.classList.contains('hideChart')) {
+        homechartSelector.classList.remove('hideChart');
     }
-    if (!workchart.getAttribute("class")) {
-        workchart.setAttribute("class", "hideChart");
+    if (workchartSelector.classList && !workchartSelector.classList.contains('hideChart')) {
+        workchartSelector.classList.add('hideChart');
     }
 }
 
 function showWorkChart() {
-    let mainChart = document.querySelector("#mainchart");
-    let homechart = document.querySelector("#homechart");
-    let workchart = document.querySelector("#workchart");
-    if (!mainChart.getAttribute("class")) {
-        mainChart.setAttribute("class", "hideChart");
+    //let mainChart = document.querySelector("#mainchart");
+    //let homechart = document.querySelector("#homechart");
+    //let workchart = document.querySelector("#workchart");
+    if (mainChartSelector.classList && !mainChartSelector.classList.contains('hideChart')) {
+        mainChartSelector.classList.add('hideChart');
     }
-    if (!homechart.getAttribute("class")) {
-        homechart.setAttribute("class", "hideChart");
+    if (homechartSelector.classList && !homechartSelector.classList.contains('hideChart')) {
+        homechartSelector.classList.add('hideChart');
     }
-    if (workchart.getAttribute("class") == "hideChart") {
-        workchart.removeAttribute("class");
+    if (workchartSelector.classList && workchartSelector.classList.contains('hideChart')) {
+        workchartSelector.classList.remove('hideChart');
     }
 }
 
@@ -80,7 +86,7 @@ window.addEventListener("scroll", changeCss , false);
 
 document.addEventListener('DOMContentLoaded', function () {
     
-    const chart = Highcharts.chart('mainchart', {
+    chart = Highcharts.chart('mainchart', {
         chart: {
             type: 'spline'
         },
@@ -143,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
     
-    const homechart = Highcharts.chart('homechart', {
+    homechart = Highcharts.chart('homechart', {
         chart: {
             type: 'spline'
         },
@@ -205,7 +211,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
     
-    const workchart = Highcharts.chart('workchart', {
+    workchart = Highcharts.chart('workchart', {
         chart: {
             type: 'spline'
         },
