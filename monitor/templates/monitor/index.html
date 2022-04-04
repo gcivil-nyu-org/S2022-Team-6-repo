@@ -4,30 +4,30 @@
 {% block content %}
 
 <div id="mySidebar" class="sidebar" style="top: 92px;">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-    <a href="#">General</a>
-    <a href="#">Home</a>
-    <a href="#">Workplace</a>
+    <!-- a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a -->
+    <a href="#" onclick="showMainChart()">General</a>
+    <a href="#" onclick="showHomeChart()">Home</a>
+    <a href="#" onclick="showWorkChart()">Workplace</a>
 </div>
   
 <div id="main">
-    <button class="openbtn" onclick="openNav()">☰</button>
+    <button id="toggleBtn" class="openbtn" onclick="toggleNav()">☰</button>
     <div class="container-fluid">
-        <div class="container">
+        <div id="mainchart_1" class="container">
             <div class="row">
                 <div class="col-11 mx-auto p-0 my-5 border-dark">
                     <div id="mainchart"></div>
                 </div>
             </div>
         </div>
-        <div class="container">
+        <div id="homechart_1" class="container hideChart">
             <div class="row">
                 <div class="col-11 mx-auto p-0 my-5 border-dark">
                     <div id="homechart"></div>
                 </div>
             </div>
         </div>
-        <div class="container">
+        <div id="workchart_1" class="container hideChart">
             <div class="row">
                 <div class="col-11 mx-auto p-0 my-5 border-dark">
                     <div id="workchart"></div>

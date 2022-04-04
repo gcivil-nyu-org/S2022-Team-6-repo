@@ -10,12 +10,14 @@ from .helper import (
     check_date_uplaoded,
     check_uploaded_yesterday,
     get_current_streak,
+    get_longest_streak,
 )
 
 
 def selftrack(request, username):
     uploaded_today = False
     new_user = False
+    uploaded_yesterday = False
     try:
         username = signing.loads(request.session["user_key"])
     except Exception:
@@ -28,6 +30,22 @@ def selftrack(request, username):
     except Exception:
         new_user = True
 
+    if (not uploaded_yesterday and not new_user) and not check_date_uplaoded(
+        username, default=False
+    ):
+        selftrack = SelfTrack()
+        selftrack.username = UserData.objects.get(username=username)
+        selftrack.user_met = "42a7b2626eae970122e01f65af2f5092"
+        selftrack.location_visited = "42a7b2626eae970122e01f65af2f5092"
+        selftrack.streak = 0
+
+        if get_current_streak(username) > get_longest_streak(username):
+            selftrack.largest_streak = get_current_streak(username)
+        else:
+            selftrack.largest_streak = get_longest_streak(username)
+
+        selftrack.save()
+
     if new_user or not uploaded_today:
 
         if request.method == "POST" and "track" in request.POST:
@@ -37,15 +55,16 @@ def selftrack(request, username):
             selftrack.location_visited = request.POST.get("user_met")
 
             if not new_user:
-                if uploaded_yesterday:
-                    selftrack.streak += 1
-                else:
-                    selftrack.streak = 0
+                selftrack.streak = get_current_streak(username) + 1
 
-                    longest_streak = get_current_streak(username)
-                    selftrack.largest_streak = longest_streak
+                if get_current_streak(username) > get_longest_streak(username):
+                    selftrack.largest_streak = get_current_streak(username)
+                else:
+                    selftrack.largest_streak = get_longest_streak(username)
+
             else:
                 selftrack.streak = 1
+                selftrack.largest_streak = 1
 
             selftrack.save()
             uploaded_today = True
