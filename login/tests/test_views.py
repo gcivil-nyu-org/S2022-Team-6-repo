@@ -69,7 +69,7 @@ class TestViews(TestCase):
             self.sigin_url,
             data={"sign-in": "", "username": "EashanKaushik", "password": "coviguard"},
         )
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
 
     def test_signup(self):
         response = self.client.get(self.sigup_url)
