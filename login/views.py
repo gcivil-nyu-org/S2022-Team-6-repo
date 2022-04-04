@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib import messages
 from django.core import signing
+from .hashes import PBKDF2WrappedSHA1PasswordHasher
 
 from .models import UserData
 
@@ -86,12 +87,13 @@ def index(request):
 
 
 def signin(request):
+
     if request.method == "POST" and "sign-in" in request.POST:
         try:
             username = request.POST.get("username")
-            password = request.POST.get("password")
+            hasher = PBKDF2WrappedSHA1PasswordHasher()
+            password = hasher.encode(request.POST.get("password"), "test123")
             user = UserData.objects.get(username=username)
-
             user_enc = signing.dumps(username)
             request.session["user_key"] = user_enc
             if user.password == password:
@@ -122,8 +124,8 @@ def signup(request):
             userdata.lastname = request.POST.get("lastname")
             userdata.username = request.POST.get("username")
             userdata.email = request.POST.get("email")
-            userdata.password = request.POST.get("password")
-
+            hasher = PBKDF2WrappedSHA1PasswordHasher()
+            userdata.password = hasher.encode(request.POST.get("password"), "test123")
             userdata.save()
 
             return HttpResponseRedirect(reverse("login:signin"))
