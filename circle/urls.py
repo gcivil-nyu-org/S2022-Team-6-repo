@@ -1,13 +1,24 @@
 from django.urls import path
 from . import views
 
+app_name = "circle"
 urlpatterns = [
-    path("<str:username>/", views.circle, name="circle"),
+    path("<str:username>/", views.circle, name="dashboard"),
     path(
-        "current/<str:username>/<str:circle_id>/", views.current_circle, name="current"
+        "current/<str:username>/<str:circle_id>/",
+        views.current_circle,
+        name="user_circle",
     ),
-    path("create/<str:username>", views.create, name="create"),
-    path("create/notifications/<str:username>", views.notify, name="notify"),
-    #     path('remove/<str:circleid>/<str:username>/',
-    #          views.remove_user, name='remove')
+    path("create", views.create, name="create"),
+    path("create/notifications/", views.notify, name="notify"),
+    path(
+        "exit/<str:username>/<str:circle_id>/",
+        views.exit_circle,
+        name="exitcircle",
+    ),
+    path(
+        "deletecircle/<str:username>/<str:circle_id>/",
+        views.delete_circle,
+        name="deletecircle",
+    ),
 ]

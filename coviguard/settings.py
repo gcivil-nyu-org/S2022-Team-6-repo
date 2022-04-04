@@ -14,6 +14,7 @@ from pathlib import Path
 import django_heroku
 import environ
 import os
+import sys
 
 environ.Env.read_env()
 
@@ -38,12 +39,16 @@ ALLOWED_HOSTS = ["ddah.herokuapp.com"]
 INSTALLED_APPS = [
     "login.apps.LoginConfig",
     "circle.apps.CircleConfig",
+    "selftracking.apps.SelftrackingConfig",
+    "alert.apps.AlertConfig",
+    "monitor.apps.MonitorConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "phonenumber_field",
 ]
 
 MIDDLEWARE = [
@@ -55,6 +60,10 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 600  # set just 10 seconds to test
+SESSION_SAVE_EVERY_REQUEST = True
 
 ROOT_URLCONF = "coviguard.urls"
 
@@ -90,6 +99,12 @@ DATABASES = {
         "PORT": "5432",
     }
 }
+
+if "test" in sys.argv:
+    DATABASES["default"] = {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "mydatabase",
+    }
 
 
 # Password validation
@@ -136,4 +151,4 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-django_heroku.settings(locals())
+django_heroku.settings(locals(), test_runner=False)

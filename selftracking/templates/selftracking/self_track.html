@@ -1,0 +1,52 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<section>
+   <div class="container">
+      <div class="row">
+         <div class="col-md-5 mx-auto my-5 p-4 bg-secondary border">
+            <div id="first">
+               <div class="myform form ">
+                  <div class="logo mb-3">
+                     <div class="col-md-12 text-center">
+                        {% if new_user %} Welcome to {% endif %}<h1>Self Tracking</h1>
+                     </div>
+                  </div>
+                  {% if not uploaded_today %}
+                  <form action="" method="post">
+                     {% csrf_token %}
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">People you Met</label>
+                        <input type="text" name="user_met" id="user_met" class="form-control" required>
+                     </div><br>
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Places Visited</label>
+                        <input type="text" name="location_visited" id="location_visited" class="form-control" required>
+                     </div><br>
+                     <div class="col-md-12 text-center ">
+                        <button type="submit" name="track" class=" btn btn-block mybtn btn-primary tx-tfm">Submit</button>
+                     </div>
+                  </form>
+                  {% else %}
+                     <h2>Data already uploaded</h2>
+                  {% endif %}
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
+
+<section>
+   <div class="container">
+      <div class="row">
+         <div class="col-md-5 mx-auto my-5 p-4 bg-success border">
+            <div class="col-md-12 text-center">
+               <h2>Your Current Streak: {{current_streak}}</h2>
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
+{% endblock content %}
