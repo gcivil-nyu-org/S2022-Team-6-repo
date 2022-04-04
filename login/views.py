@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.core import signing
 from .hashes import PBKDF2WrappedSHA1PasswordHasher
 
-from .models import UserData
+from .models import UserData, Privacy
 
 
 def profile(request, username):
@@ -127,6 +127,12 @@ def signup(request):
             hasher = PBKDF2WrappedSHA1PasswordHasher()
             userdata.password = hasher.encode(request.POST.get("password"), "test123")
             userdata.save()
+
+            privacy = Privacy()
+            privacy.username = UserData.objects.get(
+                username=request.POST.get("username")
+            )
+            privacy.save()
 
             return HttpResponseRedirect(reverse("login:signin"))
     except Exception:
