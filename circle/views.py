@@ -124,27 +124,8 @@ def create(request):
 
     if request.method == "POST" and "create_circle" in request.POST:
         circle_name = request.POST.get("circle_name")
-
-        counter = 0
-        circleusers = CircleUser.objects.filter(username=username)
-
-        for circleuser in circleusers:
-            if circleuser.circle_id.circle_name == circle_name:
-                counter += 1
-
-        try:
-            if counter > 0:
-                raise Exception("Circle Name already Exist - Adding Counter to end!!")
-
-            create_circle(username, circle_name, request.POST.getlist("policy_id"))
-        except Exception as ex:
-            messages.error(request, str(ex))
-
-            create_circle(
-                username,
-                circle_name + "(" + str(counter) + ")",
-                request.POST.getlist("policy_id"),
-            )
+        
+        create_circle(username, circle_name, request.POST.getlist("policy_id"))
 
     circle_user_data = CircleUser.objects.filter(username=username)
 

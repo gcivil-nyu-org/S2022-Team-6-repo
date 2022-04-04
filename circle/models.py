@@ -9,7 +9,7 @@ class Circle(models.Model):
     circle_name = models.CharField(max_length=100)
     admin_username = models.ForeignKey(UserData, on_delete=models.CASCADE)
     # admin_id = models.CharField(max_length=100, default=0)
-    no_of_users = models.IntegerField(default=0)
+    no_of_users = models.IntegerField(default=1)
     created = models.DateTimeField(auto_now_add=True)
     # pending_request = models.IntegerField(default=0)
     # circle_display_image = models.ImageField(upload_to = 'images/')
@@ -57,3 +57,14 @@ class RequestCircle(models.Model):
 class RecentCircle(models.Model):
     username = models.ForeignKey(UserData, on_delete=models.CASCADE)
     recent_circle = models.TextField(null=True)
+
+
+class CirclePolicyCompliance(models.Model):
+    class Meta:
+        unique_together = (("circle_id", "policy_id", "username"),)
+
+    circle_id = models.ForeignKey(Circle, on_delete=models.CASCADE)
+    policy_id = models.ForeignKey(Policy, on_delete=models.CASCADE)
+    username = models.ForeignKey(UserData, on_delete=models.CASCADE)
+
+    compliance = models.BooleanField(default=False)
