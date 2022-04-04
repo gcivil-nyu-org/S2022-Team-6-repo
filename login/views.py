@@ -129,7 +129,9 @@ def signup(request):
             userdata.save()
 
             privacy = Privacy()
-            privacy.username = UserData.objects.get(username=request.POST.get("username"))
+            privacy.username = UserData.objects.get(
+                username=request.POST.get("username")
+            )
             privacy.save()
 
             return HttpResponseRedirect(reverse("login:signin"))

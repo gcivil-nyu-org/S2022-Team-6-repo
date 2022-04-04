@@ -124,7 +124,7 @@ def create(request):
 
     if request.method == "POST" and "create_circle" in request.POST:
         circle_name = request.POST.get("circle_name")
-        
+
         create_circle(username, circle_name, request.POST.getlist("policy_id"))
 
     circle_user_data = CircleUser.objects.filter(username=username)
