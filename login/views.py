@@ -8,8 +8,7 @@ from .hashes import PBKDF2WrappedSHA1PasswordHasher
 from .models import UserData, Privacy
 
 
-def profile(request, username):
-
+def profile_view(request, username):
     try:
         userdata = UserData.objects.get(username=username)
     except Exception:
@@ -17,13 +16,13 @@ def profile(request, username):
         url = reverse("login:error")
         return HttpResponseRedirect(url)
 
-    # valid user url #
     try:
+        # check user logged in
         current_username = signing.loads(request.session["user_key"])
-        # user is logged in #
-    except Exception:  # pragma: no cover
-        # user is not logged in #
-        # TODO: Display data
+        if current_username != username:
+            raise Exception()
+    except Exception:
+
         context = {
             "page_name": username,
             "session_valid": False,
@@ -31,38 +30,98 @@ def profile(request, username):
             "FirstName": userdata.firstname,
             "LastName": userdata.lastname,
             "Email": userdata.email,
-        }  # pragma: no cover
-        return render(request, "login/profile.html", context)  # pragma: no cover
+        }
+        return render(request, "login/profile.html", context)
 
-    # user is logged in #
+    context = {
+        "page_name": username,
+        "session_valid": True,
+        "username": username,
+        "FirstName": userdata.firstname,
+        "LastName": userdata.lastname,
+        "Email": userdata.email,
+    }
+    # valid username
+    return render(request, "login/profile.html", context)
+
+
+def user_profile(request, username, page):
     try:
-        if username != current_username:
-            raise Exception()  # pragma: no cover
+        # check valid username
+        userdata = UserData.objects.get(username=username)
+    except:
+        # not a valid username
+        url = reverse("login:error")
+        return HttpResponseRedirect(url)
 
-            # TODO: Form
+    # valid username
+    try:
+        # check user logged in
+        current_username = signing.loads(request.session["user_key"])
+        if current_username != username:
+            raise Exception()
+    except Exception:
+        # user not logged in
+        url = reverse("login:profile", kwargs={"username": username})
+        return HttpResponseRedirect(url)
 
-        context = {
-            "page_name": username,
-            "session_valid": True,
-            "username": current_username,
-            "profile_username": username,
-        }
-        # user is logged in & user is looking for his own profile #
-        return render(request, "login/user_profile.html", context)
+    # user logged in
+    context = {
+        "page_name": username,
+        "session_valid": True,
+        "username": current_username,
+        "profile_username": username,
+    }
+    # user is logged in & user is looking for his own profile #
+    return render(request, "login/user_profile.html", context)
 
-    except Exception:  # pragma: no cover
-        # user is logged in looking for other profile #
-        # TODO: Display data
-        context = {
-            "page_name": username,
-            "session_valid": True,
-            "username": current_username,
-            "profile_username": username,
-            "FirstName": userdata.firstname,
-            "LastName": userdata.lastname,
-            "Email": userdata.email,
-        }
-        return render(request, "login/profile.html", context)  # pragma: no cover
+
+def user_privacy(request, username, page):
+    try:
+        current_username = signing.loads(request.session["user_key"])
+        if current_username != username:
+            raise Exception()
+    except Exception:
+        url = reverse("login:error")
+        return HttpResponseRedirect(url)
+
+    context = {
+        "page_name": username,
+        "session_valid": True,
+        "username": current_username,
+    }
+
+    return render(request, "login/user_privacy.html", context)
+
+
+def user_change_password(request, username, page):
+    try:
+        current_username = signing.loads(request.session["user_key"])
+        if current_username != username:
+            raise Exception()
+    except Exception:
+        url = reverse("login:error")
+        return HttpResponseRedirect(url)
+
+    context = {
+        "page_name": username,
+        "session_valid": True,
+        "username": current_username,
+    }
+
+    return render(request, "login/user_password.html", context)
+
+
+def settings(request, username, page):
+    if "profile" in page:
+        return user_profile(request, username, page)
+    elif "privacy" in page:
+        return user_privacy(request, username, page)
+    elif "password" in page:
+        return user_change_password(request, username, page)
+    else:
+        url = reverse("login:error")
+        return HttpResponseRedirect(url)
 
 
 def index(request):

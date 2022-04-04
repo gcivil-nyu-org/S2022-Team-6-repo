@@ -10,8 +10,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name="circle",
-            name="pending_request",
-        ),
+        migrations.RemoveField(model_name="circle", name="pending_request",),
     ]

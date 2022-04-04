@@ -27,7 +27,6 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AlterUniqueTogether(
-            name="circlepolicy",
-            unique_together={("circle_id", "policy_id")},
+            name="circlepolicy", unique_together={("circle_id", "policy_id")},
         ),
     ]
