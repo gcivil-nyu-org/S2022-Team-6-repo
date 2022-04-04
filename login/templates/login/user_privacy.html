@@ -11,13 +11,13 @@
                 <table class="table">
                     <tbody>
                         <tr>
-                            <th><a href="{% url 'login:settings' username 'profile' %}" class="link-dark"><h3>Profile</h3></a></th>
+                            <th><a class="btn btn-link" style="text-decoration: none" href="{% url 'login:settings' username 'profile' %}" class="link-dark"><h3>Profile</h3></a></th>
                         </tr>
                         <tr>
-                            <th><a href="{% url 'login:settings' username 'privacy' %}" class="link-dark"><h3>Privacy</h3></a></th>
+                            <th><a class="btn btn-link" style="text-decoration: none" href="{% url 'login:settings' username 'privacy' %}" class="link-dark"><h3>Privacy</h3></a></th>
                         </tr>
                         <tr>
-                            <th><a href="{% url 'login:settings' username 'password' %}" class="link-dark"><h3>Change Password</h3></a></th>
+                            <th><a class="btn btn-link" style="text-decoration: none" style="text-decoration: none" href="{% url 'login:settings' username 'password' %}" class="link-dark"><h3>Password</h3></a></th>
                         </tr>
                     </tbody>
                     </table>
@@ -37,25 +37,32 @@
                                 </div>
                                 <form action="" method="post">
                                     {% csrf_token %}
-                                    <div class="form-group">
-                                        <label for="dob">Date Of Birth</label>
-                                        <input type="date" name="dob" id="dob"  class="form-control">
+                                    <div class="form-group p-2">
+                                        <label for="vaccination_status">Show Vaccination Status: </label><br>
+                                        
+                                        <input class="form-check-input" type="radio" name="vaccination_status_yes" id="vaccination_status_yes" value="vaccination_status_yes" {% if vacination_status %} checked {% endif %} >
+                                        <label class="form-check-label" for="vaccination_status_yes">Yes</label>
+                                        <br>
+                                        <input class="form-check-input" type="radio" name="vaccination_status_no" id="vaccination_status_no" value="vaccination_status_no" {% if not vacination_status %} checked {% endif %}>
+                                        <label class="form-check-label" for="vaccination_status_no">No</label>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="number">Phone Number</label>
-                                        <input type="tel" name="number" id="number"  class="form-control">
+                                    <div class="form-group p-2">
+                                        <label for="people_met">Show People Met: </label><br>
+                                        
+                                        <input class="form-check-input" type="radio" name="people_met_yes" id="people_met_yes" value="people_met_yes">
+                                        <label class="form-check-label" for="people_met_yes">Yes</label>
+                                        <br>
+                                        <input class="form-check-input" type="radio" name="people_met_no" id="people_met_no" value="people_met_no">
+                                        <label class="form-check-label" for="people_met_no">No</label>
                                     </div>
-                                    <div class="form-group">
-                                    <label for="zip-home">Zip Code (Home)</label>
-                                    <input type="text" name="zip-home" id="zip-home"  class="form-control">
-                                    </div>
-                                    <div class="form-group">
-                                    <label for="zip-work">Zip Code (Work)</label>
-                                    <input type="text" name="zip-work" id="zip-work"  class="form-control">
-                                    </div>
-                                    <div class="form-group">
-                                    <label for="vaccination">Vaccinated ?</label>
-                                    <input type="checkbox" name="vaccination" id="vaccination" >
+                                    <div class="form-group p-2">
+                                        <label for="locaiton_visited">Show Location Visited: </label><br>
+                                        
+                                        <input class="form-check-input" type="radio" name="locaiton_visited_yes" id="locaiton_visited_yes" value="locaiton_visited_yes">
+                                        <label class="form-check-label" for="locaiton_visited_yes">Yes</label>
+                                        <br>
+                                        <input class="form-check-input" type="radio" name="locaiton_visited_no" id="locaiton_visited_no" value="locaiton_visited_no">
+                                        <label class="form-check-label" for="locaiton_visited_no">No</label>
                                     </div>
                                 </form>
                             </div>

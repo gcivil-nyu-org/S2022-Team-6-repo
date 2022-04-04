@@ -89,6 +89,7 @@ def user_privacy(request, username, page):
         "page_name": username,
         "session_valid": True,
         "username": current_username,
+        "vacination_status": True
     }
 
     return render(request, "login/user_privacy.html", context)
@@ -102,6 +103,25 @@ def user_change_password(request, username, page):
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
+    
+    if request.method == "POST" and "submit_change" in request.POST:
+        hasher = PBKDF2WrappedSHA1PasswordHasher()
+        userdata = UserData.objects.get(username=username)        
+        try:
+            if userdata.password != hasher.encode(request.POST.get("old_password"), "test123") and userdata.password != request.POST.get("new_password"):
+                raise Exception()
+            try:
+                if request.POST.get("new_password") != request.POST.get("confirm_password"):
+                    raise Exception()
+                
+                userdata.password = hasher.encode(request.POST.get("confirm_password"), "test123")
+                userdata.save()
+                messages.success(request, "Password Updated! ")
+            
+            except Exception:
+                messages.error(request, "Password did not match!")
+        except Exception:
+                messages.error(request, "Invalid Old Password")
 
     context = {
         "page_name": username,
