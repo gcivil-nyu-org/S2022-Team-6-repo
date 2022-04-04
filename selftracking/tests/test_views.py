@@ -37,16 +37,23 @@ class TestViews(TestCase):
             user_met="met1",
             location_visited="11225",
         )
-        self.selftrack_url = reverse("selftracking:selftrack", args=["cs55"],)
+        self.selftrack_url = reverse(
+            "selftracking:selftrack",
+            args=["cs55"],
+        )
 
         self.selftrack_url_real = reverse(
-            "selftracking:selftrack", args=["EashanKaushik"],
+            "selftracking:selftrack",
+            args=["EashanKaushik"],
         )
         self.client2 = Client()
         self.session2 = self.client2.session
         self.session2["user_key"] = None
         self.session2.save()
-        self.selftrack_url_real2 = reverse("selftracking:selftrack", args=[None],)
+        self.selftrack_url_real2 = reverse(
+            "selftracking:selftrack",
+            args=[None],
+        )
 
     def test_add_self_track(self):
         response = self.client.get(self.selftrack_url)

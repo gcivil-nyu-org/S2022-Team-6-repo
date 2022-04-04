@@ -85,11 +85,41 @@ def user_privacy(request, username, page):
         url = reverse("login:error")
         return HttpResponseRedirect(url)
 
+    if request.method == "POST" and "submit_change" in request.POST:
+
+        privacy = Privacy.objects.get(username=username)
+
+        if ("vaccination_status_yes") in request.POST:
+            privacy.show_vacination = True
+
+        if ("vaccination_status_no") in request.POST:
+            privacy.show_vacination = False
+
+        if ("people_met_yes") in request.POST:
+            privacy.show_people_met = True
+
+        if ("people_met_no") in request.POST:
+            privacy.show_people_met = False
+
+        if ("locaiton_visited_yes") in request.POST:
+            privacy.show_location_visited = True
+
+        if ("locaiton_visited_no") in request.POST:
+            privacy.show_location_visited = False
+
+        privacy.save()
+
+    vacination_status = Privacy.objects.get(username=username).show_vacination
+    people_status = Privacy.objects.get(username=username).show_people_met
+    location_status = Privacy.objects.get(username=username).show_location_visited
+
     context = {
         "page_name": username,
         "session_valid": True,
         "username": current_username,
-        "vacination_status": True
+        "vacination_status": vacination_status,
+        "people_status": people_status,
+        "location_status": location_status,
     }
 
     return render(request, "login/user_privacy.html", context)
@@ -103,25 +133,31 @@ def user_change_password(request, username, page):
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
-    
+
     if request.method == "POST" and "submit_change" in request.POST:
         hasher = PBKDF2WrappedSHA1PasswordHasher()
-        userdata = UserData.objects.get(username=username)        
+        userdata = UserData.objects.get(username=username)
         try:
-            if userdata.password != hasher.encode(request.POST.get("old_password"), "test123") and userdata.password != request.POST.get("new_password"):
+            if userdata.password != hasher.encode(
+                request.POST.get("old_password"), "test123"
+            ) and userdata.password != request.POST.get("new_password"):
                 raise Exception()
             try:
-                if request.POST.get("new_password") != request.POST.get("confirm_password"):
+                if request.POST.get("new_password") != request.POST.get(
+                    "confirm_password"
+                ):
                     raise Exception()
-                
-                userdata.password = hasher.encode(request.POST.get("confirm_password"), "test123")
+
+                userdata.password = hasher.encode(
+                    request.POST.get("confirm_password"), "test123"
+                )
                 userdata.save()
                 messages.success(request, "Password Updated! ")
-            
+
             except Exception:
                 messages.error(request, "Password did not match!")
         except Exception:
-                messages.error(request, "Invalid Old Password")
+            messages.error(request, "Invalid Old Password")
 
     context = {
         "page_name": username,

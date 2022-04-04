@@ -12,7 +12,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterUniqueTogether(name="circleuser", unique_together=set(),),
+        migrations.AlterUniqueTogether(
+            name="circleuser",
+            unique_together=set(),
+        ),
         migrations.AlterField(
             model_name="circleuser",
             name="username",
@@ -21,7 +24,11 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AlterUniqueTogether(
-            name="circleuser", unique_together={("circle_id", "username")},
+            name="circleuser",
+            unique_together={("circle_id", "username")},
         ),
-        migrations.RemoveField(model_name="circleuser", name="user_id",),
+        migrations.RemoveField(
+            model_name="circleuser",
+            name="user_id",
+        ),
     ]

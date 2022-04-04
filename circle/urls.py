@@ -11,7 +11,11 @@ urlpatterns = [
     ),
     path("create", views.create, name="create"),
     path("create/notifications/", views.notify, name="notify"),
-    path("exit/<str:username>/<str:circle_id>/", views.exit_circle, name="exitcircle",),
+    path(
+        "exit/<str:username>/<str:circle_id>/",
+        views.exit_circle,
+        name="exitcircle",
+    ),
     path(
         "deletecircle/<str:username>/<str:circle_id>/",
         views.delete_circle,
