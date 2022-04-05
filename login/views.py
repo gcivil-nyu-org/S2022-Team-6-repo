@@ -3,7 +3,6 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib import messages
 from django.core import signing
-from .models import UserData
 from .hashes import PBKDF2WrappedSHA1PasswordHasher
 
 from .models import UserData, Privacy
