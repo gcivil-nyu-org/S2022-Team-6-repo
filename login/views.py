@@ -1,5 +1,5 @@
-from django.http import HttpResponseRedirect,HttpResponse
-from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse
 from django.contrib import messages
 from django.core import signing
@@ -312,6 +312,8 @@ def signup(request):
         return HttpResponseRedirect(url)
 
     return render(request, "login/signup.html", context)
+
+
 def logout(request):
     del request.session["user_key"]
 
