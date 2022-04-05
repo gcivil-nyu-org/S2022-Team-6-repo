@@ -21,6 +21,9 @@ from .driver import (
     add_recent_circle,
     get_recent_circles,
 )
+
+from selftracking.helper import check_upload_today
+
 from django.core import signing
 
 
@@ -44,12 +47,15 @@ def circle(request, username):
     three_non_compliance, non_compliance = get_all_non_compliance(username, True)
 
     total_notify = requests + non_compliance
+    streak_today = check_upload_today(username)
+
     context = {
         "page_name": "Circle",
         "username": username,
         "request_user_data": request_user_data,
         "total_notify": total_notify,
         "three_non_compliance": three_non_compliance,
+        "streak_today": streak_today,
         # Other
         "circle_user_data": circle_user_data,
         "recent_circles": recent_circles,
@@ -78,8 +84,6 @@ def current_circle(request, username, circle_id):
 
     circle_compliance = get_circle_compliance(circle_id=circle_id)
 
-    print(circle_compliance)
-
     policies = []
     for policy in circle_policy:
         policies.append(policy.policy_id)
@@ -94,6 +98,8 @@ def current_circle(request, username, circle_id):
     else:
         circle_request = None
 
+    streak_today = check_upload_today(username)
+
     context = {
         "page_name": circle_data.circle_id.circle_name,
         "username": username,
@@ -107,6 +113,7 @@ def current_circle(request, username, circle_id):
         "is_admin": circle_data.is_admin,
         "policies": policies,
         "circle_compliance": circle_compliance,
+        "streak_today": streak_today,
     }
 
     return render(request, "circle/current-circle.html", context)
@@ -150,12 +157,15 @@ def create(request):
 
     total_notify = requests + non_compliance
 
+    streak_today = check_upload_today(username)
+
     context = {
         "page_name": "Add Circle",
         "username": username,
         "request_user_data": request_user_data,
         "total_notify": total_notify,
         "three_non_compliance": three_non_compliance,
+        "streak_today": streak_today,
         # Other
         "circle_user_data": circle_user_data,
     }
@@ -185,12 +195,15 @@ def notify(request):
 
     total_notify = requests + non_compliance
 
+    streak_today = check_upload_today(username)
+
     context = {
         "page_name": "Notifications",
         "username": username,
         "request_user_data": request_user_data,
         "total_notify": total_notify,
         "three_non_compliance": three_non_compliance,
+        "streak_today": streak_today,
         # Other
         "all_requests": all_requests,
         "all_non_compliance": all_non_compliance,
@@ -208,6 +221,7 @@ def exit_circle(request, username, circle_id):
     three_non_compliance, non_compliance = get_all_non_compliance(username, True)
 
     total_notify = requests + non_compliance
+    streak_today = check_upload_today(username)
 
     context = {
         "page_name": "Circle",
@@ -215,6 +229,7 @@ def exit_circle(request, username, circle_id):
         "request_user_data": request_user_data,
         "total_notify": total_notify,
         "three_non_compliance": three_non_compliance,
+        "streak_today": streak_today,
         # Other
         "circle_user_data": circle_user_data,
     }
@@ -228,13 +243,14 @@ def delete_circle(request, username, circle_id):
     three_non_compliance, non_compliance = get_all_non_compliance(username, True)
 
     total_notify = requests + non_compliance
-
+    streak_today = check_upload_today(username)
     context = {
         "page_name": "Circle",
         "username": username,
         "request_user_data": request_user_data,
         "total_notify": total_notify,
         "three_non_compliance": three_non_compliance,
+        "streak_today": streak_today,
         # Other
         "circle_user_data": circle_user_data,
     }

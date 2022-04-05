@@ -11,6 +11,7 @@ from .helper import (
     check_uploaded_yesterday,
     get_current_streak,
     get_longest_streak,
+    check_upload_today,
 )
 
 
@@ -52,7 +53,7 @@ def selftrack(request, username):
             selftrack = SelfTrack()
             selftrack.username = UserData.objects.get(username=username)
             selftrack.user_met = request.POST.get("user_met")
-            selftrack.location_visited = request.POST.get("user_met")
+            selftrack.location_visited = request.POST.get("location_visited")
 
             if not new_user:
                 selftrack.streak = get_current_streak(username) + 1
@@ -77,18 +78,24 @@ def selftrack(request, username):
 
     if not new_user:
         current_streak = get_current_streak(username)
+        longest_streak = get_longest_streak(username)
+
     else:
         current_streak = 0
+        longest_streak = 0
 
+    streak_today = check_upload_today(username)
     context = {
         "page_name": "SelfTrack",
         "username": username,
         "request_user_data": request_user_data,
         "total_notify": total_notify,
         "three_non_compliance": three_non_compliance,
+        "streak_today": streak_today,
         # other
         "uploaded_today": uploaded_today,
         "current_streak": current_streak,
         "new_user": new_user,
+        "longest_streak": longest_streak,
     }
     return render(request, "selftracking/self_track.html", context)

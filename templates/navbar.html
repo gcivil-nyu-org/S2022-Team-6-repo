@@ -20,13 +20,32 @@
                     <li class="nav-item">
                         <a href="{% url 'circle:dashboard' username %}" class="nav-link">Dashboard</a>
                     </li>
-                    <li class="nav-item">
+                    {% comment %} <li class="nav-item">
                         <a href="{% url 'selftracking:selftrack' username %}" class="nav-link">Self-Track</a>
+                    </li> {% endcomment %}
+                    <li class="nav-item">
+                        <a style="text-decoration: none" href="{% url 'selftracking:selftrack' username %}">
+                        <button type="button" class="btn btn-light position-relative">
+                            
+                            <p class="text-secondary">Self-Track</p>
+                            {% if not streak_today %}
+                                <span
+                                    class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                                    {% comment %} {{ total_notify }} {% endcomment %}
+                                    <span class="visually-hidden">New alerts</span>
+                                </span>
+                            {% endif %}
+                                {% comment %} <p class="text-danger">Self-Track</p>
+                            {% endif %} {% endcomment %}
+
+                        </button>
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a href="{% url 'monitor:user_monitor' %}" class="nav-link">Monitor</a>
                     </li>
                     <li class="nav-item">
+                        <a style="text-decoration: none" href="#">
                         <button type="button" class="btn btn-light position-relative">
                             <p class="text-danger">Alerts</p>
                             <span
@@ -34,6 +53,7 @@
                                 <span class="visually-hidden">New alerts</span>
                             </span>
                         </button>
+                        </a>
                     </li>
                     <li class="nav-item text-dark">
                         <a href="{% url 'circle:create' %}" class="nav-link">

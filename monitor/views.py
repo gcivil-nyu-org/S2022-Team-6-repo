@@ -14,6 +14,7 @@ from django.core import signing
 
 # import pandas as pdcondaavtivate
 from .helper import convert_datetime
+from selftracking.helper import check_upload_today
 
 
 def base(request):
@@ -44,6 +45,8 @@ def base(request):
     three_non_compliance, non_compliance = get_all_non_compliance(username, True)
 
     total_notify = requests + non_compliance
+    streak_today = check_upload_today(username)
+
     context = {
         "page_name": "Monitor",
         "username": username,
@@ -51,6 +54,7 @@ def base(request):
         "total_notify": total_notify,
         "three_non_compliance": three_non_compliance,
         "monitor": True,
+        "streak_today": streak_today,
         # other
         "df_2021": df_2021,
         "categories_2021": categories,

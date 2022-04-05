@@ -24,6 +24,18 @@ def check_date_uplaoded(username, default=True):
         )
 
 
+def check_upload_today(username):
+    try:
+        latest = SelfTrack.objects.filter(username=username).latest("date_uploaded")
+    except Exception:
+        return False
+
+    return (
+        latest.date_uploaded.date() == datetime.datetime.now().date()
+        and latest.user_met != "42a7b2626eae970122e01f65af2f5092"
+    )
+
+
 def check_uploaded_yesterday(username):
 
     yesterday_date = datetime.date.today() + datetime.timedelta(days=-1)
