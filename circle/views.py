@@ -9,6 +9,8 @@ from .helper import (
     get_circle_requests,
     get_all_non_compliance,
     get_circle_compliance,
+    get_recent_circles,
+    check_recent_circle,
 )
 from .driver import (
     create_request,
@@ -19,7 +21,6 @@ from .driver import (
     remove_circle,
     recent_circle,
     add_recent_circle,
-    get_recent_circles,
 )
 
 from selftracking.helper import check_upload_today
@@ -40,9 +41,11 @@ def circle(request, username):
 
     request_user_data, requests = get_notifications(username=username)
 
-    recent_circle_list = recent_circle(username)
-
-    recent_circles = get_recent_circles(recent_circle_list, username)
+    check_recent_circle(recent_circle(username), username)
+    recent_circle_list = recent_circle(username)  # TODO: Recent Circle
+    recent_circles = get_recent_circles(
+        recent_circle_list, username
+    )  # TODO: Recent Circle
 
     three_non_compliance, non_compliance = get_all_non_compliance(username, True)
 
@@ -78,7 +81,7 @@ def current_circle(request, username, circle_id):
 
     circle_data = CircleUser.objects.get(circle_id=circle_id, username=username)
 
-    add_recent_circle(circle_data)
+    add_recent_circle(circle_data)  # TODO: Recent Circle
     circle_user_data = CircleUser.objects.filter(circle_id=circle_id)
     circle_policy = CirclePolicy.objects.filter(circle_id=circle_id)
 
@@ -216,42 +219,12 @@ def exit_circle(request, username, circle_id):
     admin_user = CircleUser.objects.filter(circle_id=circle_id, is_admin=True)
     remove_user(admin_user[0].username.username, username, circle_id)
 
-    circle_user_data = CircleUser.objects.filter(username=username)
-    request_user_data, requests = get_notifications(username=username)
-    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
-
-    total_notify = requests + non_compliance
-    streak_today = check_upload_today(username)
-
-    context = {
-        "page_name": "Circle",
-        "username": username,
-        "request_user_data": request_user_data,
-        "total_notify": total_notify,
-        "three_non_compliance": three_non_compliance,
-        "streak_today": streak_today,
-        # Other
-        "circle_user_data": circle_user_data,
-    }
-    return render(request, "circle/circle.html", context)
+    url = reverse("circle:dashboard", kwargs={"username": username})
+    return HttpResponseRedirect(url)
 
 
 def delete_circle(request, username, circle_id):
     remove_circle(circle_id)
-    circle_user_data = CircleUser.objects.filter(username=username)
-    request_user_data, requests = get_notifications(username=username)
-    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
 
-    total_notify = requests + non_compliance
-    streak_today = check_upload_today(username)
-    context = {
-        "page_name": "Circle",
-        "username": username,
-        "request_user_data": request_user_data,
-        "total_notify": total_notify,
-        "three_non_compliance": three_non_compliance,
-        "streak_today": streak_today,
-        # Other
-        "circle_user_data": circle_user_data,
-    }
-    return render(request, "circle/circle.html", context)
+    url = reverse("circle:dashboard", kwargs={"username": username})
+    return HttpResponseRedirect(url)
