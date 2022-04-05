@@ -39,11 +39,11 @@
                                     {% csrf_token %}
                                     <div class="form-group p-2">
                                         <label for="first_name">First Name: </label>
-                                        <input type="text" name="first_name" id="first_name"  class="form-control" {% if first_name %} placeholder={{first_name}} {% endif %}>
+                                        <input type="text" name="first_name" id="first_name" class="form-control" {% if first_name %} value={{first_name}} {% endif %}>
                                     </div>
                                     <div class="form-group p-2">
                                         <label for="last_name">Last Name: </label>
-                                        <input type="text" name="last_name" id="last_name" class="form-control" {% if last_name %} placeholder={{last_name}} {% endif %}>
+                                        <input type="text" name="last_name" id="last_name" class="form-control" {% if last_name %} value={{last_name}} {% endif %}>
                                     </div>
                                     <div class="form-group p-2">
                                         <label for="dob">Date Of Birth: </label>
@@ -51,24 +51,24 @@
                                     </div>
                                     <div class="form-group p-2">
                                         <label for="phone">Phone Number: </label>
-                                        <input type="tel" name="phone" id="phone" class="form-control" {% if phone %} placeholder={{phone}} {% endif %}>
+                                        <input type="tel" name="phone" id="phone" class="form-control" {% if phone %} value={{phone}} {% endif %}>
                                     </div>
                                     <div class="form-group p-2">
                                         <label for="home">Home County: </label>
                                         <select class="form-select" name="home" id="home" aria-label="Default select example">
                                             <option selected>{% if home %} {{home}} {% endif %}</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            {% for county in counties %}
+                                                <option value="{{county}}">{{county}}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>
                                     <div class="form-group p-2">
                                         <label for="work">Work County: </label>
-                                        <select class="form-select" name="home" id="home" aria-label="Default select example">
+                                        <select class="form-select" name="work" id="work" aria-label="Default select example">
                                             <option selected>{% if work %} {{work}} {% endif %}</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            {% for county in counties %}
+                                                <option value="{{county}}">{{county}}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>
                                     <div class="form-group p-2">

@@ -7,6 +7,8 @@ from .hashes import PBKDF2WrappedSHA1PasswordHasher
 
 from .models import UserData, Privacy
 
+from monitor.driver import get_s3_client, get_data
+
 
 def profile_view(request, username):
     try:
@@ -49,6 +51,8 @@ def user_profile(request, username, page):
     try:
         # check valid username
         userdata = UserData.objects.get(username=username)
+        _, client_object = get_s3_client()
+        historical, _, _ = get_data(client_object)
     except:
         # not a valid username
         url = reverse("login:error")
@@ -64,42 +68,42 @@ def user_profile(request, username, page):
         # user not logged in
         url = reverse("login:profile", kwargs={"username": username})
         return HttpResponseRedirect(url)
-    
+
     if request.method == "POST" and "submit_change" in request.POST:
-        try: 
+        try:
             userdata = UserData.objects.get(username=username)
-            
-            if 'first_name' in request.POST:
-                userdata.firstname = request.POST['first_name']
-            
-            if 'last_name' in request.POST:
-                userdata.lastname = request.POST['last_name']
-            
-            if 'dob' in request.POST:
-                userdata.dob = request.POST['dob']
-            
-            if 'phone' in request.POST:
-                userdata.phone = request.POST['phone']
-            
-            if 'home' in request.POST:
-                userdata.home_adress = request.POST['home']
-            
-            if 'work' in request.POST:
-                userdata.work_address = request.POST['work']
-            
-            if 'vaccination_status_yes' in request.POST:
+
+            if "first_name" in request.POST:
+                userdata.firstname = request.POST["first_name"]
+
+            if "last_name" in request.POST:
+                userdata.lastname = request.POST["last_name"]
+
+            if "dob" in request.POST:
+                userdata.dob = request.POST["dob"]
+
+            if "phone" in request.POST:
+                userdata.phone = request.POST["phone"]
+
+            if "home" in request.POST:
+                userdata.home_adress = request.POST["home"]
+
+            if "work" in request.POST:
+                userdata.work_address = request.POST["work"]
+
+            if "vaccination_status_yes" in request.POST:
                 userdata.is_vacinated = True
-            
-            if 'vaccination_status_no' in request.POST:
+
+            if "vaccination_status_no" in request.POST:
                 userdata.is_vacinated = False
-            
+
             userdata.save()
         except Exception:
             messages.error(request, "Invalid Field")
-        
+
     # user logged in
     userdata = UserData.objects.get(username=username)
-    
+
     vaccination_status = userdata.is_vacinated
     first_name = userdata.firstname
     last_name = userdata.lastname
@@ -107,12 +111,14 @@ def user_profile(request, username, page):
     phone = userdata.phone
     home = userdata.work_address
     work = userdata.home_adress
-    
+
+    counties = historical.county.dropna().unique()
+    counties = counties[counties != "Unknown"]
+
     context = {
         "page_name": username,
         "session_valid": True,
-        "username": current_username,        
-        
+        "username": current_username,
         "vaccination_status": vaccination_status,
         "first_name": first_name,
         "last_name": last_name,
@@ -120,6 +126,7 @@ def user_profile(request, username, page):
         "phone": phone,
         "home": home,
         "work": work,
+        "counties": counties,
     }
     # user is logged in & user is looking for his own profile #
     return render(request, "login/user_profile.html", context)

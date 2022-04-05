@@ -15,19 +15,13 @@ class TestView(TestCase):
         ] = "IkVhc2hhbkthdXNoaWsi:1nYapk:h76qaIXuhZkcmoL0DPN_lCrB_88Cs2ezsLn1vMXe0cY"
         self.session.save()
 
-        self.dashboard_url = reverse(
-            "circle:dashboard",
-            args=["EashanKaushik"],
-        )
+        self.dashboard_url = reverse("circle:dashboard", args=["EashanKaushik"],)
 
         self.user_circle_url = reverse(
-            "circle:user_circle",
-            args=["EashanKaushik", "1"],
+            "circle:user_circle", args=["EashanKaushik", "1"],
         )
 
-        self.create_url = reverse(
-            "circle:create",
-        )
+        self.create_url = reverse("circle:create",)
 
         self.notify_url = reverse("circle:notify")
 

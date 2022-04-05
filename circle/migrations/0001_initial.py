@@ -77,8 +77,6 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={
-                "unique_together": {("circle_id", "user_id")},
-            },
+            options={"unique_together": {("circle_id", "user_id")},},
         ),
     ]
