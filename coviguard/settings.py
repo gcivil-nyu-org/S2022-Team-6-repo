@@ -60,6 +60,11 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+PASSWORD_HASHERS = [
+    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
+    "login.hashes.PBKDF2WrappedSHA1PasswordHasher",
+]
+
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 600  # set just 10 seconds to test
 SESSION_SAVE_EVERY_REQUEST = True

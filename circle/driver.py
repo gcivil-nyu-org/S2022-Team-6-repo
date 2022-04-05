@@ -5,8 +5,9 @@ from .models import (
     Policy,
     RequestCircle,
     RecentCircle,
+    CirclePolicyCompliance,
 )
-from login.models import UserData
+from login.models import UserData, Privacy
 import json
 
 
@@ -70,14 +71,28 @@ def create_request(username, circle_id):
     requestcircle.save()
 
 
+def check_compliance(policy, username):
+    policy_id = Policy.objects.get(policy_id=policy).policy_id
+
+    if policy_id == 1:
+        return Privacy.objects.get(username=username).show_vacination
+
+    if policy_id == 2:
+        return Privacy.objects.get(username=username).show_people_met
+
+    if policy_id == 3:
+        return Privacy.objects.get(username=username).show_location_visited
+
+
 def create_circle(username, circle_name, policy_id):
 
+    # Add Circle
     circle = Circle()
-
     circle.circle_name = circle_name
     circle.admin_username = UserData.objects.get(username=username)
     circle.save()
 
+    # Add Admin user
     circleusers = CircleUser()
     circleusers.circle_id = Circle.objects.get(circle_id=circle.circle_id)
     circleusers.username = UserData.objects.get(username=username)
@@ -85,10 +100,19 @@ def create_circle(username, circle_name, policy_id):
     circleusers.save()
 
     for policy in policy_id:
+        # Add Policy
         circlepolicy = CirclePolicy()
         circlepolicy.circle_id = Circle.objects.get(circle_id=circle.circle_id)
         circlepolicy.policy_id = Policy.objects.get(policy_id=int(policy))
         circlepolicy.save()
+
+        # Add Policy Compliance
+        policycomplicance = CirclePolicyCompliance()
+        policycomplicance.circle_id = Circle.objects.get(circle_id=circle.circle_id)
+        policycomplicance.policy_id = Policy.objects.get(policy_id=int(policy))
+        policycomplicance.username = UserData.objects.get(username=username)
+        policycomplicance.compliance = check_compliance(int(policy), username)
+        policycomplicance.save()
 
 
 def accept_request(request_id):
@@ -114,6 +138,24 @@ def accept_request(request_id):
     circleusers.save()
     current_request.delete()
 
+    for current_policy in CirclePolicy.objects.filter(
+        circle_id=current_request.circle_id.circle_id
+    ):
+        # Add Policy Compliance
+        policy = current_policy.policy_id.policy_id
+        policycomplicance = CirclePolicyCompliance()
+        policycomplicance.circle_id = Circle.objects.get(
+            circle_id=current_request.circle_id.circle_id
+        )
+        policycomplicance.policy_id = Policy.objects.get(policy_id=policy)
+        policycomplicance.username = UserData.objects.get(
+            username=current_request.username.username
+        )
+        policycomplicance.compliance = check_compliance(
+            policy, current_request.username.username
+        )
+        policycomplicance.save()
+
 
 def reject_request(request_id):
     temp = RequestCircle.objects.get(request_id=request_id)
@@ -122,13 +164,20 @@ def reject_request(request_id):
 
 def remove_user(admin_username, username, circle_id):
 
+    # decrease number of users
     circle = Circle.objects.get(circle_id=circle_id)
     circle.no_of_users -= 1
     circle.save()
 
+    # remove circleuser object
     circleusers = CircleUser.objects.get(circle_id=circle_id, username=username)
-
     circleusers.delete()
+
+    # remove circlecompliance object
+    policycomplicance = CirclePolicyCompliance.objects.filter(
+        circle_id=circle_id, username=username
+    )
+    policycomplicance.delete()
 
 
 def remove_circle(circle_id):

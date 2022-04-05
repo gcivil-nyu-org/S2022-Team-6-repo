@@ -62,14 +62,14 @@ class TestViews(TestCase):
     def test_check_profile(self):
         response = self.client.get(self.profile_url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "login/user_profile.html")
+        self.assertTemplateUsed(response, "login/profile.html")
 
     def test_signin(self):
         response = self.client.post(
             self.sigin_url,
             data={"sign-in": "", "username": "EashanKaushik", "password": "coviguard"},
         )
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
 
     def test_signup(self):
         response = self.client.get(self.sigup_url)
