@@ -12,12 +12,26 @@ class TestViews(TestCase):
             "user_key"
         ] = "IkVhc2hhbkthdXNoaWsi:1nYapk:h76qaIXuhZkcmoL0DPN_lCrB_88Cs2ezsLn1vMXe0cY"
         self.session.save()
-        self.sigin_url = reverse("login:signin",)
-        self.sigup_url = reverse("login:signup",)
-        self.error_url = reverse("login:error",)
-        self.logout_url = reverse("login:logout",)
-        self.profile_url = reverse("login:profile", args=["EashanKaushik"],)
-        self.profile_url_error = reverse("login:profile", args=["WrongUser"],)
+        self.sigin_url = reverse(
+            "login:signin",
+        )
+        self.sigup_url = reverse(
+            "login:signup",
+        )
+        self.error_url = reverse(
+            "login:error",
+        )
+        self.logout_url = reverse(
+            "login:logout",
+        )
+        self.profile_url = reverse(
+            "login:profile",
+            args=["EashanKaushik"],
+        )
+        self.profile_url_error = reverse(
+            "login:profile",
+            args=["WrongUser"],
+        )
         self.index_url = reverse("login:index")
 
         self.userdata = UserData.objects.create(
@@ -40,12 +54,15 @@ class TestViews(TestCase):
             work_address="1122",
             home_adress="1122",
         )
-        self.profile_url_fake = reverse("login:profile", args=[None],)
+        self.profile_url_fake = reverse(
+            "login:profile",
+            args=[None],
+        )
 
     def test_check_profile(self):
         response = self.client.get(self.profile_url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "login/user_profile.html")
+        self.assertTemplateUsed(response, "login/profile.html")
 
     def test_signin(self):
         response = self.client.post(
