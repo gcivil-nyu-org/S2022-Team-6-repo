@@ -7,8 +7,10 @@ from .models import (
     RecentCircle,
     CirclePolicyCompliance,
 )
+
 from login.models import UserData, Privacy
 import json
+import os
 
 
 def recent_circle(username):
@@ -72,13 +74,19 @@ def check_compliance(policy, username):
         return Privacy.objects.get(username=username).show_location_visited
 
 
-def create_circle(username, circle_name, policy_id):
+def create_circle(username, circle_name, policy_id, group_image):
 
     # Add Circle
     circle = Circle()
     circle.circle_name = circle_name
     circle.admin_username = UserData.objects.get(username=username)
     circle.save()
+
+    if group_image:
+        group_image.name = str(circle.circle_id) + "." + group_image.name.split(".")[-1]
+        circle.group_image = group_image
+        # circle.group_image.name = str(circle.circle_id)+ '.' + group_image.name.split('.')[-1]
+        circle.save()
 
     # Add Admin user
     circleusers = CircleUser()

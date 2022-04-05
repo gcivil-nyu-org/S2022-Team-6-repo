@@ -39,6 +39,11 @@ def circle(request, username):
 
     circle_user_data = CircleUser.objects.filter(username=username)
 
+    # if circle_user_data.circle_id.group_image:
+    #     group_image = 'https://coviguard-images.s3.us-east-1.amazonaws.com/' + str(circle_user_data.circle_id.group_image)
+    # else:
+    #     group_image = 'https://coviguard-images.s3.us-east-1.amazonaws.com/media/default/circle/1.jpg'
+
     request_user_data, requests = get_notifications(username=username)
 
     check_recent_circle(recent_circle(username), username)
@@ -81,6 +86,11 @@ def current_circle(request, username, circle_id):
 
     circle_data = CircleUser.objects.get(circle_id=circle_id, username=username)
 
+    # if circle_data.circle_id.group_image:
+    #     group_image = 'https://coviguard-images.s3.us-east-1.amazonaws.com/' + str(circle_data.circle_id.group_image)
+    # else:
+    #     group_image = 'https://coviguard-images.s3.us-east-1.amazonaws.com/media/default/circle/1.jpg'
+
     add_recent_circle(circle_data)  # TODO: Recent Circle
     circle_user_data = CircleUser.objects.filter(circle_id=circle_id)
     circle_policy = CirclePolicy.objects.filter(circle_id=circle_id)
@@ -117,6 +127,7 @@ def current_circle(request, username, circle_id):
         "policies": policies,
         "circle_compliance": circle_compliance,
         "streak_today": streak_today,
+        # "group_image": group_image,
     }
 
     return render(request, "circle/current-circle.html", context)
@@ -148,9 +159,19 @@ def create(request):
             messages.error(request, "Circle ID does not exist!")
 
     if request.method == "POST" and "create_circle" in request.POST:
-        circle_name = request.POST.get("circle_name")
 
-        create_circle(username, circle_name, request.POST.getlist("policy_id"))
+        circle_name = request.POST.get("circle_name")
+        try:
+            create_circle(
+                username,
+                circle_name,
+                request.POST.getlist("policy_id"),
+                request.FILES["circle_image"],
+            )
+        except Exception:
+            create_circle(
+                username, circle_name, request.POST.getlist("policy_id"), None
+            )
 
     circle_user_data = CircleUser.objects.filter(username=username)
 
