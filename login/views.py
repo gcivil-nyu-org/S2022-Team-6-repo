@@ -53,7 +53,7 @@ def user_profile(request, username, page):
         userdata = UserData.objects.get(username=username)
         _, client_object = get_s3_client()
         historical, _, _ = get_data(client_object)
-    except:
+    except Exception:
         # not a valid username
         url = reverse("login:error")
         return HttpResponseRedirect(url)
