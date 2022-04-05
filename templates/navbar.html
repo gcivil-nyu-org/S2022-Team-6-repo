@@ -46,19 +46,26 @@
                             <button class="btn btn-outline-primary dropdown-toggle position-relative mx-3" type="button"
                                 id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-bell"></i>
-                                {% if requests != 0 %}
+                                {% if total_notify != 0 %}
                                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        {{ requests }}
+                                        {{ total_notify }}
                                         <span class="visually-hidden">unread messages</span>
                                     </span>
                                 {% endif %}
                             </button>
                             <ul class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton1">
-                                {% if request_user_data %}
+                                {% if request_user_data or three_non_compliance %}
                                     {% for request in request_user_data %}
                                         <li>
                                             <div class="alert alert-danger m-0" role="alert">
                                                 {{request.username.username}} requested to join {{request.circle_id.circle_name}}
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                    {% for non_compliance in three_non_compliance %}
+                                        <li>
+                                            <div class="alert alert-danger m-0" role="alert">
+                                                {{non_compliance.circle_id.circle_name}} non-compliance on {{non_compliance.policy_id.policy_name}}
                                             </div>
                                         </li>
                                     {% endfor %}

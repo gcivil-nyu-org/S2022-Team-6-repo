@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from .driver import get_s3_client, get_data
 
 # from circle.models import CircleUser, Circle
-from circle.helper import get_notifications
+from circle.helper import get_notifications, get_all_non_compliance
 
 
 from django.core import signing
@@ -41,12 +41,15 @@ def base(request):
     df_2021_work = (df[df.county == work_location][["date", "cases"]].values).tolist()
 
     request_user_data, requests = get_notifications(username=username)
+    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
 
+    total_notify = requests + non_compliance
     context = {
         "page_name": "Monitor",
         "username": username,
         "request_user_data": request_user_data,
-        "requests": requests,
+        "total_notify": total_notify,
+        "three_non_compliance": three_non_compliance,
         "monitor": True,
         # other
         "df_2021": df_2021,

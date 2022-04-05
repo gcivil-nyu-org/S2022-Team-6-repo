@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.core import signing
 from login.models import UserData
-from circle.helper import get_notifications
+from circle.helper import get_notifications, get_all_non_compliance
 
 from .helper import (
     check_date_uplaoded,
@@ -71,6 +71,9 @@ def selftrack(request, username):
             new_user = False
 
     request_user_data, requests = get_notifications(username=username)
+    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
+
+    total_notify = requests + non_compliance
 
     if not new_user:
         current_streak = get_current_streak(username)
@@ -81,7 +84,8 @@ def selftrack(request, username):
         "page_name": "SelfTrack",
         "username": username,
         "request_user_data": request_user_data,
-        "requests": requests,
+        "total_notify": total_notify,
+        "three_non_compliance": three_non_compliance,
         # other
         "uploaded_today": uploaded_today,
         "current_streak": current_streak,

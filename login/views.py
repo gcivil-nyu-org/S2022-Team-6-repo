@@ -6,6 +6,7 @@ from django.core import signing
 from .hashes import PBKDF2WrappedSHA1PasswordHasher
 
 from .models import UserData, Privacy
+from circle.models import CircleUser, CirclePolicyCompliance
 
 from monitor.driver import get_s3_client, get_data
 
@@ -47,7 +48,7 @@ def profile_view(request, username):
     return render(request, "login/profile.html", context)
 
 
-def user_profile(request, username, page):
+def user_profile(request, username):
     try:
         # check valid username
         userdata = UserData.objects.get(username=username)
@@ -132,7 +133,20 @@ def user_profile(request, username, page):
     return render(request, "login/user_profile.html", context)
 
 
-def user_privacy(request, username, page):
+def update_compliance(username, circle_id, policy_id, compliance):
+    try:
+        policy_compliance = CirclePolicyCompliance.objects.get(
+            username=username, circle_id=circle_id, policy_id=policy_id
+        )
+
+        policy_compliance.compliance = compliance
+
+        policy_compliance.save()
+    except Exception:
+        pass
+
+
+def user_privacy(request, username):
     try:
         current_username = signing.loads(request.session["user_key"])
         if current_username != username:
@@ -144,24 +158,37 @@ def user_privacy(request, username, page):
     if request.method == "POST" and "submit_change" in request.POST:
 
         privacy = Privacy.objects.get(username=username)
+        circles = CircleUser.objects.filter(username=username)
 
         if ("vaccination_status_yes") in request.POST:
             privacy.show_vacination = True
+            for circle in circles:
+                update_compliance(username, circle.circle_id.circle_id, 1, True)
 
         if ("vaccination_status_no") in request.POST:
             privacy.show_vacination = False
+            for circle in circles:
+                update_compliance(username, circle.circle_id.circle_id, 1, False)
 
         if ("people_met_yes") in request.POST:
             privacy.show_people_met = True
+            for circle in circles:
+                update_compliance(username, circle.circle_id.circle_id, 2, True)
 
         if ("people_met_no") in request.POST:
             privacy.show_people_met = False
+            for circle in circles:
+                update_compliance(username, circle.circle_id.circle_id, 2, False)
 
         if ("locaiton_visited_yes") in request.POST:
             privacy.show_location_visited = True
+            for circle in circles:
+                update_compliance(username, circle.circle_id.circle_id, 3, True)
 
         if ("locaiton_visited_no") in request.POST:
             privacy.show_location_visited = False
+            for circle in circles:
+                update_compliance(username, circle.circle_id.circle_id, 3, False)
 
         privacy.save()
 
@@ -181,7 +208,7 @@ def user_privacy(request, username, page):
     return render(request, "login/user_privacy.html", context)
 
 
-def user_change_password(request, username, page):
+def user_change_password(request, username):
     try:
         current_username = signing.loads(request.session["user_key"])
         if current_username != username:
@@ -226,11 +253,11 @@ def user_change_password(request, username, page):
 
 def settings(request, username, page):
     if "profile" in page:
-        return user_profile(request, username, page)
+        return user_profile(request, username)
     elif "privacy" in page:
-        return user_privacy(request, username, page)
+        return user_privacy(request, username)
     elif "password" in page:
-        return user_change_password(request, username, page)
+        return user_change_password(request, username)
     else:
         url = reverse("login:error")
         return HttpResponseRedirect(url)

@@ -1,4 +1,43 @@
-from .models import CircleUser, RequestCircle
+from .models import CircleUser, RequestCircle, CirclePolicyCompliance
+
+
+def get_circle_compliance(circle_id):
+    compliance_dict = dict()
+
+    circle_compliance = CirclePolicyCompliance.objects.filter(circle_id=circle_id)
+
+    for compliance in circle_compliance:
+        if compliance.username.username not in compliance_dict.keys():
+            compliance_dict[compliance.username.username] = dict()
+        if compliance.compliance:
+            compliance_dict[compliance.username.username][
+                compliance.policy_id.policy_id
+            ] = "Compliant"
+        else:
+            compliance_dict[compliance.username.username][
+                compliance.policy_id.policy_id
+            ] = "Not Compliant"
+
+    return compliance_dict
+
+
+def get_all_non_compliance(username, get_three):
+
+    circle_compliance = CirclePolicyCompliance.objects.filter(username=username)
+
+    non_compliance = None
+
+    for compliance in circle_compliance:
+        if not compliance.compliance:
+            if not non_compliance:
+                non_compliance = list()
+            non_compliance.append(compliance)
+
+    if non_compliance and get_three:
+        if len(non_compliance) > 3:
+            return non_compliance[:3], len(non_compliance)
+
+    return non_compliance, len(non_compliance)
 
 
 def get_notifications(username, get_three=True):

@@ -4,7 +4,12 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from .models import Circle, CirclePolicy, CircleUser, RequestCircle
-from .helper import get_notifications, get_circle_requests
+from .helper import (
+    get_notifications,
+    get_circle_requests,
+    get_all_non_compliance,
+    get_circle_compliance,
+)
 from .driver import (
     create_request,
     create_circle,
@@ -36,16 +41,19 @@ def circle(request, username):
 
     recent_circles = get_recent_circles(recent_circle_list, username)
 
+    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
+
+    total_notify = requests + non_compliance
     context = {
         "page_name": "Circle",
         "username": username,
         "request_user_data": request_user_data,
-        "requests": requests,
+        "total_notify": total_notify,
+        "three_non_compliance": three_non_compliance,
         # Other
         "circle_user_data": circle_user_data,
         "recent_circles": recent_circles,
     }
-    print(reverse("circle:dashboard", kwargs={"username": username}))
     return render(request, "circle/circle.html", context)
 
 
@@ -65,16 +73,21 @@ def current_circle(request, username, circle_id):
     circle_data = CircleUser.objects.get(circle_id=circle_id, username=username)
 
     add_recent_circle(circle_data)
-
     circle_user_data = CircleUser.objects.filter(circle_id=circle_id)
-
     circle_policy = CirclePolicy.objects.filter(circle_id=circle_id)
+
+    circle_compliance = get_circle_compliance(circle_id=circle_id)
+
+    print(circle_compliance)
 
     policies = []
     for policy in circle_policy:
         policies.append(policy.policy_id)
 
     request_user_data, requests = get_notifications(username=username)
+    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
+
+    total_notify = requests + non_compliance
 
     if circle_data.is_admin:
         circle_request = get_circle_requests(circle_id)
@@ -85,13 +98,15 @@ def current_circle(request, username, circle_id):
         "page_name": circle_data.circle_id.circle_name,
         "username": username,
         "request_user_data": request_user_data,
-        "requests": requests,
+        "total_notify": total_notify,
+        "three_non_compliance": three_non_compliance,
         # Other
         "circle_user_data": circle_user_data,
         "circle_data": circle_data,
         "circle_request": circle_request,
         "is_admin": circle_data.is_admin,
         "policies": policies,
+        "circle_compliance": circle_compliance,
     }
 
     return render(request, "circle/current-circle.html", context)
@@ -131,11 +146,16 @@ def create(request):
 
     request_user_data, requests = get_notifications(username=username)
 
+    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
+
+    total_notify = requests + non_compliance
+
     context = {
         "page_name": "Add Circle",
         "username": username,
         "request_user_data": request_user_data,
-        "requests": requests,
+        "total_notify": total_notify,
+        "three_non_compliance": three_non_compliance,
         # Other
         "circle_user_data": circle_user_data,
     }
@@ -157,14 +177,23 @@ def notify(request):
     if request.method == "POST" and "reject_circle" in request.POST:
         reject_request(request.POST.get("reject_circle"))
 
-    request_user_data, requests = get_notifications(username=username, get_three=False)
+    request_user_data, requests = get_notifications(username=username, get_three=True)
+    all_requests, _ = get_notifications(username=username, get_three=False)
+
+    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
+    all_non_compliance, _ = get_all_non_compliance(username, False)
+
+    total_notify = requests + non_compliance
 
     context = {
         "page_name": "Notifications",
         "username": username,
         "request_user_data": request_user_data,
-        "requests": requests
+        "total_notify": total_notify,
+        "three_non_compliance": three_non_compliance,
         # Other
+        "all_requests": all_requests,
+        "all_non_compliance": all_non_compliance,
     }
 
     return render(request, "circle/notifications.html", context)
@@ -176,11 +205,16 @@ def exit_circle(request, username, circle_id):
 
     circle_user_data = CircleUser.objects.filter(username=username)
     request_user_data, requests = get_notifications(username=username)
+    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
+
+    total_notify = requests + non_compliance
+
     context = {
         "page_name": "Circle",
         "username": username,
         "request_user_data": request_user_data,
-        "requests": requests,
+        "total_notify": total_notify,
+        "three_non_compliance": three_non_compliance,
         # Other
         "circle_user_data": circle_user_data,
     }
@@ -191,11 +225,16 @@ def delete_circle(request, username, circle_id):
     remove_circle(circle_id)
     circle_user_data = CircleUser.objects.filter(username=username)
     request_user_data, requests = get_notifications(username=username)
+    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
+
+    total_notify = requests + non_compliance
+
     context = {
         "page_name": "Circle",
         "username": username,
         "request_user_data": request_user_data,
-        "requests": requests,
+        "total_notify": total_notify,
+        "three_non_compliance": three_non_compliance,
         # Other
         "circle_user_data": circle_user_data,
     }
