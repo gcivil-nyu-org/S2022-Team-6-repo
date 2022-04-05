@@ -64,13 +64,62 @@ def user_profile(request, username, page):
         # user not logged in
         url = reverse("login:profile", kwargs={"username": username})
         return HttpResponseRedirect(url)
-
+    
+    if request.method == "POST" and "submit_change" in request.POST:
+        try: 
+            userdata = UserData.objects.get(username=username)
+            
+            if 'first_name' in request.POST:
+                userdata.firstname = request.POST['first_name']
+            
+            if 'last_name' in request.POST:
+                userdata.lastname = request.POST['last_name']
+            
+            if 'dob' in request.POST:
+                userdata.dob = request.POST['dob']
+            
+            if 'phone' in request.POST:
+                userdata.phone = request.POST['phone']
+            
+            if 'home' in request.POST:
+                userdata.home_adress = request.POST['home']
+            
+            if 'work' in request.POST:
+                userdata.work_address = request.POST['work']
+            
+            if 'vaccination_status_yes' in request.POST:
+                userdata.is_vacinated = True
+            
+            if 'vaccination_status_no' in request.POST:
+                userdata.is_vacinated = False
+            
+            userdata.save()
+        except Exception:
+            messages.error(request, "Invalid Field")
+        
     # user logged in
+    userdata = UserData.objects.get(username=username)
+    
+    vaccination_status = userdata.is_vacinated
+    first_name = userdata.firstname
+    last_name = userdata.lastname
+    dob = userdata.dob
+    phone = userdata.phone
+    home = userdata.work_address
+    work = userdata.home_adress
+    
     context = {
         "page_name": username,
         "session_valid": True,
-        "username": current_username,
-        "profile_username": username,
+        "username": current_username,        
+        
+        "vaccination_status": vaccination_status,
+        "first_name": first_name,
+        "last_name": last_name,
+        "dob": str(dob),
+        "phone": phone,
+        "home": home,
+        "work": work,
     }
     # user is logged in & user is looking for his own profile #
     return render(request, "login/user_profile.html", context)
