@@ -6,7 +6,8 @@ from django.core import signing
 from .hashes import PBKDF2WrappedSHA1PasswordHasher
 
 from .models import UserData, Privacy
-from circle.models import CircleUser, CirclePolicyCompliance
+from .helper import update_compliance
+from circle.models import CircleUser
 
 from monitor.driver import get_s3_client, get_data
 
@@ -97,21 +98,17 @@ def user_profile(request, username):
 
             if "vaccination_status_no" in request.POST:
                 userdata.is_vacinated = False
-
+            
+            if request.FILES:
+                user_image = request.FILES["user_image"]
+                user_image.name = userdata.username + "." + user_image.name.split(".")[-1]
+                userdata.user_image = user_image
             userdata.save()
         except Exception:
             messages.error(request, "Invalid Field")
 
     # user logged in
     userdata = UserData.objects.get(username=username)
-
-    vaccination_status = userdata.is_vacinated
-    first_name = userdata.firstname
-    last_name = userdata.lastname
-    dob = userdata.dob
-    phone = userdata.phone
-    home = userdata.work_address
-    work = userdata.home_adress
 
     counties = historical.county.dropna().unique()
     counties = counties[counties != "Unknown"]
@@ -120,34 +117,17 @@ def user_profile(request, username):
         "page_name": username,
         "session_valid": True,
         "username": current_username,
-        "vaccination_status": vaccination_status,
-        "first_name": first_name,
-        "last_name": last_name,
-        "dob": str(dob),
-        "phone": phone,
-        "home": home,
-        "work": work,
+        "userdata": userdata,
+        # other
         "counties": counties,
     }
     # user is logged in & user is looking for his own profile #
     return render(request, "login/user_profile.html", context)
 
 
-def update_compliance(username, circle_id, policy_id, compliance):
-    try:
-        policy_compliance = CirclePolicyCompliance.objects.get(
-            username=username, circle_id=circle_id, policy_id=policy_id
-        )
-
-        policy_compliance.compliance = compliance
-
-        policy_compliance.save()
-    except Exception:
-        pass
-
-
 def user_privacy(request, username):
     try:
+        userdata=UserData.objects.get(username=username)
         current_username = signing.loads(request.session["user_key"])
         if current_username != username:
             raise Exception()
@@ -191,18 +171,16 @@ def user_privacy(request, username):
                 update_compliance(username, circle.circle_id.circle_id, 3, False)
 
         privacy.save()
-
-    vacination_status = Privacy.objects.get(username=username).show_vacination
-    people_status = Privacy.objects.get(username=username).show_people_met
-    location_status = Privacy.objects.get(username=username).show_location_visited
+    
+    privacy = Privacy.objects.get(username=username)
 
     context = {
         "page_name": username,
         "session_valid": True,
         "username": current_username,
-        "vacination_status": vacination_status,
-        "people_status": people_status,
-        "location_status": location_status,
+        "userdata": userdata,
+        # other
+        "privacy": privacy,
     }
 
     return render(request, "login/user_privacy.html", context)

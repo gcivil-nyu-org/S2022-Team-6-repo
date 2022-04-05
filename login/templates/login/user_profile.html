@@ -19,6 +19,9 @@
                         <tr>
                             <th><a class="btn btn-link" style="text-decoration: none" href="{% url 'login:settings' username 'password' %}" class="link-dark"><h3>Password</h3></a></th>
                         </tr>
+                        <tr>
+                            <th><a class="btn btn-link" style="text-decoration: none" href="#" class="link-dark"><h3>Preview</h3></a></th>
+                        </tr>
                     </tbody>
                     </table>
             </div>
@@ -32,31 +35,31 @@
                             <div class="myform form ">
                                 <div class="logo mb-3">
                                     <div class="col-md-12 text-center">
-                                        <h1>{{username}}</h1>
+                                        <h1>{{userdata.username}}</h1>
                                     </div>
                                 </div>
-                                <form action="" method="post">
+                                <form action="" method="post" enctype="multipart/form-data">
                                     {% csrf_token %}
                                     <div class="form-group p-2">
                                         <label for="first_name">First Name: </label>
-                                        <input type="text" name="first_name" id="first_name" class="form-control" {% if first_name %} value={{first_name}} {% endif %}>
+                                        <input type="text" name="first_name" id="first_name" class="form-control" {% if userdata.firstname %} value={{userdata.firstname}} {% endif %}>
                                     </div>
                                     <div class="form-group p-2">
                                         <label for="last_name">Last Name: </label>
-                                        <input type="text" name="last_name" id="last_name" class="form-control" {% if last_name %} value={{last_name}} {% endif %}>
+                                        <input type="text" name="last_name" id="last_name" class="form-control" {% if userdata.lastname %} value={{userdata.lastname}} {% endif %}>
                                     </div>
                                     <div class="form-group p-2">
                                         <label for="dob">Date Of Birth: </label>
-                                        <input type="date" name="dob" id="dob" class="form-control" {% if dob %} value={{dob}} {% endif %}>
+                                        <input type="date" name="dob" id="dob" class="form-control" {% if userdata.dob %} value={{ userdata.dob|stringformat:"s" }} {% endif %}>
                                     </div>
                                     <div class="form-group p-2">
                                         <label for="phone">Phone Number: </label>
-                                        <input type="tel" name="phone" id="phone" class="form-control" {% if phone %} value={{phone}} {% endif %}>
+                                        <input type="tel" name="phone" id="phone" class="form-control" {% if userdata.phone %} value={{userdata.phone}} {% endif %}>
                                     </div>
                                     <div class="form-group p-2">
                                         <label for="home">Home County: </label>
                                         <select class="form-select" name="home" id="home" aria-label="Default select example">
-                                            <option selected>{% if home %} {{home}} {% endif %}</option>
+                                            <option selected>{% if userdata.home_adress %} {{userdata.home_adress}} {% endif %}</option>
                                             {% for county in counties %}
                                                 <option value="{{county}}">{{county}}</option>
                                             {% endfor %}
@@ -65,7 +68,7 @@
                                     <div class="form-group p-2">
                                         <label for="work">Work County: </label>
                                         <select class="form-select" name="work" id="work" aria-label="Default select example">
-                                            <option selected>{% if work %} {{work}} {% endif %}</option>
+                                            <option selected>{% if userdata.work_address %} {{userdata.work_address}} {% endif %}</option>
                                             {% for county in counties %}
                                                 <option value="{{county}}">{{county}}</option>
                                             {% endfor %}
@@ -75,18 +78,23 @@
                                         <label for="vaccination_status">Vaccination Status: </label><br>
                                         
                                         <h5>
-                                            <input class="form-check-input" type="checkbox" name="vaccination_status_yes" id="vaccination_status_yes" value="vaccination_status_yes" {% if vaccination_status %} disabled {% endif %}>
+                                            <input class="form-check-input" type="checkbox" name="vaccination_status_yes" id="vaccination_status_yes" value="vaccination_status_yes" {% if userdata.is_vacinated %} disabled {% endif %}>
                                             <label class="form-check-label" for="vaccination_status_yes">Yes</label>
                                             <br>
                                         </h5>
                                         <h5>
-                                            <input class="form-check-input" type="checkbox" name="vaccination_status_no" id="vaccination_status_no" value="vaccination_status_no" {% if not vaccination_status %} disabled {% endif %}>
+                                            <input class="form-check-input" type="checkbox" name="vaccination_status_no" id="vaccination_status_no" value="vaccination_status_no" {% if not userdata.is_vacinated %} disabled {% endif %}>
                                             <label class="form-check-label" for="vaccination_status_no">No</label>
                                         </h5>
+                                    </div>
+                                    <div class="form-group p-2">
+                                        <label for="user_image" class="form-label">Change Profile Picture</label>
+                                        <input type="file" class="form-control-file" id="user_image" name="user_image">
                                     </div>
                                     <div class="col-md-12 text-center p-2">
                                         <button type="submit" name="submit_change" class=" btn btn-block mybtn btn-outline-primary tx-tfm">Change Profile</button>
                                     </div>
+                                    
                                     {% if messages %}
                                         {% for message in messages %}
                                             {% if message.tags == 'error' %}

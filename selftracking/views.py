@@ -21,6 +21,7 @@ def selftrack(request, username):
     uploaded_yesterday = False
     try:
         username = signing.loads(request.session["user_key"])
+        userdata = UserData.objects.get(username=username)
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
@@ -88,6 +89,7 @@ def selftrack(request, username):
     context = {
         "page_name": "SelfTrack",
         "username": username,
+        "userdata": userdata,
         "request_user_data": request_user_data,
         "total_notify": total_notify,
         "three_non_compliance": three_non_compliance,

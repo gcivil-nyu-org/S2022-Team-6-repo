@@ -21,6 +21,7 @@ def base(request):
 
     try:
         username = signing.loads(request.session["user_key"])
+        userdata = UserData.objects.get(username=username)
         _, client_object = get_s3_client()
         historical, _, _ = get_data(client_object)
     except Exception:
@@ -50,11 +51,12 @@ def base(request):
     context = {
         "page_name": "Monitor",
         "username": username,
+        "userdata": userdata,
         "request_user_data": request_user_data,
         "total_notify": total_notify,
         "three_non_compliance": three_non_compliance,
-        "monitor": True,
         "streak_today": streak_today,
+        "monitor": True,
         # other
         "df_2021": df_2021,
         "categories_2021": categories,

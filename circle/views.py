@@ -4,6 +4,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from .models import Circle, CirclePolicy, CircleUser, RequestCircle
+from login.models import UserData
+
 from .helper import (
     get_notifications,
     get_circle_requests,
@@ -30,6 +32,7 @@ from django.core import signing
 
 def circle(request, username):
     try:
+        userdata = UserData.objects.get(username=username)
         current_username = signing.loads(request.session["user_key"])
         if current_username != username:
             raise Exception()
@@ -39,18 +42,13 @@ def circle(request, username):
 
     circle_user_data = CircleUser.objects.filter(username=username)
 
-    # if circle_user_data.circle_id.group_image:
-    #     group_image = 'https://coviguard-images.s3.us-east-1.amazonaws.com/' + str(circle_user_data.circle_id.group_image)
-    # else:
-    #     group_image = 'https://coviguard-images.s3.us-east-1.amazonaws.com/media/default/circle/1.jpg'
-
     request_user_data, requests = get_notifications(username=username)
 
     check_recent_circle(recent_circle(username), username)
-    recent_circle_list = recent_circle(username)  # TODO: Recent Circle
+    recent_circle_list = recent_circle(username)
     recent_circles = get_recent_circles(
         recent_circle_list, username
-    )  # TODO: Recent Circle
+    )
 
     three_non_compliance, non_compliance = get_all_non_compliance(username, True)
 
@@ -60,6 +58,7 @@ def circle(request, username):
     context = {
         "page_name": "Circle",
         "username": username,
+        "userdata": userdata,
         "request_user_data": request_user_data,
         "total_notify": total_notify,
         "three_non_compliance": three_non_compliance,
@@ -73,6 +72,7 @@ def circle(request, username):
 
 def current_circle(request, username, circle_id):
     try:
+        userdata = UserData.objects.get(username=username)
         current_username = signing.loads(request.session["user_key"])
         if current_username != username:
             raise Exception()
@@ -85,11 +85,6 @@ def current_circle(request, username, circle_id):
         remove_user(username, request.POST.get("remove_user"), circle_id)
 
     circle_data = CircleUser.objects.get(circle_id=circle_id, username=username)
-
-    # if circle_data.circle_id.group_image:
-    #     group_image = 'https://coviguard-images.s3.us-east-1.amazonaws.com/' + str(circle_data.circle_id.group_image)
-    # else:
-    #     group_image = 'https://coviguard-images.s3.us-east-1.amazonaws.com/media/default/circle/1.jpg'
 
     add_recent_circle(circle_data)  # TODO: Recent Circle
     circle_user_data = CircleUser.objects.filter(circle_id=circle_id)
@@ -116,9 +111,11 @@ def current_circle(request, username, circle_id):
     context = {
         "page_name": circle_data.circle_id.circle_name,
         "username": username,
+        "userdata": userdata,
         "request_user_data": request_user_data,
         "total_notify": total_notify,
         "three_non_compliance": three_non_compliance,
+        "streak_today": streak_today,
         # Other
         "circle_user_data": circle_user_data,
         "circle_data": circle_data,
@@ -126,7 +123,6 @@ def current_circle(request, username, circle_id):
         "is_admin": circle_data.is_admin,
         "policies": policies,
         "circle_compliance": circle_compliance,
-        "streak_today": streak_today,
         # "group_image": group_image,
     }
 
@@ -137,6 +133,7 @@ def create(request):
 
     try:
         username = signing.loads(request.session["user_key"])
+        userdata = UserData.objects.get(username=username)
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
@@ -186,6 +183,7 @@ def create(request):
     context = {
         "page_name": "Add Circle",
         "username": username,
+        "userdata": userdata,
         "request_user_data": request_user_data,
         "total_notify": total_notify,
         "three_non_compliance": three_non_compliance,
@@ -201,6 +199,7 @@ def notify(request):
 
     try:
         username = signing.loads(request.session["user_key"])
+        userdata = UserData.objects.get(username=username)
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
@@ -224,6 +223,7 @@ def notify(request):
     context = {
         "page_name": "Notifications",
         "username": username,
+        "userdata": userdata,
         "request_user_data": request_user_data,
         "total_notify": total_notify,
         "three_non_compliance": three_non_compliance,

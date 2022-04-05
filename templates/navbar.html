@@ -106,36 +106,14 @@
                             </ul>
                         </div>
                     </li>
-
-                    <li>
-                        <div class="dropdown">
-                            <button class="btn btn-outline-secondary dropdown-toggle position-relative mx-3" type="button"
-                                id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-gear"></i>
-                                {% if update_settings %}
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        <i class="bi bi-exclamation-lg"></i>
-                                        <span class="visually-hidden">unread messages</span>
-                                    </span>
-                                {% endif %}
-                            </button>
-                            <ul class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton1">
-                                <li>
-                                    <div class="alert alert-light m-0" role="alert">
-                                        <a href="{% url 'login:settings' username 'profile' %}" class="text-decoration-none">
-                                            Settings
-                                        </a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="alert alert-light m-0" role="alert">
-                                        <a href="{% url 'login:logout' %}" class="text-decoration-none">
-                                            Sign-Out
-                                        </a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{{ userdata.user_image.url }}" width="35" height="35" class="rounded-circle">
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" href="{% url 'login:settings' username 'profile' %}">Settings</a></li>
+                            <li><a class="dropdown-item" href="{% url 'login:logout' %}">Sign-Out</a></li>
+                        </ul>
                     </li>
                 </ul>
             </div>
