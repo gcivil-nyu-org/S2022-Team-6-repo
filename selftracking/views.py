@@ -4,13 +4,14 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.core import signing
 from login.models import UserData
-from circle.helper import get_notifications
+from circle.helper import get_notifications, get_all_non_compliance
 
 from .helper import (
     check_date_uplaoded,
     check_uploaded_yesterday,
     get_current_streak,
     get_longest_streak,
+    check_upload_today,
 )
 
 
@@ -20,6 +21,7 @@ def selftrack(request, username):
     uploaded_yesterday = False
     try:
         username = signing.loads(request.session["user_key"])
+        userdata = UserData.objects.get(username=username)
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
@@ -52,7 +54,7 @@ def selftrack(request, username):
             selftrack = SelfTrack()
             selftrack.username = UserData.objects.get(username=username)
             selftrack.user_met = request.POST.get("user_met")
-            selftrack.location_visited = request.POST.get("user_met")
+            selftrack.location_visited = request.POST.get("location_visited")
 
             if not new_user:
                 selftrack.streak = get_current_streak(username) + 1
@@ -71,20 +73,31 @@ def selftrack(request, username):
             new_user = False
 
     request_user_data, requests = get_notifications(username=username)
+    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
+
+    total_notify = requests + non_compliance
 
     if not new_user:
         current_streak = get_current_streak(username)
+        longest_streak = get_longest_streak(username)
+
     else:
         current_streak = 0
+        longest_streak = 0
 
+    streak_today = check_upload_today(username)
     context = {
         "page_name": "SelfTrack",
         "username": username,
+        "userdata": userdata,
         "request_user_data": request_user_data,
-        "requests": requests,
+        "total_notify": total_notify,
+        "three_non_compliance": three_non_compliance,
+        "streak_today": streak_today,
         # other
         "uploaded_today": uploaded_today,
         "current_streak": current_streak,
         "new_user": new_user,
+        "longest_streak": longest_streak,
     }
     return render(request, "selftracking/self_track.html", context)
