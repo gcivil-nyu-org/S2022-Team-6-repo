@@ -43,7 +43,7 @@
             <div class="bg-light col-md-6 m-auto border border-secondary border-3 rounded rounded-3 p-3">
                 <h1 class="text-muted">Create Circle</h1>
                 <hr>
-                <form action="", method="post">
+                <form action="", method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="circle_name" class="form-label">Circle Name</label>
@@ -54,6 +54,8 @@
                             <option value="2">People Met</option>
                             <option value="3">Location Visited</option>
                         </select>
+                        <label for="circle_image" class="form-label">Example file input</label>
+                        <input type="file" class="form-control-file" id="circle_image" name="circle_image">
                     </div>
                     <button type="submit" name='create_circle' class="btn btn-primary">Create Circle</button>
                 </form>

@@ -6,6 +6,8 @@ from django.core import signing
 from .hashes import PBKDF2WrappedSHA1PasswordHasher
 
 from .models import UserData, Privacy
+from .helper import update_compliance
+from circle.models import CircleUser
 
 from monitor.driver import get_s3_client, get_data
 
@@ -47,7 +49,7 @@ def profile_view(request, username):
     return render(request, "login/profile.html", context)
 
 
-def user_profile(request, username, page):
+def user_profile(request, username):
     try:
         # check valid username
         userdata = UserData.objects.get(username=username)
@@ -97,20 +99,18 @@ def user_profile(request, username, page):
             if "vaccination_status_no" in request.POST:
                 userdata.is_vacinated = False
 
+            if request.FILES:
+                user_image = request.FILES["user_image"]
+                user_image.name = (
+                    userdata.username + "." + user_image.name.split(".")[-1]
+                )
+                userdata.user_image = user_image
             userdata.save()
         except Exception:
             messages.error(request, "Invalid Field")
 
     # user logged in
     userdata = UserData.objects.get(username=username)
-
-    vaccination_status = userdata.is_vacinated
-    first_name = userdata.firstname
-    last_name = userdata.lastname
-    dob = userdata.dob
-    phone = userdata.phone
-    home = userdata.work_address
-    work = userdata.home_adress
 
     counties = historical.county.dropna().unique()
     counties = counties[counties != "Unknown"]
@@ -119,21 +119,17 @@ def user_profile(request, username, page):
         "page_name": username,
         "session_valid": True,
         "username": current_username,
-        "vaccination_status": vaccination_status,
-        "first_name": first_name,
-        "last_name": last_name,
-        "dob": str(dob),
-        "phone": phone,
-        "home": home,
-        "work": work,
+        "userdata": userdata,
+        # other
         "counties": counties,
     }
     # user is logged in & user is looking for his own profile #
     return render(request, "login/user_profile.html", context)
 
 
-def user_privacy(request, username, page):
+def user_privacy(request, username):
     try:
+        userdata = UserData.objects.get(username=username)
         current_username = signing.loads(request.session["user_key"])
         if current_username != username:
             raise Exception()
@@ -144,44 +140,55 @@ def user_privacy(request, username, page):
     if request.method == "POST" and "submit_change" in request.POST:
 
         privacy = Privacy.objects.get(username=username)
+        circles = CircleUser.objects.filter(username=username)
 
         if ("vaccination_status_yes") in request.POST:
             privacy.show_vacination = True
+            for circle in circles:
+                update_compliance(username, circle.circle_id.circle_id, 1, True)
 
         if ("vaccination_status_no") in request.POST:
             privacy.show_vacination = False
+            for circle in circles:
+                update_compliance(username, circle.circle_id.circle_id, 1, False)
 
         if ("people_met_yes") in request.POST:
             privacy.show_people_met = True
+            for circle in circles:
+                update_compliance(username, circle.circle_id.circle_id, 2, True)
 
         if ("people_met_no") in request.POST:
             privacy.show_people_met = False
+            for circle in circles:
+                update_compliance(username, circle.circle_id.circle_id, 2, False)
 
         if ("locaiton_visited_yes") in request.POST:
             privacy.show_location_visited = True
+            for circle in circles:
+                update_compliance(username, circle.circle_id.circle_id, 3, True)
 
         if ("locaiton_visited_no") in request.POST:
             privacy.show_location_visited = False
+            for circle in circles:
+                update_compliance(username, circle.circle_id.circle_id, 3, False)
 
         privacy.save()
 
-    vacination_status = Privacy.objects.get(username=username).show_vacination
-    people_status = Privacy.objects.get(username=username).show_people_met
-    location_status = Privacy.objects.get(username=username).show_location_visited
+    privacy = Privacy.objects.get(username=username)
 
     context = {
         "page_name": username,
         "session_valid": True,
         "username": current_username,
-        "vacination_status": vacination_status,
-        "people_status": people_status,
-        "location_status": location_status,
+        "userdata": userdata,
+        # other
+        "privacy": privacy,
     }
 
     return render(request, "login/user_privacy.html", context)
 
 
-def user_change_password(request, username, page):
+def user_change_password(request, username):
     try:
         current_username = signing.loads(request.session["user_key"])
         if current_username != username:
@@ -226,11 +233,11 @@ def user_change_password(request, username, page):
 
 def settings(request, username, page):
     if "profile" in page:
-        return user_profile(request, username, page)
+        return user_profile(request, username)
     elif "privacy" in page:
-        return user_privacy(request, username, page)
+        return user_privacy(request, username)
     elif "password" in page:
-        return user_change_password(request, username, page)
+        return user_change_password(request, username)
     else:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
@@ -264,10 +271,11 @@ def signin(request):
             username = request.POST.get("username")
             hasher = PBKDF2WrappedSHA1PasswordHasher()
             password = hasher.encode(request.POST.get("password"), "test123")
+
             user = UserData.objects.get(username=username)
-            user_enc = signing.dumps(username)
-            request.session["user_key"] = user_enc
             if user.password == password:
+                user_enc = signing.dumps(username)
+                request.session["user_key"] = user_enc
                 url = reverse("circle:dashboard", kwargs={"username": username})
                 return HttpResponseRedirect(url)
             else:

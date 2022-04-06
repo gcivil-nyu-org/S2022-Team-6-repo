@@ -1,12 +1,13 @@
 {% extends 'main.html' %}
 {% load static %}
+{% comment %} {% load media %} {% endcomment %}
 {% block content %}
 <!-- intro -->
 <section class="bg-light p-1">
     <div class="container my-5">
         <div class="row">
             <div class="col-sm-3">
-                <img src="{% static "img/famliy.jpg"%}" class="img-fluid rounded-circle" alt="...">
+                <img height="250" width="250" src="{{ circle_data.circle_id.group_image.url }}" class="img-fluid rounded-circle" alt="...">
             </div>
             <div class="col-sm-9">
                 <h1 class="fw-bold text-uppercase text-secondary align-self-start">
@@ -54,9 +55,13 @@
                         <td class="table-danger text-center">Risk</td>
                         <td class="table-danger text-center">Safe</td>
                         <td class="table-danger text-center">3 days ago</td>
-                        {% for policy in policies %}
-                            <td class="table-danger text-center">Has Policy {{ policy.policy_id }}</td>
-                        {% endfor %}
+                            {% for key, value in circle_compliance.items %}
+                                {% if key == data.username.username %}
+                                    {% for key1, value1 in value.items %}
+                                            <td class="table-danger text-center">{{value1}}</td>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
                         {% if is_admin %}
                             {% if data.is_member %}
                             <td class="table-danger text-center">
