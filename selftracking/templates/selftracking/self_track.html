@@ -10,10 +10,10 @@
                <div class="myform form ">
                   <div class="logo mb-3">
                      <div class="col-md-12 text-center">
-                        {% if new_user %} Welcome to {% endif %}<h1>Self Tracking</h1>
+                        Welcome to <h1>Self Tracking</h1>
                      </div>
                   </div>
-                  {% if not uploaded_today %}
+                  {% if not streak_today %}
                   <form action="" method="post">
                      {% csrf_token %}
                      <div class="form-group">
