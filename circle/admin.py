@@ -6,6 +6,7 @@ from .models import (
     Policy,
     RequestCircle,
     RecentCircle,
+    CirclePolicyCompliance,
 )
 
 # Register your models here.
@@ -15,3 +16,4 @@ admin.site.register(CirclePolicy)
 admin.site.register(Policy)
 admin.site.register(RequestCircle)
 admin.site.register(RecentCircle)
+admin.site.register(CirclePolicyCompliance)

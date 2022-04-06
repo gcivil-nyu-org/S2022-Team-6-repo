@@ -1,6 +1,6 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
-from login.views import index, signin, error, signup, profile, logout
+from login.views import index, signin, error, signup, profile_view, logout
 
 
 class TestUrls(SimpleTestCase):
@@ -27,7 +27,7 @@ class TestUrls(SimpleTestCase):
     def test_profile_url_is_resolved(self):
         url = reverse("login:profile", args=["username"])
         print(resolve(url))
-        self.assertEquals(resolve(url).func, profile)
+        self.assertEquals(resolve(url).func, profile_view)
 
     def test_error_url_is_resolved(self):
         url = reverse("login:error")

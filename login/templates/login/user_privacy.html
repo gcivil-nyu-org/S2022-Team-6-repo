@@ -1,0 +1,98 @@
+{% extends 'main-extend-nav.html' %}
+{% load static %}
+{% block content %}
+<br><br><br><br><br>
+
+<div class="container-fluid">
+    <div class="row">
+        
+        <div class="col-2 m-4 border" id="sticky-sidebar">
+            <div class="sticky-top">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th><a class="btn btn-link" style="text-decoration: none" href="{% url 'login:settings' username 'profile' %}" class="link-dark"><h3>Profile</h3></a></th>
+                        </tr>
+                        <tr>
+                            <th><a class="btn btn-link" style="text-decoration: none" href="{% url 'login:settings' username 'privacy' %}" class="link-dark"><h3>Privacy</h3></a></th>
+                        </tr>
+                        <tr>
+                            <th><a class="btn btn-link" style="text-decoration: none" style="text-decoration: none" href="{% url 'login:settings' username 'password' %}" class="link-dark"><h3>Password</h3></a></th>
+                        </tr>
+                        <tr>
+                            <th><a class="btn btn-link" style="text-decoration: none" href="#" class="link-dark"><h3>Preview</h3></a></th>
+                        </tr>
+                    </tbody>
+                    </table>
+            </div>
+        </div>
+
+        <div class="col m-4 border p-5" id="main">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-5 mx-auto">
+                        <div id="first">
+                            <div class="myform form ">
+                                <div class="logo mb-3">
+                                    <div class="col-md-12 text-center">
+                                        <h1>{{username}}</h1>
+                                    </div>
+                                </div>
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group p-2">
+                                        <label for="vaccination_status">Show Vaccination Status: </label><br>
+                                        
+                                        <h5>
+                                            <input class="form-check-input" type="checkbox" name="vaccination_status_yes" id="vaccination_status_no" value="vaccination_status_yes" {% if privacy.show_vacination %} disabled {% endif %} >
+                                            <label class="form-check-label" for="vaccination_status_yes">Yes</label>
+                                            <br>
+                                        </h5>
+                                        <h5>
+                                            <input class="form-check-input" type="checkbox" name="vaccination_status_no" id="vaccination_status_no" value="vaccination_status_no" {% if not privacy.show_vacination %} disabled {% endif %}>
+                                            <label class="form-check-label" for="vaccination_status_no">No</label>
+                                        </h5>
+                                    </div>
+                                    
+                                    <div class="form-group p-2">
+                                        <label for="people_met">Show People Met: </label><br>
+                                        
+                                        <h5>
+                                            <input class="form-check-input" type="checkbox" name="people_met_yes" id="people_met_yes" value="people_met_yes" {% if privacy.show_people_met %} disabled {% endif %}>
+                                            <label class="form-check-label" for="people_met_yes">Yes</label>
+                                            <br>
+                                        </h5>
+                                        <h5>
+                                            <input class="form-check-input" type="checkbox" name="people_met_no" id="people_met_no" value="people_met_no" {% if not privacy.show_people_met %} disabled {% endif %}>
+                                            <label class="form-check-label" for="people_met_no">No</label>
+                                        </h5>
+                                    </div>
+                                    
+                                    <div class="form-group p-2">
+                                        <label for="locaiton_visited">Show Location Visited: </label><br>
+                                        
+                                        <h5>
+                                            <input class="form-check-input" type="checkbox" name="locaiton_visited_yes" id="locaiton_visited_yes" value="locaiton_visited_yes" {% if privacy.show_location_visited %} disabled {% endif %}>
+                                            <label class="form-check-label" for="locaiton_visited_yes">Yes</label>
+                                            <br>
+                                        </h5>
+                                        <h5>
+                                            <input class="form-check-input" type="checkbox" name="locaiton_visited_no" id="locaiton_visited_no" value="locaiton_visited_no" {% if not privacy.show_location_visited %} disabled {% endif %}>
+                                            <label class="form-check-label" for="locaiton_visited_no">No</label>
+                                        </h5>
+                                    </div>
+
+                                    <div class="col-md-12 text-center p-2">
+                                        <button type="submit" name="submit_change" class=" btn btn-block mybtn btn-outline-primary tx-tfm">Change Policy</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

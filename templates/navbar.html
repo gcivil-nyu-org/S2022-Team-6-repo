@@ -20,13 +20,32 @@
                     <li class="nav-item">
                         <a href="{% url 'circle:dashboard' username %}" class="nav-link">Dashboard</a>
                     </li>
-                    <li class="nav-item">
+                    {% comment %} <li class="nav-item">
                         <a href="{% url 'selftracking:selftrack' username %}" class="nav-link">Self-Track</a>
+                    </li> {% endcomment %}
+                    <li class="nav-item">
+                        <a style="text-decoration: none" href="{% url 'selftracking:selftrack' username %}">
+                        <button type="button" class="btn btn-light position-relative">
+                            
+                            <p class="text-secondary">Self-Track</p>
+                            {% if not streak_today %}
+                                <span
+                                    class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                                    {% comment %} {{ total_notify }} {% endcomment %}
+                                    <span class="visually-hidden">New alerts</span>
+                                </span>
+                            {% endif %}
+                                {% comment %} <p class="text-danger">Self-Track</p>
+                            {% endif %} {% endcomment %}
+
+                        </button>
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a href="{% url 'monitor:user_monitor' %}" class="nav-link">Monitor</a>
                     </li>
                     <li class="nav-item">
+                        <a style="text-decoration: none" href="#">
                         <button type="button" class="btn btn-light position-relative">
                             <p class="text-danger">Alerts</p>
                             <span
@@ -34,6 +53,7 @@
                                 <span class="visually-hidden">New alerts</span>
                             </span>
                         </button>
+                        </a>
                     </li>
                     <li class="nav-item text-dark">
                         <a href="{% url 'circle:create' %}" class="nav-link">
@@ -46,19 +66,26 @@
                             <button class="btn btn-outline-primary dropdown-toggle position-relative mx-3" type="button"
                                 id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-bell"></i>
-                                {% if requests != 0 %}
+                                {% if total_notify != 0 %}
                                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        {{ requests }}
+                                        {{ total_notify }}
                                         <span class="visually-hidden">unread messages</span>
                                     </span>
                                 {% endif %}
                             </button>
                             <ul class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton1">
-                                {% if request_user_data %}
+                                {% if request_user_data or three_non_compliance %}
                                     {% for request in request_user_data %}
                                         <li>
                                             <div class="alert alert-danger m-0" role="alert">
                                                 {{request.username.username}} requested to join {{request.circle_id.circle_name}}
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                    {% for non_compliance in three_non_compliance %}
+                                        <li>
+                                            <div class="alert alert-danger m-0" role="alert">
+                                                {{non_compliance.circle_id.circle_name}} non-compliance on {{non_compliance.policy_id.policy_name}}
                                             </div>
                                         </li>
                                     {% endfor %}
@@ -79,36 +106,14 @@
                             </ul>
                         </div>
                     </li>
-
-                    <li>
-                        <div class="dropdown">
-                            <button class="btn btn-outline-secondary dropdown-toggle position-relative mx-3" type="button"
-                                id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-gear"></i>
-                                {% if update_settings %}
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        <i class="bi bi-exclamation-lg"></i>
-                                        <span class="visually-hidden">unread messages</span>
-                                    </span>
-                                {% endif %}
-                            </button>
-                            <ul class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton1">
-                                <li>
-                                    <div class="alert alert-light m-0" role="alert">
-                                        <a href="{% url 'login:profile' username %}" class="text-decoration-none">
-                                            Profile
-                                        </a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="alert alert-light m-0" role="alert">
-                                        <a href="{% url 'login:logout' %}" class="text-decoration-none">
-                                            Sign-Out
-                                        </a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{{ userdata.user_image.url }}" width="35" height="35" class="rounded-circle">
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" href="{% url 'login:settings' username 'profile' %}">Settings</a></li>
+                            <li><a class="dropdown-item" href="{% url 'login:logout' %}">Sign-Out</a></li>
+                        </ul>
                     </li>
                 </ul>
             </div>

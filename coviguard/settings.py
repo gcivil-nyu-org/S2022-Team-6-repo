@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "phonenumber_field",
 ]
-
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -59,6 +58,11 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
+
+PASSWORD_HASHERS = [
+    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
+    "login.hashes.PBKDF2WrappedSHA1PasswordHasher",
 ]
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
@@ -133,18 +137,18 @@ LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "America/New_York"
 
-USE_I18N = True
+# USE_I18N = True
 
-USE_TZ = True
+# USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -152,3 +156,11 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 django_heroku.settings(locals(), test_runner=False)
+
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+AWS_ACCESS_KEY_ID = os.environ["AWS_ACCESS_KEY_ID"]
+AWS_SECRET_ACCESS_KEY = os.environ["AWS_SECRET_ACCESS_KEY"]
+AWS_STORAGE_BUCKET_NAME = os.environ["AWS_STORAGE_BUCKET_NAME"]
+AWS_QUERYSTRING_AUTH = False
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

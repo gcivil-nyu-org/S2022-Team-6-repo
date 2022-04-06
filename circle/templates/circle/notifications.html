@@ -7,37 +7,71 @@
         <div class="rows">
             <div class="bg-light col-md-6 m-auto border border-secondary border-3 rounded rounded-3 p-3">
                     <h1 class="text-muted">Pending Requests</h1>
-                    <hr>
-                    <table class="table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">Circle</th>
-                                <th scope="col">Username</th>
-                                <th scope="col">Accept</th>
-                                <th scope="col">Reject</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for request_data in request_user_data %}
-                                <form action="" method="post">
-                                {% csrf_token %}
-                                    <tr>
-                                        <td>{{ request_data.circle_id.circle_name }}</td>
-                                        <td>{{ request_data.username.username }}</td>
-                                        <td><button name="accept_circle" value="{{request_data.request_id}}" type="submit" class="btn btn-outline-success">Accept</button></td>
-                                        <td><button name="reject_circle" value="{{request_data.request_id}}" type="submit" class="btn btn-outline-danger">Reject</button></td>
-                                    </tr>
-                                </form>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-
+                <hr>
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Circle</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Accept</th>
+                            <th scope="col">Reject</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for request_data in all_requests %}
+                            <form action="" method="post">
+                            {% csrf_token %}
+                                <tr>
+                                    <td>{{ request_data.circle_id.circle_name }}</td>
+                                    <td>{{ request_data.username.username }}</td>
+                                    <td><button name="accept_circle" value="{{request_data.request_id}}" type="submit" class="btn btn-outline-success">Accept</button></td>
+                                    <td><button name="reject_circle" value="{{request_data.request_id}}" type="submit" class="btn btn-outline-danger">Reject</button></td>
+                                </tr>
+                            </form>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-
     </div>
 </section>
 
+<section>
+    <div class="container-fluid my-5">
+        <div class="rows">
+            <div class="bg-light col-md-6 m-auto border border-secondary border-3 rounded rounded-3 p-3">
+                <h1 class="text-muted">Non-Compliance</h1>
+                <hr>
+                <table class="table table-danger">
+                    <thead class="thead">
+                        <tr>
+                            <th scope="col">Circle</th>
+                            <th scope="col">Policy</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for non_compliance in all_non_compliance %}
+                            <form action="" method="post">
+                            {% csrf_token %}
+                                <tr>
+                                    <td>{{ non_compliance.circle_id.circle_name }}</td>
+                                    <td>{{ non_compliance.policy_id.policy_name }}</td>
+                                </tr>
+                            </form>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="d-grid gap-2 col-6 mx-auto">
+                    <a style="text-decoration: none" href="{% url 'login:privacy' username %}">
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <button type="button" class="btn btn-outline-dark m-auto">Change Privacy Settings</button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 
 {% endblock %}

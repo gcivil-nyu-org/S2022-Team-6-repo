@@ -3,12 +3,16 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib import messages
 from django.core import signing
+from .hashes import PBKDF2WrappedSHA1PasswordHasher
 
-from .models import UserData
+from .models import UserData, Privacy
+from .helper import update_compliance
+from circle.models import CircleUser
+
+from monitor.driver import get_s3_client, get_data
 
 
-def profile(request, username):
-
+def profile_view(request, username):
     try:
         userdata = UserData.objects.get(username=username)
     except Exception:
@@ -16,13 +20,13 @@ def profile(request, username):
         url = reverse("login:error")
         return HttpResponseRedirect(url)
 
-    # valid user url #
     try:
+        # check user logged in
         current_username = signing.loads(request.session["user_key"])
-        # user is logged in #
-    except Exception:  # pragma: no cover
-        # user is not logged in #
-        # TODO: Display data
+        if current_username != username:
+            raise Exception()
+    except Exception:
+
         context = {
             "page_name": username,
             "session_valid": False,
@@ -30,38 +34,213 @@ def profile(request, username):
             "FirstName": userdata.firstname,
             "LastName": userdata.lastname,
             "Email": userdata.email,
-        }  # pragma: no cover
-        return render(request, "login/profile.html", context)  # pragma: no cover
+        }
+        return render(request, "login/profile.html", context)
 
-    # user is logged in #
+    context = {
+        "page_name": username,
+        "session_valid": True,
+        "username": username,
+        "FirstName": userdata.firstname,
+        "LastName": userdata.lastname,
+        "Email": userdata.email,
+    }
+    # valid username
+    return render(request, "login/profile.html", context)
+
+
+def user_profile(request, username):
     try:
-        if username != current_username:
-            raise Exception()  # pragma: no cover
+        # check valid username
+        userdata = UserData.objects.get(username=username)
+        _, client_object = get_s3_client()
+        historical, _, _ = get_data(client_object)
+    except Exception:
+        # not a valid username
+        url = reverse("login:error")
+        return HttpResponseRedirect(url)
 
-            # TODO: Form
+    # valid username
+    try:
+        # check user logged in
+        current_username = signing.loads(request.session["user_key"])
+        if current_username != username:
+            raise Exception()
+    except Exception:
+        # user not logged in
+        url = reverse("login:profile", kwargs={"username": username})
+        return HttpResponseRedirect(url)
 
-        context = {
-            "page_name": username,
-            "session_valid": True,
-            "username": current_username,
-            "profile_username": username,
-        }
-        # user is logged in & user is looking for his own profile #
-        return render(request, "login/user_profile.html", context)
+    if request.method == "POST" and "submit_change" in request.POST:
+        try:
+            userdata = UserData.objects.get(username=username)
 
-    except Exception:  # pragma: no cover
-        # user is logged in looking for other profile #
-        # TODO: Display data
-        context = {
-            "page_name": username,
-            "session_valid": True,
-            "username": current_username,
-            "profile_username": username,
-            "FirstName": userdata.firstname,
-            "LastName": userdata.lastname,
-            "Email": userdata.email,
-        }
-        return render(request, "login/profile.html", context)  # pragma: no cover
+            if "first_name" in request.POST:
+                userdata.firstname = request.POST["first_name"]
+
+            if "last_name" in request.POST:
+                userdata.lastname = request.POST["last_name"]
+
+            if "dob" in request.POST:
+                userdata.dob = request.POST["dob"]
+
+            if "phone" in request.POST:
+                userdata.phone = request.POST["phone"]
+
+            if "home" in request.POST:
+                userdata.home_adress = request.POST["home"]
+
+            if "work" in request.POST:
+                userdata.work_address = request.POST["work"]
+
+            if "vaccination_status_yes" in request.POST:
+                userdata.is_vacinated = True
+
+            if "vaccination_status_no" in request.POST:
+                userdata.is_vacinated = False
+
+            if request.FILES:
+                user_image = request.FILES["user_image"]
+                user_image.name = (
+                    userdata.username + "." + user_image.name.split(".")[-1]
+                )
+                userdata.user_image = user_image
+            userdata.save()
+        except Exception:
+            messages.error(request, "Invalid Field")
+
+    # user logged in
+    userdata = UserData.objects.get(username=username)
+
+    counties = historical.county.dropna().unique()
+    counties = counties[counties != "Unknown"]
+
+    context = {
+        "page_name": username,
+        "session_valid": True,
+        "username": current_username,
+        "userdata": userdata,
+        # other
+        "counties": counties,
+    }
+    # user is logged in & user is looking for his own profile #
+    return render(request, "login/user_profile.html", context)
+
+
+def user_privacy(request, username):
+    try:
+        userdata = UserData.objects.get(username=username)
+        current_username = signing.loads(request.session["user_key"])
+        if current_username != username:
+            raise Exception()
+    except Exception:
+        url = reverse("login:error")
+        return HttpResponseRedirect(url)
+
+    if request.method == "POST" and "submit_change" in request.POST:
+
+        privacy = Privacy.objects.get(username=username)
+        circles = CircleUser.objects.filter(username=username)
+
+        if ("vaccination_status_yes") in request.POST:
+            privacy.show_vacination = True
+            for circle in circles:
+                update_compliance(username, circle.circle_id.circle_id, 1, True)
+
+        if ("vaccination_status_no") in request.POST:
+            privacy.show_vacination = False
+            for circle in circles:
+                update_compliance(username, circle.circle_id.circle_id, 1, False)
+
+        if ("people_met_yes") in request.POST:
+            privacy.show_people_met = True
+            for circle in circles:
+                update_compliance(username, circle.circle_id.circle_id, 2, True)
+
+        if ("people_met_no") in request.POST:
+            privacy.show_people_met = False
+            for circle in circles:
+                update_compliance(username, circle.circle_id.circle_id, 2, False)
+
+        if ("locaiton_visited_yes") in request.POST:
+            privacy.show_location_visited = True
+            for circle in circles:
+                update_compliance(username, circle.circle_id.circle_id, 3, True)
+
+        if ("locaiton_visited_no") in request.POST:
+            privacy.show_location_visited = False
+            for circle in circles:
+                update_compliance(username, circle.circle_id.circle_id, 3, False)
+
+        privacy.save()
+
+    privacy = Privacy.objects.get(username=username)
+
+    context = {
+        "page_name": username,
+        "session_valid": True,
+        "username": current_username,
+        "userdata": userdata,
+        # other
+        "privacy": privacy,
+    }
+
+    return render(request, "login/user_privacy.html", context)
+
+
+def user_change_password(request, username):
+    try:
+        current_username = signing.loads(request.session["user_key"])
+        if current_username != username:
+            raise Exception()
+    except Exception:
+        url = reverse("login:error")
+        return HttpResponseRedirect(url)
+
+    if request.method == "POST" and "submit_change" in request.POST:
+        hasher = PBKDF2WrappedSHA1PasswordHasher()
+        userdata = UserData.objects.get(username=username)
+        try:
+            if userdata.password != hasher.encode(
+                request.POST.get("old_password"), "test123"
+            ) and userdata.password != request.POST.get("new_password"):
+                raise Exception()
+            try:
+                if request.POST.get("new_password") != request.POST.get(
+                    "confirm_password"
+                ):
+                    raise Exception()
+
+                userdata.password = hasher.encode(
+                    request.POST.get("confirm_password"), "test123"
+                )
+                userdata.save()
+                messages.success(request, "Password Updated! ")
+
+            except Exception:
+                messages.error(request, "Password did not match!")
+        except Exception:
+            messages.error(request, "Invalid Old Password")
+
+    context = {
+        "page_name": username,
+        "session_valid": True,
+        "username": current_username,
+    }
+
+    return render(request, "login/user_password.html", context)
+
+
+def settings(request, username, page):
+    if "profile" in page:
+        return user_profile(request, username)
+    elif "privacy" in page:
+        return user_privacy(request, username)
+    elif "password" in page:
+        return user_change_password(request, username)
+    else:
+        url = reverse("login:error")
+        return HttpResponseRedirect(url)
 
 
 def index(request):
@@ -86,15 +265,17 @@ def index(request):
 
 
 def signin(request):
+
     if request.method == "POST" and "sign-in" in request.POST:
         try:
             username = request.POST.get("username")
-            password = request.POST.get("password")
-            user = UserData.objects.get(username=username)
+            hasher = PBKDF2WrappedSHA1PasswordHasher()
+            password = hasher.encode(request.POST.get("password"), "test123")
 
-            user_enc = signing.dumps(username)
-            request.session["user_key"] = user_enc
+            user = UserData.objects.get(username=username)
             if user.password == password:
+                user_enc = signing.dumps(username)
+                request.session["user_key"] = user_enc
                 url = reverse("circle:dashboard", kwargs={"username": username})
                 return HttpResponseRedirect(url)
             else:
@@ -122,9 +303,15 @@ def signup(request):
             userdata.lastname = request.POST.get("lastname")
             userdata.username = request.POST.get("username")
             userdata.email = request.POST.get("email")
-            userdata.password = request.POST.get("password")
-
+            hasher = PBKDF2WrappedSHA1PasswordHasher()
+            userdata.password = hasher.encode(request.POST.get("password"), "test123")
             userdata.save()
+
+            privacy = Privacy()
+            privacy.username = UserData.objects.get(
+                username=request.POST.get("username")
+            )
+            privacy.save()
 
             return HttpResponseRedirect(reverse("login:signin"))
     except Exception:

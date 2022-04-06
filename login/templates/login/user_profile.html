@@ -2,42 +2,116 @@
 {% load static %}
 {% block content %}
 <br><br><br><br><br>
-<div class="container">
+
+<div class="container-fluid">
     <div class="row">
-        <div class="col-md-5 mx-auto">
-            <div id="first">
-                <div class="myform form ">
-                    <div class="logo mb-3">
-                        <div class="col-md-12 text-center">
-                            <h1>{{username}}</h1>
+        
+        <div class="col-2 m-4 border" id="sticky-sidebar">
+            <div class="sticky-top">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th><a class="btn btn-link" style="text-decoration: none" href="{% url 'login:settings' username 'profile' %}" class="link-dark"><h3>Profile</h3></a></th>
+                        </tr>
+                        <tr>
+                            <th><a class="btn btn-link" style="text-decoration: none" href="{% url 'login:settings' username 'privacy' %}" class="link-dark"><h3>Privacy</h3></a></th>
+                        </tr>
+                        <tr>
+                            <th><a class="btn btn-link" style="text-decoration: none" href="{% url 'login:settings' username 'password' %}" class="link-dark"><h3>Password</h3></a></th>
+                        </tr>
+                        <tr>
+                            <th><a class="btn btn-link" style="text-decoration: none" href="#" class="link-dark"><h3>Preview</h3></a></th>
+                        </tr>
+                    </tbody>
+                    </table>
+            </div>
+        </div>
+
+        <div class="col m-4 border p-5" id="main">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-5 mx-auto">
+                        <div id="first">
+                            <div class="myform form ">
+                                <div class="logo mb-3">
+                                    <div class="col-md-12 text-center">
+                                        <h1>{{userdata.username}}</h1>
+                                    </div>
+                                </div>
+                                <form action="" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="form-group p-2">
+                                        <label for="first_name">First Name: </label>
+                                        <input type="text" name="first_name" id="first_name" class="form-control" {% if userdata.firstname %} value={{userdata.firstname}} {% endif %}>
+                                    </div>
+                                    <div class="form-group p-2">
+                                        <label for="last_name">Last Name: </label>
+                                        <input type="text" name="last_name" id="last_name" class="form-control" {% if userdata.lastname %} value={{userdata.lastname}} {% endif %}>
+                                    </div>
+                                    <div class="form-group p-2">
+                                        <label for="dob">Date Of Birth: </label>
+                                        <input type="date" name="dob" id="dob" class="form-control" {% if userdata.dob %} value={{ userdata.dob|stringformat:"s" }} {% endif %}>
+                                    </div>
+                                    <div class="form-group p-2">
+                                        <label for="phone">Phone Number: </label>
+                                        <input type="tel" name="phone" id="phone" class="form-control" {% if userdata.phone %} value={{userdata.phone}} {% endif %}>
+                                    </div>
+                                    <div class="form-group p-2">
+                                        <label for="home">Home County: </label>
+                                        <select class="form-select" name="home" id="home" aria-label="Default select example">
+                                            <option selected>{% if userdata.home_adress %} {{userdata.home_adress}} {% endif %}</option>
+                                            {% for county in counties %}
+                                                <option value="{{county}}">{{county}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group p-2">
+                                        <label for="work">Work County: </label>
+                                        <select class="form-select" name="work" id="work" aria-label="Default select example">
+                                            <option selected>{% if userdata.work_address %} {{userdata.work_address}} {% endif %}</option>
+                                            {% for county in counties %}
+                                                <option value="{{county}}">{{county}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group p-2">
+                                        <label for="vaccination_status">Vaccination Status: </label><br>
+                                        
+                                        <h5>
+                                            <input class="form-check-input" type="checkbox" name="vaccination_status_yes" id="vaccination_status_yes" value="vaccination_status_yes" {% if userdata.is_vacinated %} disabled {% endif %}>
+                                            <label class="form-check-label" for="vaccination_status_yes">Yes</label>
+                                            <br>
+                                        </h5>
+                                        <h5>
+                                            <input class="form-check-input" type="checkbox" name="vaccination_status_no" id="vaccination_status_no" value="vaccination_status_no" {% if not userdata.is_vacinated %} disabled {% endif %}>
+                                            <label class="form-check-label" for="vaccination_status_no">No</label>
+                                        </h5>
+                                    </div>
+                                    <div class="form-group p-2">
+                                        <label for="user_image" class="form-label">Change Profile Picture</label>
+                                        <input type="file" class="form-control-file" id="user_image" name="user_image">
+                                    </div>
+                                    <div class="col-md-12 text-center p-2">
+                                        <button type="submit" name="submit_change" class=" btn btn-block mybtn btn-outline-primary tx-tfm">Change Profile</button>
+                                    </div>
+                                    
+                                    {% if messages %}
+                                        {% for message in messages %}
+                                            {% if message.tags == 'error' %}
+                                            <div class="alert alert-danger my-2" role="alert">
+                                                {{message}}
+                                            </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}   
+                                </form>
+                            </div>
                         </div>
                     </div>
-                    <form action="" method="post">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="dob">Date Of Birth</label>
-                            <input type="date" name="dob" id="dob"  class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="number">Phone Number</label>
-                            <input type="tel" name="number" id="number"  class="form-control">
-                        </div>
-                        <div class="form-group">
-                        <label for="zip-home">Zip Code (Home)</label>
-                        <input type="text" name="zip-home" id="zip-home"  class="form-control">
-                        </div>
-                        <div class="form-group">
-                        <label for="zip-work">Zip Code (Work)</label>
-                        <input type="text" name="zip-work" id="zip-work"  class="form-control">
-                        </div>
-                        <div class="form-group">
-                        <label for="vaccination">Vaccinated ?</label>
-                        <input type="checkbox" name="vaccination" id="vaccination" >
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock %}

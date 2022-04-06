@@ -7,19 +7,23 @@ from django.http import HttpResponseRedirect
 from .driver import get_s3_client, get_data
 
 # from circle.models import CircleUser, Circle
-from circle.helper import get_notifications
+from circle.helper import get_notifications, get_all_non_compliance
 
 
 from django.core import signing
 
 # import pandas as pdcondaavtivate
 from .helper import convert_datetime
+from selftracking.helper import check_upload_today
+
+from login.models import UserData
 
 
 def base(request):
 
     try:
         username = signing.loads(request.session["user_key"])
+        userdata = UserData.objects.get(username=username)
         _, client_object = get_s3_client()
         historical, _, _ = get_data(client_object)
     except Exception:
@@ -41,12 +45,19 @@ def base(request):
     df_2021_work = (df[df.county == work_location][["date", "cases"]].values).tolist()
 
     request_user_data, requests = get_notifications(username=username)
+    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
+
+    total_notify = requests + non_compliance
+    streak_today = check_upload_today(username)
 
     context = {
         "page_name": "Monitor",
         "username": username,
+        "userdata": userdata,
         "request_user_data": request_user_data,
-        "requests": requests,
+        "total_notify": total_notify,
+        "three_non_compliance": three_non_compliance,
+        "streak_today": streak_today,
         "monitor": True,
         # other
         "df_2021": df_2021,

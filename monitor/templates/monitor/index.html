@@ -4,30 +4,43 @@
 {% block content %}
 
 <div id="mySidebar" class="sidebar" style="top: 92px;">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-    <a href="#">General</a>
-    <a href="#">Home</a>
-    <a href="#">Workplace</a>
+    <!-- a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a -->
+    <a href="#" onclick="showMainChart()">General</a>
+    <a href="#" onclick="showHomeChart()">Home</a>
+    <a href="#" onclick="showWorkChart()">Workplace</a>
 </div>
+
+<div class="dropdown">
+    <a class="btn btn-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+        Graph
+    </a>
   
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+      <li><a class="dropdown-item" href="#">Line Graph</a></li>
+      <li><a class="dropdown-item" href="#" onclick="generateBarGraph()"> Bar Graph </a></li>
+      <li><a class="dropdown-item" href="#" onclick="generateColumn()"> Column Chart </a></li>
+      <li><a class="dropdown-item" href="#" onclick="generateScatter()"> Scatter Plot </a></li>
+    </ul>
+</div>
+
 <div id="main">
-    <button class="openbtn" onclick="openNav()">☰</button>
+    <button id="toggleBtn" class="openbtn" onclick="toggleNav()">☰</button>
     <div class="container-fluid">
-        <div class="container">
+        <div id="mainchart_1" class="container">
             <div class="row">
                 <div class="col-11 mx-auto p-0 my-5 border-dark">
                     <div id="mainchart"></div>
                 </div>
             </div>
         </div>
-        <div class="container">
+        <div id="homechart_1" class="container hideChart">
             <div class="row">
                 <div class="col-11 mx-auto p-0 my-5 border-dark">
                     <div id="homechart"></div>
                 </div>
             </div>
         </div>
-        <div class="container">
+        <div id="workchart_1" class="container hideChart">
             <div class="row">
                 <div class="col-11 mx-auto p-0 my-5 border-dark">
                     <div id="workchart"></div>

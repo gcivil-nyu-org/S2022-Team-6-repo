@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from circle.models import Circle, CircleUser, RecentCircle, Policy, RequestCircle
-from login.models import UserData
+from login.models import UserData, Privacy
 import datetime
 
 
@@ -68,6 +68,12 @@ class TestView(TestCase):
             home_adress="1122",
         )
 
+        self.privacy = Privacy.objects.create(username=self.userdata)
+
+        self.privacy_2 = Privacy.objects.create(username=self.userdata_2)
+
+        self.privacy_3 = Privacy.objects.create(username=self.userdata_3)
+
         self.recentcircle = RecentCircle.objects.create(
             username=self.userdata, recent_circle="[1]"
         )
@@ -100,6 +106,11 @@ class TestView(TestCase):
             request_id=1, circle_id=self.circle, username=self.userdata_3
         )
 
+        self.client2 = Client()
+        self.session2 = self.client2.session
+        self.session2["user_key"] = None
+        self.session2.save()
+
     def test_circle(self):
         response = self.client.get(self.dashboard_url)
         self.assertEquals(response.status_code, 200)
@@ -114,12 +125,12 @@ class TestView(TestCase):
         self.assertTemplateUsed(response, "circle/add.html")
 
         response = self.client.get(self.exitcircle)
-        self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, "circle/circle.html")
+        self.assertEquals(response.status_code, 302)
+        # self.assertTemplateUsed(response, "circle/circle.html")
 
         response = self.client.get(self.deletecircle)
-        self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, "circle/circle.html")
+        self.assertEquals(response.status_code, 302)
+        # self.assertTemplateUsed(response, "circle/circle.html")
 
     def test_current_circle(self):
         response = self.client.post(
@@ -158,3 +169,31 @@ class TestView(TestCase):
         response = self.client.post(self.notify_url, data={"reject_circle": 1})
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, "circle/notifications.html")
+
+    def test_user2_circle(self):
+        response = self.client2.get(self.dashboard_url)
+        # print(response)
+        self.assertEqual(response.status_code, 302)
+        url = reverse("login:error")
+        self.assertEqual(url, response.url)
+
+    def test_user2_user_circle_url(self):
+        response = self.client2.get(self.user_circle_url)
+        # print(response)
+        self.assertEqual(response.status_code, 302)
+        url = reverse("login:error")
+        self.assertEqual(url, response.url)
+
+    def test_user2_notify(self):
+        response = self.client2.get(self.notify_url)
+        # print(response)
+        self.assertEqual(response.status_code, 302)
+        url = reverse("login:error")
+        self.assertEqual(url, response.url)
+
+    def test_user2_create_circle(self):
+        response = self.client2.get(self.create_url)
+        # print(response)
+        self.assertEqual(response.status_code, 302)
+        url = reverse("login:error")
+        self.assertEqual(url, response.url)
