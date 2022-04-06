@@ -106,6 +106,11 @@ class TestView(TestCase):
             request_id=1, circle_id=self.circle, username=self.userdata_3
         )
 
+        self.client2 = Client()
+        self.session2 = self.client2.session
+        self.session2["user_key"] = None
+        self.session2.save()
+
     def test_circle(self):
         response = self.client.get(self.dashboard_url)
         self.assertEquals(response.status_code, 200)
@@ -164,3 +169,31 @@ class TestView(TestCase):
         response = self.client.post(self.notify_url, data={"reject_circle": 1})
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, "circle/notifications.html")
+
+    def test_user2_circle(self):
+        response = self.client2.get(self.dashboard_url)
+        # print(response)
+        self.assertEqual(response.status_code, 302)
+        url = reverse("login:error")
+        self.assertEqual(url, response.url)
+
+    def test_user2_user_circle_url(self):
+        response = self.client2.get(self.user_circle_url)
+        # print(response)
+        self.assertEqual(response.status_code, 302)
+        url = reverse("login:error")
+        self.assertEqual(url, response.url)
+
+    def test_user2_notify(self):
+        response = self.client2.get(self.notify_url)
+        # print(response)
+        self.assertEqual(response.status_code, 302)
+        url = reverse("login:error")
+        self.assertEqual(url, response.url)
+
+    def test_user2_create_circle(self):
+        response = self.client2.get(self.create_url)
+        # print(response)
+        self.assertEqual(response.status_code, 302)
+        url = reverse("login:error")
+        self.assertEqual(url, response.url)
