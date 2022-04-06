@@ -120,12 +120,12 @@ class TestView(TestCase):
         self.assertTemplateUsed(response, "circle/add.html")
 
         response = self.client.get(self.exitcircle)
-        self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, "circle/circle.html")
+        self.assertEquals(response.status_code, 302)
+        # self.assertTemplateUsed(response, "circle/circle.html")
 
         response = self.client.get(self.deletecircle)
-        self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, "circle/circle.html")
+        self.assertEquals(response.status_code, 302)
+        # self.assertTemplateUsed(response, "circle/circle.html")
 
     def test_current_circle(self):
         response = self.client.post(
