@@ -31,7 +31,7 @@ class TestViews(TestCase):
     def test_user_monitor(self):
         response = self.client.get(self.user_monitor_url)
         print(response)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
 
     def test_user_monitor_url(self):
         response = self.client.get(self.user_monitor_url)
