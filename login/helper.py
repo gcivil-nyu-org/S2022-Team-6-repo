@@ -1,5 +1,6 @@
 from circle.models import CirclePolicyCompliance
 
+
 def update_compliance(username, circle_id, policy_id, compliance):
     try:
         policy_compliance = CirclePolicyCompliance.objects.get(

@@ -46,9 +46,7 @@ def circle(request, username):
 
     check_recent_circle(recent_circle(username), username)
     recent_circle_list = recent_circle(username)
-    recent_circles = get_recent_circles(
-        recent_circle_list, username
-    )
+    recent_circles = get_recent_circles(recent_circle_list, username)
 
     three_non_compliance, non_compliance = get_all_non_compliance(username, True)
 

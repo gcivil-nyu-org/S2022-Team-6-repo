@@ -7,13 +7,15 @@ import login.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('login', '0007_privacy'),
+        ("login", "0007_privacy"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='userdata',
-            name='user_image',
-            field=models.ImageField(default=login.models.random_img, upload_to='media/user/'),
+            model_name="userdata",
+            name="user_image",
+            field=models.ImageField(
+                default=login.models.random_img, upload_to="media/user/"
+            ),
         ),
     ]

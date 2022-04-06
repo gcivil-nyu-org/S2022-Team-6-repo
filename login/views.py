@@ -98,10 +98,12 @@ def user_profile(request, username):
 
             if "vaccination_status_no" in request.POST:
                 userdata.is_vacinated = False
-            
+
             if request.FILES:
                 user_image = request.FILES["user_image"]
-                user_image.name = userdata.username + "." + user_image.name.split(".")[-1]
+                user_image.name = (
+                    userdata.username + "." + user_image.name.split(".")[-1]
+                )
                 userdata.user_image = user_image
             userdata.save()
         except Exception:
@@ -127,7 +129,7 @@ def user_profile(request, username):
 
 def user_privacy(request, username):
     try:
-        userdata=UserData.objects.get(username=username)
+        userdata = UserData.objects.get(username=username)
         current_username = signing.loads(request.session["user_key"])
         if current_username != username:
             raise Exception()
@@ -171,7 +173,7 @@ def user_privacy(request, username):
                 update_compliance(username, circle.circle_id.circle_id, 3, False)
 
         privacy.save()
-    
+
     privacy = Privacy.objects.get(username=username)
 
     context = {
