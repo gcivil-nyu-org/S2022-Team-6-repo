@@ -10,7 +10,6 @@ from .models import (
 
 from login.models import UserData, Privacy
 import json
-import os
 
 
 def recent_circle(username):

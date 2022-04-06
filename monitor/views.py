@@ -16,6 +16,8 @@ from django.core import signing
 from .helper import convert_datetime
 from selftracking.helper import check_upload_today
 
+from models.login import UserData
+
 
 def base(request):
 

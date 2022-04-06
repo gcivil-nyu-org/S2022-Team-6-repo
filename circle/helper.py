@@ -96,8 +96,6 @@ def get_recent_circles(recent_circle_list, username):  # TODO: Recent Circle
 
 def check_recent_circle(recent_circle_list, username):
 
-    circle_list = recent_circle_list.copy()
-
     for recent_circle in recent_circle_list:
         try:
             CircleUser.objects.get(
