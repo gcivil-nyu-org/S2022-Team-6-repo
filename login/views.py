@@ -271,12 +271,15 @@ def signin(request):
             username = request.POST.get("username")
             hasher = PBKDF2WrappedSHA1PasswordHasher()
             password = hasher.encode(request.POST.get("password"), "test123")
-            user = UserData.objects.get(username=username)
-            user_enc = signing.dumps(username)
-            request.session["user_key"] = user_enc
             if user.password == password:
+                user = UserData.objects.get(username=username)
+                
+                user_enc = signing.dumps(username)
+                request.session["user_key"] = user_enc
+                
                 url = reverse("circle:dashboard", kwargs={"username": username})
                 return HttpResponseRedirect(url)
+            
             else:
                 raise Exception("Invalid Password")
         except Exception:
