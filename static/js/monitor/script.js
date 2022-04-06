@@ -148,8 +148,13 @@ function generateBarGraph() {
     chart = Highcharts.chart('mainchart', mainChartConfig);
 }
 
-function generateHistoGraph() {
-    mainChartConfig.chart.type = 'spline';
+function generateScatter() {
+    mainChartConfig.chart.type = 'scatter';
+    chart = Highcharts.chart('mainchart', mainChartConfig);
+}
+
+function generateColumn() {
+    mainChartConfig.chart.type = 'column';
     chart = Highcharts.chart('mainchart', mainChartConfig);
 }
 
