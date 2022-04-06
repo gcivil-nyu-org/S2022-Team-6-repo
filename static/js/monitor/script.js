@@ -3,6 +3,67 @@ let mainChartSelector = document.querySelector("#mainchart_1");
 let homechartSelector = document.querySelector("#homechart_1");
 let workchartSelector = document.querySelector("#workchart_1");
 let chart,homechart,workchart;
+let mainChartConfig = {
+    chart: {
+        type: 'spline'
+    },
+    title: {
+        text: 'NYC Covid Cases'
+    },
+    xAxis: [
+        {
+            'categories': _categories_2021,
+        title: {
+            text: 'Date'
+        },
+        }
+    ],
+
+    exporting: { enabled: false },
+
+    credits: {
+        enabled: false
+      },
+
+    yAxis: {
+        title: {
+            text: 'Covid Cases'
+        }
+    },
+
+    plotOptions: {
+        series: {
+            marker: {
+                enabled: true
+            }
+        }
+    },
+
+    colors: ['#6CF'],
+
+    series: [
+    {
+        showInLegend: false,
+        data: _df_2021
+    }],
+
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 100
+            },
+            chartOptions: {
+                plotOptions: {
+                    series: {
+                        marker: {
+                            radius: 2.5
+                        }
+                    }
+                }
+            }
+        }]
+    }
+}
 
 function toggleNav() {
     if (!isNavBarOpen) {
@@ -82,71 +143,20 @@ function showWorkChart() {
     }
 }
 
+function generateBarGraph() {
+    mainChartConfig.chart.type = 'bar';
+    chart = Highcharts.chart('mainchart', mainChartConfig);
+}
+
+function generateHistoGraph() {
+    mainChartConfig.chart.type = 'spline';
+    chart = Highcharts.chart('mainchart', mainChartConfig);
+}
+
 window.addEventListener("scroll", changeCss , false);
 
 document.addEventListener('DOMContentLoaded', function () {
-    
-    chart = Highcharts.chart('mainchart', {
-        chart: {
-            type: 'spline'
-        },
-        title: {
-            text: 'NYC Covid Cases'
-        },
-        xAxis: [
-            {
-                'categories': _categories_2021,
-            title: {
-                text: 'Date'
-            },
-            }
-        ],
-
-        exporting: { enabled: false },
-
-        credits: {
-            enabled: false
-          },
-
-        yAxis: {
-            title: {
-                text: 'Covid Cases'
-            }
-        },
-
-        plotOptions: {
-            series: {
-                marker: {
-                    enabled: true
-                }
-            }
-        },
-
-        colors: ['#6CF'],
-
-        series: [
-        {
-            showInLegend: false,
-            data: _df_2021
-        }],
-
-        responsive: {
-            rules: [{
-                condition: {
-                    maxWidth: 100
-                },
-                chartOptions: {
-                    plotOptions: {
-                        series: {
-                            marker: {
-                                radius: 2.5
-                            }
-                        }
-                    }
-                }
-            }]
-        }
-    });
+    chart = Highcharts.chart('mainchart', mainChartConfig);
 });
     
     homechart = Highcharts.chart('homechart', {
