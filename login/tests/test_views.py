@@ -3,6 +3,8 @@ from django.urls import reverse
 from login.models import UserData, Privacy
 import datetime
 from login.hashes import PBKDF2WrappedSHA1PasswordHasher
+import os
+from pathlib import Path
 
 
 class TestViews(TestCase, TransactionTestCase):
@@ -279,7 +281,7 @@ class AtomicTests(TransactionTestCase):
 
     def test_user_profile_post(self):
         with open(
-            "/Users/chinmaykulkarni/Documents/Assignments/SE/Covigaurd/Fork/S2022-Team-6-repo/static/img/famliy.jpg",
+            os.path.join(Path(__file__).parent.absolute(), "famliy.jpg"),
             "rb",
         ) as imgData:
             response = self.client.post(
