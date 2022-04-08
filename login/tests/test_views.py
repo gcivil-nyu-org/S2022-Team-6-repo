@@ -1,6 +1,7 @@
 from django.test import TestCase, Client, TransactionTestCase
 from django.urls import reverse
 from login.models import UserData, Privacy
+from circle.models import Circle, CircleUser
 import datetime
 from login.hashes import PBKDF2WrappedSHA1PasswordHasher
 import os
@@ -62,6 +63,22 @@ class TestViews(TestCase, TransactionTestCase):
 
         self.change_password_url_error = reverse(
             "login:change_password", args=["ChinmayKulkarni"]
+        )
+
+        self.settings_profile_url = reverse(
+            "login:settings", args=["EashanKaushik", "profile"]
+        )
+
+        self.settings_privacy_url = reverse(
+            "login:settings", args=["EashanKaushik", "privacy"]
+        )
+
+        self.settings_password_url = reverse(
+            "login:settings", args=["EashanKaushik", "password"]
+        )
+
+        self.settings_error_url = reverse(
+            "login:settings", args=["EashanKaushik", "Error"]
         )
 
         self.userdata = UserData.objects.create(
@@ -225,6 +242,25 @@ class TestViews(TestCase, TransactionTestCase):
         )
         self.assertEqual(response.status_code, 200)
 
+    def test_user_settings_profile(self):
+        response = self.client.get(self.settings_profile_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "login/user_profile.html")
+
+    def test_user_settings_privacy(self):
+        response = self.client.get(self.settings_privacy_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "login/user_privacy.html")
+
+    def test_user_settings_password(self):
+        response = self.client.get(self.settings_password_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "login/user_password.html")
+
+    def test_user_settings_error(self):
+        response = self.client.get(self.settings_error_url)
+        self.assertEqual(response.status_code, 302)
+
 
 class AtomicTests(TransactionTestCase):
     def setUp(self):
@@ -249,6 +285,10 @@ class AtomicTests(TransactionTestCase):
 
         self.change_password_url = reverse(
             "login:change_password", args=["EashanKaushik"]
+        )
+
+        self.sigup_url = reverse(
+            "login:signup",
         )
 
         self.userdata = UserData.objects.create(
@@ -279,6 +319,17 @@ class AtomicTests(TransactionTestCase):
             show_location_visited=False,
         )
 
+        self.circle = Circle.objects.create(
+            circle_id=1,
+            circle_name="TestCircle",
+            admin_username=self.userdata,
+            no_of_users=1,
+        )
+
+        self.circle_user_data = CircleUser.objects.create(
+            circle_id=self.circle, username=self.userdata, is_admin=True, is_member=True
+        )
+
     def test_user_profile_post(self):
         with open(
             os.path.join(Path(__file__).parent.absolute(), "famliy.jpg"),
@@ -295,6 +346,7 @@ class AtomicTests(TransactionTestCase):
                     "home": "1122",
                     "work": "1122",
                     "vaccination_status_yes": "",
+                    "vaccination_status_no": "",
                     "user_image": imgData,
                 },
             )
@@ -346,3 +398,48 @@ class AtomicTests(TransactionTestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "login/user_password.html")
+
+    def test_signup_post(self):
+        response = self.client.post(
+            self.sigup_url,
+            data={
+                "signup-button": "",
+                "password": "coviguard",
+                "confirmpassword": "coviguard",
+                "firstname": "NewTestUser",
+                "lastname": "TestLastName",
+                "username": "TestUsername",
+                "email": "test@gmail.com",
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+
+    def test_signup_post_error(self):
+        response = self.client.post(
+            self.sigup_url,
+            data={
+                "signup-button": "",
+                "password": "coviguard",
+                "confirmpassword": "covi",
+                "firstname": "NewTestUser",
+                "lastname": "TestLastName",
+                "username": "TestUsername",
+                "email": "test@gmail.com",
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "login/signup.html")
+
+    def test_signup_post_error_2(self):
+        response = self.client.post(
+            self.sigup_url,
+            data={
+                "signup-button": "",
+                "password": "coviguard",
+                "confirmpassword": "coviguard",
+                "firstname": "",
+                "lastname": "TestLastName",
+                "email": "test@gmail.com",
+            },
+        )
+        self.assertEqual(response.status_code, 302)
