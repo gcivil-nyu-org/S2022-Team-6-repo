@@ -31,7 +31,7 @@ def base(request):
         return HttpResponseRedirect(url)
 
     df = historical[
-        (historical.date < "2022-01-01") & (historical.date >= "2021-08-01")
+        (historical.date < "2022-01-01") & (historical.date >= "2021-01-01")
     ]
 
     df_2021 = df[df.county == "New York City"]
