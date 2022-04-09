@@ -12,8 +12,7 @@ let mainChartConfig = {
     },
     xAxis: [
         {
-            'categories': ["January", "February", "March", "April", "May", "June", "July", "August", "September", 
-            "October", "November", "December"],
+            'type': "category",
         title: {
             text: 'Month'
         },
@@ -31,6 +30,9 @@ let mainChartConfig = {
             text: 'Covid Cases'
         }
     },
+    tooltip: {
+        pointFormat: '{point.x}: {point.y}'
+    },
 
     plotOptions: {
         series: {
@@ -45,6 +47,7 @@ let mainChartConfig = {
     series: [
     {
         showInLegend: false,
+        name: "",
         data: generateseriesData(_df_2021)
     }],
 
@@ -63,7 +66,8 @@ let mainChartConfig = {
                 }
             }
         }]
-    }
+    },
+    drilldown: generateDrillDownData(_df_2021)
 }
 
 function toggleNav() {
@@ -175,6 +179,23 @@ function generateseriesData(data) {
     return seriesDataMap;
 }
 
+function generateDrillDownData(data) {
+    drilldownData = [{"id": "January", "data": []}, {"id": "February", "data": []}, {"id": "March", "data": []}, {"id": "April", "data": []},
+    {"id": "May", "data": []}, {"id": "June", "data": []}, {"id": "July", "data": []}, {"id": "August", "data": []}, {"id": "September", "data": []},
+    {"id": "October", "data": []}, {"id": "November", "data": []}, {"id": "December", "data": []}];
+    monthNumberToNameMap = {"01": "January", "02": "February", "03": "March", "04": "April", "05": "May", "06": "June", 
+    "07": "July","08": "August", "09": "September", "10": "October", "11": "November", "12": "December"};
+    for (temp in data) {
+        for (temp2 in drilldownData) {
+            if (drilldownData[temp2]["id"] == monthNumberToNameMap[data[temp][0].split("-")[1]]) {
+                drilldownData[temp2]["data"].push([data[temp][0], data[temp][1]]);
+            }
+        }
+    }
+    finalData = {"series": drilldownData};
+    return finalData;
+}
+
 window.addEventListener("scroll", changeCss , false);
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -188,14 +209,12 @@ document.addEventListener('DOMContentLoaded', function () {
         title: {
             text: 'Home Location Covid Cases'
         },
-        subtitle: {
-            text: 'Winter 2021'
-        },
         xAxis: [
             {
-                'categories': _categories_2021,
+                'categories': ["January", "February", "March", "April", "May", "June", "July", "August", "September", 
+                "October", "November", "December"],
             title: {
-                text: 'Date'
+                text: 'Month'
             },
             }
         ],
@@ -221,8 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
         colors: ['#39F'],
 
         series: [{
-            name: "Winter 2021",
-            data: _df_2021_home
+            data: generateseriesData(_df_2021_home)
         }],
 
         responsive: {
@@ -250,14 +268,12 @@ document.addEventListener('DOMContentLoaded', function () {
         title: {
             text: 'Workspace Covid Cases'
         },
-        subtitle: {
-            text: 'Winter 2021'
-        },
         xAxis: [
             {
-                'categories': _categories_2021,
+                'categories': ["January", "February", "March", "April", "May", "June", "July", "August", "September", 
+                "October", "November", "December"],
             title: {
-                text: 'Date'
+                text: 'Month'
             },
             }
         ],
@@ -283,8 +299,7 @@ document.addEventListener('DOMContentLoaded', function () {
         colors: ['#036'],
 
         series: [{
-            name: "Winter 2021",
-            data: _df_2021_work
+            data: generateseriesData(_df_2021_work)
         }],
 
         responsive: {

@@ -19,8 +19,6 @@ class TestViews(TestCase):
             username="EashanKaushik",
             email="test@gmail.com",
             dob=datetime.datetime.now(),
-            work_address="1122",
-            home_adress="1122",
         )
         self.user_monitor_url = reverse("monitor:user_monitor")
         self.client2 = Client()
