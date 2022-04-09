@@ -12,9 +12,10 @@ let mainChartConfig = {
     },
     xAxis: [
         {
-            'categories': _categories_2021,
+            'categories': ["January", "February", "March", "April", "May", "June", "July", "August", "September", 
+            "October", "November", "December"],
         title: {
-            text: 'Date'
+            text: 'Month'
         },
         }
     ],
@@ -44,7 +45,7 @@ let mainChartConfig = {
     series: [
     {
         showInLegend: false,
-        data: _df_2021
+        data: generateseriesData(_df_2021)
     }],
 
     responsive: {
@@ -156,6 +157,22 @@ function generateScatter() {
 function generateColumn() {
     mainChartConfig.chart.type = 'column';
     chart = Highcharts.chart('mainchart', mainChartConfig);
+}
+
+function generateseriesData(data) {
+    monthToCasesMap = {"January": 0, "February": 0, "March": 0, "April": 0, "May": 0, "June": 0, "July": 0, "August": 0, "September": 0, 
+    "October": 0, "November": 0, "December": 0};
+    monthNumberToNameMap = {"01": "January", "02": "February", "03": "March", "04": "April", "05": "May", "06": "June", 
+    "07": "July","08": "August", "09": "September", "10": "October", "11": "November", "12": "December"};
+    seriesDataMap = [];
+    for (temp in data) {
+        monthToCasesMap[monthNumberToNameMap[data[temp][0].split("-")[1]]] += data[temp][1];
+    }
+    for (temp in monthToCasesMap) {
+        let temp1 = {"name": temp, "y": monthToCasesMap[temp], "drilldown": temp};
+        seriesDataMap.push(temp1);
+    }
+    return seriesDataMap;
 }
 
 window.addEventListener("scroll", changeCss , false);
