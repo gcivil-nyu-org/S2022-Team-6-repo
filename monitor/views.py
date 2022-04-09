@@ -38,11 +38,11 @@ def base(request):
     df_2021 = (df_2021[["date", "cases"]].values).tolist()
     categories = [convert_datetime(df_2021[i][0]) for i in range(0, 153)]
 
-    home_location = userdata.home_adress # pragma: no cover
+    home_location = userdata.home_adress  # pragma: no cover
     work_location = userdata.work_address  # pragma: no cover
-    if home_location == None:
+    if home_location is None:
         home_location = "New York City"
-    if work_location == None:
+    if work_location is None:
         work_location = "New York City"
 
     df_2021_home = (df[df.county == home_location][["date", "cases"]].values).tolist()
