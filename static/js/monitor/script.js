@@ -170,8 +170,8 @@ function generateColumn() {
     chart = Highcharts.chart('mainchart', mainChartConfig);
 }
 
-function generateColumn() {
-    mainChartConfig.chart.type = 'column';
+function generatePie() {
+    mainChartConfig.chart.type = 'pie';
     chart = Highcharts.chart('mainchart', mainChartConfig);
 }
 
