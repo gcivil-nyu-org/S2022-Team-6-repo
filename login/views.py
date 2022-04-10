@@ -273,6 +273,8 @@ def signin(request):
             password = hasher.encode(request.POST.get("password"), "test123")
 
             user = UserData.objects.get(username=username)
+            print(user.password)
+            print(password)
             if user.password == password:
                 user_enc = signing.dumps(username)
                 request.session["user_key"] = user_enc

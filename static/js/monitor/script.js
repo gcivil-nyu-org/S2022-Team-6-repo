@@ -5,7 +5,14 @@ let workchartSelector = document.querySelector("#workchart_1");
 let chart,homechart,workchart;
 let mainChartConfig = {
     chart: {
-        type: 'spline'
+        type: 'spline',
+        options3d: {
+            enabled: true,
+            alpha: 15,
+            beta: 15,
+            depth: 50,
+            viewDistance: 25
+        }
     },
     title: {
         text: 'NYC Covid Cases'
@@ -155,6 +162,11 @@ function generateBarGraph() {
 
 function generateScatter() {
     mainChartConfig.chart.type = 'scatter';
+    chart = Highcharts.chart('mainchart', mainChartConfig);
+}
+
+function generateColumn() {
+    mainChartConfig.chart.type = 'column';
     chart = Highcharts.chart('mainchart', mainChartConfig);
 }
 
