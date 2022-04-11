@@ -233,6 +233,11 @@ def notify(request):
 
     return render(request, "circle/notifications.html", context)
 
+def search_circles(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        Searched_circle = Circle.objects.filter(circle_name__contains=searched)
+        return render(request, 'circle/search_circles.html', {'searched':searched,'Searched_circle':Searched_circle})
 
 def exit_circle(request, username, circle_id):
     admin_user = CircleUser.objects.filter(circle_id=circle_id, is_admin=True)

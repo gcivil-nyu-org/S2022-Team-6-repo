@@ -7,11 +7,9 @@
                 CoviGuard
             </a>
             <a href="#" class="navbar-brand"></a>
-
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
             <div class="collapse navbar-collapse" id="navmenu">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
@@ -106,6 +104,11 @@
                             </ul>
                         </div>
                     </li>
+                </ul>
+                <form class="d-flex" method=POST action="{% url 'circle:search_circles' %}">
+                  {% csrf_token %}
+                  <input class="form-control me-2" type="search" placeholder="Search Circles" aria-label="Search" name="searched">
+                  <button class="btn btn-outline-secondary" type="submit">Search</button></form></ul>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="{{ userdata.user_image.url }}" width="35" height="35" class="rounded-circle">
@@ -117,5 +120,9 @@
                     </li>
                 </ul>
             </div>
+        </div>
+            </div>
+    </div>
+</form>
         </div>
     </nav>
