@@ -8,7 +8,7 @@ from .hashes import PBKDF2WrappedSHA1PasswordHasher
 from .models import UserData, Privacy
 from .helper import update_compliance
 from circle.models import CircleUser
-
+from alert.models import Alert
 from monitor.driver import get_s3_client, get_data
 
 
@@ -321,6 +321,12 @@ def signup(request):
                     username=request.POST.get("username")
                 )
                 privacy.save()
+                
+                alert = Alert()
+                alert.username = UserData.objects.get(
+                    username=request.POST.get("username")
+                )
+                alert.save()
 
                 return HttpResponseRedirect(reverse("login:signin"))
     except Exception:
