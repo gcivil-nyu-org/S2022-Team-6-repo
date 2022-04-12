@@ -9,16 +9,29 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('login', '0008_userdata_user_image'),
+        ("login", "0008_userdata_user_image"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Alert',
+            name="Alert",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('alert', models.BooleanField(default=False)),
-                ('username', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='login.userdata')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("alert", models.BooleanField(default=False)),
+                (
+                    "username",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="login.userdata"
+                    ),
+                ),
             ],
         ),
     ]

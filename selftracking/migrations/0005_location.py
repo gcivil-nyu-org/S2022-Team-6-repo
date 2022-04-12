@@ -6,14 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('selftracking', '0004_alter_selftrack_date_uploaded'),
+        ("selftracking", "0004_alter_selftrack_date_uploaded"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Location',
+            name="Location",
             fields=[
-                ('location_visited', models.CharField(max_length=100, primary_key=True, serialize=False)),
+                (
+                    "location_visited",
+                    models.CharField(max_length=100, primary_key=True, serialize=False),
+                ),
             ],
         ),
     ]

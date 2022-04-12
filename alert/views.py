@@ -18,15 +18,12 @@ def alert_user(request, username):
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
-    
-    
-    
-    
+
     request_user_data, requests = get_notifications(username=username)
     three_non_compliance, non_compliance = get_all_non_compliance(username, True)
     total_notify = requests + non_compliance
     streak_today = check_upload_today(username)
-    
+
     context = {
         "page_name": "Alert",
         "username": username,
@@ -36,5 +33,5 @@ def alert_user(request, username):
         "three_non_compliance": three_non_compliance,
         "streak_today": streak_today,
     }
-    
+
     return render(request, "alert/alert.html", context)

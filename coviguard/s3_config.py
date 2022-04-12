@@ -33,7 +33,8 @@ class s3Config:
 
     def get_avg(self, year=2022):
         return self.read_data("us-rolling-avg/us-" + str(year) + ".csv")
-    
+
+
 # class s3ImageConfig:
 #     def get_s3_client(self):
 #         self.s3_client = boto3.client(
@@ -41,8 +42,6 @@ class s3Config:
 #             aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
 #             aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],
 #         )
-        
+
 #     def delete_user_image(self, username, key):
 #         s3.Object('your-bucket', 'your-key').delete()
-        
-    

@@ -6,13 +6,15 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('login', '0008_userdata_user_image'),
-        ('selftracking', '0006_alter_selftrack_location_visited_and_more'),
+        ("login", "0008_userdata_user_image"),
+        ("selftracking", "0006_alter_selftrack_location_visited_and_more"),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='selftrack',
-            unique_together={('date_uploaded', 'username', 'user_met', 'location_visited')},
+            name="selftrack",
+            unique_together={
+                ("date_uploaded", "username", "user_met", "location_visited")
+            },
         ),
     ]

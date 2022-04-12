@@ -7,31 +7,33 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('login', '0008_userdata_user_image'),
-        ('selftracking', '0007_alter_selftrack_unique_together'),
+        ("login", "0008_userdata_user_image"),
+        ("selftracking", "0007_alter_selftrack_unique_together"),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='selftrack',
+            name="selftrack",
             unique_together=set(),
         ),
         migrations.AlterField(
-            model_name='selftrack',
-            name='location_visited',
+            model_name="selftrack",
+            name="location_visited",
             field=models.TextField(null=True),
         ),
         migrations.AlterField(
-            model_name='selftrack',
-            name='user_met',
+            model_name="selftrack",
+            name="user_met",
             field=models.TextField(null=True),
         ),
         migrations.AlterField(
-            model_name='selftrack',
-            name='username',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='login.userdata'),
+            model_name="selftrack",
+            name="username",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="login.userdata"
+            ),
         ),
         migrations.DeleteModel(
-            name='Location',
+            name="Location",
         ),
     ]

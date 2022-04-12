@@ -12,7 +12,7 @@ from .helper import (
     get_current_streak,
     get_longest_streak,
     check_upload_today,
-    get_all_connections
+    get_all_connections,
 )
 
 from .driver import add_user_met, add_location_visited
@@ -54,11 +54,13 @@ def selftrack(request, username):
     if not uploaded_today:
 
         if request.method == "POST" and "track" in request.POST:
-            
+
             selftrack = SelfTrack()
             selftrack.username = UserData.objects.get(username=username)
             selftrack.user_met = add_user_met(request.POST.getlist("user_met"))
-            selftrack.location_visited = add_location_visited(request.POST.getlist("location_visited"))
+            selftrack.location_visited = add_location_visited(
+                request.POST.getlist("location_visited")
+            )
 
             uploaded_yesterday = check_uploaded_yesterday(username)
 
@@ -84,11 +86,11 @@ def selftrack(request, username):
 
     streak_today = check_upload_today(username)
     streak_yesterday = check_uploaded_yesterday(username)
-    
+
     connections = get_all_connections(username)
     counties = historical.county.dropna().unique()
     counties = counties[counties != "Unknown"]
-    
+
     context = {
         "page_name": "SelfTrack",
         "username": username,

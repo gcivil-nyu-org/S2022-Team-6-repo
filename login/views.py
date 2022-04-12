@@ -105,7 +105,7 @@ def user_profile(request, username):
                     userdata.username + "." + user_image.name.split(".")[-1]
                 )
                 userdata.user_image = user_image
-        
+
             userdata.save()
         except Exception:
             messages.error(request, "Invalid Field")
@@ -300,12 +300,12 @@ def signup(request):
             if request.POST.get("password") != request.POST.get("confirmpassword"):
                 messages.error(request, "Password Do Not Match!!")
                 return render(request, "login/signup.html", context)
-            
+
             try:
                 UserData.objects.get(username=request.POST.get("username"))
                 messages.error(request, "Username Already Exist!!")
                 return render(request, "login/signup.html", context)
-            
+
             except Exception:
                 userdata = UserData()
                 userdata.firstname = request.POST.get("firstname")
@@ -313,7 +313,9 @@ def signup(request):
                 userdata.username = request.POST.get("username")
                 userdata.email = request.POST.get("email")
                 hasher = PBKDF2WrappedSHA1PasswordHasher()
-                userdata.password = hasher.encode(request.POST.get("password"), "test123")
+                userdata.password = hasher.encode(
+                    request.POST.get("password"), "test123"
+                )
                 userdata.save()
 
                 privacy = Privacy()
@@ -321,7 +323,7 @@ def signup(request):
                     username=request.POST.get("username")
                 )
                 privacy.save()
-                
+
                 alert = Alert()
                 alert.username = UserData.objects.get(
                     username=request.POST.get("username")
@@ -341,7 +343,7 @@ def logout(request):
         del request.session["user_key"]
     except Exception:
         return HttpResponseRedirect(reverse("login:index"))
-    
+
     return HttpResponseRedirect(reverse("login:index"))
 
 

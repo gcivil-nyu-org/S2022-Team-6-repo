@@ -7,24 +7,34 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('login', '0008_userdata_user_image'),
-        ('selftracking', '0005_location'),
+        ("login", "0008_userdata_user_image"),
+        ("selftracking", "0005_location"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='selftrack',
-            name='location_visited',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='selftracking.location'),
+            model_name="selftrack",
+            name="location_visited",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="selftracking.location"
+            ),
         ),
         migrations.AlterField(
-            model_name='selftrack',
-            name='user_met',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_met', to='login.userdata'),
+            model_name="selftrack",
+            name="user_met",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="user_met",
+                to="login.userdata",
+            ),
         ),
         migrations.AlterField(
-            model_name='selftrack',
-            name='username',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_input', to='login.userdata'),
+            model_name="selftrack",
+            name="username",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="user_input",
+                to="login.userdata",
+            ),
         ),
     ]
