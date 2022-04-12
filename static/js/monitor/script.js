@@ -2,6 +2,7 @@ let isNavBarOpen = false;
 let mainChartSelector = document.querySelector("#mainchart_1");
 let homechartSelector = document.querySelector("#homechart_1");
 let workchartSelector = document.querySelector("#workchart_1");
+let dropdownMenuLinkSelector = document.querySelector("#dropdownMenuLink");
 let chart,homechart,workchart;
 let mainChartConfig = {
     chart: {
@@ -75,6 +76,127 @@ let mainChartConfig = {
         }]
     },
     drilldown: generateDrillDownData(_df_2021)
+}
+
+let homeChartConfig = {
+    chart: {
+        type: 'spline'
+    },
+    title: {
+        text: 'Home Covid Cases'
+    },
+    xAxis: [
+        {
+            'categories': ["January", "February", "March", "April", "May", "June", "July", "August", "September", 
+            "October", "November", "December"],
+        title: {
+            text: 'Month'
+        },
+        }
+    ],
+    yAxis: {
+        title: {
+            text: 'Covid Cases'
+        }
+    },
+    tooltip: {
+        headerFormat: '<b>{series.name}</b><br>',
+        pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+    },
+
+    plotOptions: {
+        series: {
+            marker: {
+                enabled: true
+            },
+            turboThreshold: 50000
+        }
+    },
+
+    colors: ['#39F'],
+
+    series: [{
+        data: generateseriesData(_df_2021_home)
+    }],
+
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 100
+            },
+            chartOptions: {
+                plotOptions: {
+                    series: {
+                        marker: {
+                            radius: 2.5
+                        }
+                    }
+                }
+            }
+        }]
+    },
+    drilldown: generateDrillDownData(_df_2021_home)
+}
+
+
+let workChartConfig = {
+    chart: {
+        type: 'spline'
+    },
+    title: {
+        text: 'Work Covid Cases'
+    },
+    xAxis: [
+        {
+            'categories': ["January", "February", "March", "April", "May", "June", "July", "August", "September", 
+            "October", "November", "December"],
+        title: {
+            text: 'Month'
+        },
+        }
+    ],
+    yAxis: {
+        title: {
+            text: 'Covid Cases'
+        }
+    },
+    tooltip: {
+        headerFormat: '<b>{series.name}</b><br>',
+        pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+    },
+
+    plotOptions: {
+        series: {
+            marker: {
+                enabled: true
+            },
+            turboThreshold: 50000
+        }
+    },
+
+    colors: ['#036'],
+
+    series: [{
+        data: generateseriesData(_df_2021_work)
+    }],
+
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 100
+            },
+            chartOptions: {
+                plotOptions: {
+                    series: {
+                        marker: {
+                            radius: 2.5
+                        }
+                    }
+                }
+            }
+        }]
+    },
+    drilldown: generateDrillDownData(_df_2021_work)
 }
 
 function toggleNav() {
@@ -155,24 +277,53 @@ function showWorkChart() {
     }
 }
 
+function generateLineGraph() {
+    dropdownMenuLinkSelector.innerText = 'Line Graph';
+    mainChartConfig.chart.type = 'spline';
+    chart = Highcharts.chart('mainchart', mainChartConfig);
+    homeChartConfig.chart.type = 'spline';
+    chart = Highcharts.chart('homechart', homeChartConfig);
+    workChartConfig.chart.type = 'spline';
+    chart = Highcharts.chart('workchart', workChartConfig);
+}
 function generateBarGraph() {
+    dropdownMenuLinkSelector.innerText = 'Bar Graph';
     mainChartConfig.chart.type = 'bar';
     chart = Highcharts.chart('mainchart', mainChartConfig);
+    homeChartConfig.chart.type = 'bar';
+    chart = Highcharts.chart('homechart', homeChartConfig);
+    workChartConfig.chart.type = 'bar';
+    chart = Highcharts.chart('workchart', workChartConfig);
 }
 
 function generateScatter() {
+    dropdownMenuLinkSelector.innerText = 'Scatter Plot';
     mainChartConfig.chart.type = 'scatter';
     chart = Highcharts.chart('mainchart', mainChartConfig);
+    homeChartConfig.chart.type = 'scatter';
+    chart = Highcharts.chart('homechart', homeChartConfig);
+    workChartConfig.chart.type = 'scatter';
+    chart = Highcharts.chart('workchart', workChartConfig);
 }
 
 function generateColumn() {
+    dropdownMenuLinkSelector.innerText = 'Column Graph';
     mainChartConfig.chart.type = 'column';
     chart = Highcharts.chart('mainchart', mainChartConfig);
+    homeChartConfig.chart.type = 'column';
+    chart = Highcharts.chart('homechart', homeChartConfig);
+    workChartConfig.chart.type = 'column';
+    chart = Highcharts.chart('workchart', workChartConfig);
 }
 
 function generatePie() {
+    dropdownMenuLinkSelector.innerText = 'Pie Chart';
     mainChartConfig.chart.type = 'pie';
     chart = Highcharts.chart('mainchart', mainChartConfig);
+    homeChartConfig.chart.type = 'pie';
+    chart = Highcharts.chart('homechart', homeChartConfig);
+    workChartConfig.chart.type = 'pie';
+    chart = Highcharts.chart('workchart', workChartConfig);
 }
 
 function generateseriesData(data) {
@@ -214,120 +365,6 @@ document.addEventListener('DOMContentLoaded', function () {
     chart = Highcharts.chart('mainchart', mainChartConfig);
 });
     
-    homechart = Highcharts.chart('homechart', {
-        chart: {
-            type: 'spline'
-        },
-        title: {
-            text: 'Home Location Covid Cases'
-        },
-        xAxis: [
-            {
-                'categories': ["January", "February", "March", "April", "May", "June", "July", "August", "September", 
-                "October", "November", "December"],
-            title: {
-                text: 'Month'
-            },
-            }
-        ],
-        yAxis: {
-            title: {
-                text: 'Covid Cases'
-            }
-        },
-        tooltip: {
-            headerFormat: '<b>{series.name}</b><br>',
-            pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
-        },
-
-        plotOptions: {
-            series: {
-                marker: {
-                    enabled: true
-                },
-                turboThreshold: 50000
-            }
-        },
-
-        colors: ['#39F'],
-
-        series: [{
-            data: generateseriesData(_df_2021_home)
-        }],
-
-        responsive: {
-            rules: [{
-                condition: {
-                    maxWidth: 100
-                },
-                chartOptions: {
-                    plotOptions: {
-                        series: {
-                            marker: {
-                                radius: 2.5
-                            }
-                        }
-                    }
-                }
-            }]
-        }
-    });
+    homechart = Highcharts.chart('homechart', homeChartConfig);
     
-    workchart = Highcharts.chart('workchart', {
-        chart: {
-            type: 'spline'
-        },
-        title: {
-            text: 'Workspace Covid Cases'
-        },
-        xAxis: [
-            {
-                'categories': ["January", "February", "March", "April", "May", "June", "July", "August", "September", 
-                "October", "November", "December"],
-            title: {
-                text: 'Month'
-            },
-            }
-        ],
-        yAxis: {
-            title: {
-                text: 'Covid Cases'
-            }
-        },
-        tooltip: {
-            headerFormat: '<b>{series.name}</b><br>',
-            pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
-        },
-
-        plotOptions: {
-            series: {
-                marker: {
-                    enabled: true
-                },
-                turboThreshold: 50000
-            }
-        },
-
-        colors: ['#036'],
-
-        series: [{
-            data: generateseriesData(_df_2021_work)
-        }],
-
-        responsive: {
-            rules: [{
-                condition: {
-                    maxWidth: 100
-                },
-                chartOptions: {
-                    plotOptions: {
-                        series: {
-                            marker: {
-                                radius: 2.5
-                            }
-                        }
-                    }
-                }
-            }]
-        }
-    });
+    workchart = Highcharts.chart('workchart', workChartConfig);
