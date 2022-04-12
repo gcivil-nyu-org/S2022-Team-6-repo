@@ -331,8 +331,11 @@ def signup(request):
 
 
 def logout(request):
-    del request.session["user_key"]
-
+    try:
+        del request.session["user_key"]
+    except Exception:
+        return HttpResponseRedirect(reverse("login:index"))
+    
     return HttpResponseRedirect(reverse("login:index"))
 
 

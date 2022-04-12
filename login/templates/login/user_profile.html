@@ -58,7 +58,7 @@
                                     </div>
                                     <div class="form-group p-2">
                                         <label for="home">Home County: </label>
-                                        <select class="form-select" name="home" id="home" aria-label="Default select example">
+                                        <select class="form-select" name="home" id="home">
                                             <option selected>{% if userdata.home_adress %} {{userdata.home_adress}} {% endif %}</option>
                                             {% for county in counties %}
                                                 <option value="{{county}}">{{county}}</option>
@@ -67,7 +67,7 @@
                                     </div>
                                     <div class="form-group p-2">
                                         <label for="work">Work County: </label>
-                                        <select class="form-select" name="work" id="work" aria-label="Default select example">
+                                        <select class="form-select" name="work" id="work">
                                             <option selected>{% if userdata.work_address %} {{userdata.work_address}} {% endif %}</option>
                                             {% for county in counties %}
                                                 <option value="{{county}}">{{county}}</option>
