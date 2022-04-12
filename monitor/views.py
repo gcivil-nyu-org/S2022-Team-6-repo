@@ -69,6 +69,6 @@ def base(request):
         "df_2021_home": df_2021_home,
         "df_2021_work": df_2021_work,
         "home_location": userdata.home_adress,
-        "work_location": userdata.work_address
+        "work_location": userdata.work_address,
     }
     return render(request, "monitor/index.html", context)
