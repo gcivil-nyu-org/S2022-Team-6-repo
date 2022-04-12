@@ -1,7 +1,7 @@
 from django.db import models
 from login.models import UserData
 from django.utils.timezone import now
-
+from circle.models import Circle
 
 # Create your models here.
 class SelfTrack(models.Model):
