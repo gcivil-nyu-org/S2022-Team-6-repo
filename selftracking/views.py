@@ -74,6 +74,7 @@ def selftrack(request, username):
     longest_streak = get_longest_streak(username)
 
     streak_today = check_upload_today(username)
+    streak_yesterday = check_uploaded_yesterday(username)
     context = {
         "page_name": "SelfTrack",
         "username": username,
@@ -85,5 +86,6 @@ def selftrack(request, username):
         # other
         "current_streak": current_streak,
         "longest_streak": longest_streak,
+        "streak_yesterday": streak_yesterday,
     }
     return render(request, "selftracking/self_track.html", context)

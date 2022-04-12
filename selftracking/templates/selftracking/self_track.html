@@ -5,16 +5,16 @@
 <section>
    <div class="container">
       <div class="row">
-         <div class="col-md-5 mx-auto my-5 p-4 bg-secondary border">
+         <div class="col-md-5 mx-auto my-5 p-4 bg-light border">
             <div id="first">
-               <div class="myform form ">
+               <div class="myform form">
                   <div class="logo mb-3">
                      <div class="col-md-12 text-center">
                         Welcome to <h1>Self Tracking</h1>
                      </div>
                   </div>
                   {% if not streak_today %}
-                  <form action="" method="post">
+                  <form action="" method="post" class="bg-light border p-3">
                      {% csrf_token %}
                      <div class="form-group">
                         <label for="exampleInputEmail1">People you Met</label>
@@ -43,7 +43,11 @@
       <div class="row">
          <div class="col-md-5 mx-auto my-5 p-4 bg-success border">
             <div class="col-md-12 text-center">
-               <h2>Your Current Streak: {{current_streak}}</h2>
+               {% if streak_yesterday %}
+                  <h2>Your Current Streak: {{current_streak}}</h2>
+               {% else %}
+                  <h2>Your Current Streak: 0</h2>
+               {% endif %}
             </div>
             <div class="col-md-12 text-center">
                <h2>Your Longest Streak: {{longest_streak}}</h2>
