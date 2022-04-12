@@ -81,7 +81,7 @@ def user_profile(request, username):
             if "last_name" in request.POST:
                 userdata.lastname = request.POST["last_name"]
 
-            if "dob" in request.POST:
+            if "dob" in request.POST and request.POST["dob"]:
                 userdata.dob = request.POST["dob"]
 
             if "phone" in request.POST:
@@ -105,6 +105,7 @@ def user_profile(request, username):
                     userdata.username + "." + user_image.name.split(".")[-1]
                 )
                 userdata.user_image = user_image
+        
             userdata.save()
         except Exception:
             messages.error(request, "Invalid Field")
