@@ -3,6 +3,7 @@ let mainChartSelector = document.querySelector("#mainchart_1");
 let homechartSelector = document.querySelector("#homechart_1");
 let workchartSelector = document.querySelector("#workchart_1");
 let dropdownMenuLinkSelector = document.querySelector("#dropdownMenuLink");
+let countyDropDownMain = document.querySelector("#countyDropDownMain");
 let chart,homechart,workchart;
 let mainChartConfig = {
     chart: {
@@ -43,8 +44,6 @@ let mainChartConfig = {
         }
     },
 
-    colors: ['#6CF'],
-
     series: [
     {
         showInLegend: false,
@@ -78,10 +77,14 @@ let homeChartConfig = {
     title: {
         text: _locations[0] + ' Covid Cases'
     },
+    exporting: { enabled: false },
+
+    credits: {
+        enabled: false
+      },
     xAxis: [
         {
-            'categories': ["January", "February", "March", "April", "May", "June", "July", "August", "September", 
-            "October", "November", "December"],
+            'type': "category",
         title: {
             text: 'Month'
         },
@@ -93,8 +96,7 @@ let homeChartConfig = {
         }
     },
     tooltip: {
-        headerFormat: '<b>{series.name}</b><br>',
-        pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+        pointFormat: '{point.x}: {point.y}'
     },
 
     plotOptions: {
@@ -106,9 +108,9 @@ let homeChartConfig = {
         }
     },
 
-    colors: ['#39F'],
-
     series: [{
+        showInLegend: false,
+        name: "",
         data: generateseriesData(_df_2021_home)
     }],
 
@@ -139,10 +141,14 @@ let workChartConfig = {
     title: {
         text: _locations[1] + ' Covid Cases'
     },
+    exporting: { enabled: false },
+
+    credits: {
+        enabled: false
+      },
     xAxis: [
         {
-            'categories': ["January", "February", "March", "April", "May", "June", "July", "August", "September", 
-            "October", "November", "December"],
+            'type': "category",
         title: {
             text: 'Month'
         },
@@ -154,8 +160,7 @@ let workChartConfig = {
         }
     },
     tooltip: {
-        headerFormat: '<b>{series.name}</b><br>',
-        pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+        pointFormat: '{point.x}: {point.y}'
     },
 
     plotOptions: {
@@ -167,9 +172,9 @@ let workChartConfig = {
         }
     },
 
-    colors: ['#036'],
-
     series: [{
+        showInLegend: false,
+        name: "",
         data: generateseriesData(_df_2021_work)
     }],
 
@@ -227,6 +232,9 @@ function showMainChart() {
     if (workchartSelector.classList && !workchartSelector.classList.contains('hideChart')) {
         workchartSelector.classList.add('hideChart');
     }
+    if (countyDropDownMain.classList && countyDropDownMain.classList.contains('hideChart')) {
+        countyDropDownMain.classList.remove('hideChart');
+    }
 }
 
 function showHomeChart() {
@@ -238,6 +246,9 @@ function showHomeChart() {
     }
     if (workchartSelector.classList && !workchartSelector.classList.contains('hideChart')) {
         workchartSelector.classList.add('hideChart');
+    }
+    if (countyDropDownMain.classList && !countyDropDownMain.classList.contains('hideChart')) {
+        countyDropDownMain.classList.add('hideChart');
     }
 }
 
@@ -251,11 +262,20 @@ function showWorkChart() {
     if (workchartSelector.classList && workchartSelector.classList.contains('hideChart')) {
         workchartSelector.classList.remove('hideChart');
     }
+    if (countyDropDownMain.classList && !countyDropDownMain.classList.contains('hideChart')) {
+        countyDropDownMain.classList.add('hideChart');
+    }
 }
 
 function generateLineGraph() {
     dropdownMenuLinkSelector.innerText = 'Line Graph';
     mainChartConfig.chart.type = 'spline';
+    if (mainChartConfig.chart.options3d) 
+        delete mainChartConfig.chart.options3d;
+    if (homeChartConfig.chart.options3d) 
+        delete homeChartConfig.chart.options3d;
+    if (workChartConfig.chart.options3d) 
+        delete workChartConfig.chart.options3d;
     chart = Highcharts.chart('mainchart', mainChartConfig);
     homeChartConfig.chart.type = 'spline';
     homechart = Highcharts.chart('homechart', homeChartConfig);
@@ -263,8 +283,27 @@ function generateLineGraph() {
     workchart = Highcharts.chart('workchart', workChartConfig);
 }
 function generateBarGraph() {
+    let barGraph3d = {
+        enabled: true,
+        alpha: 15,
+        beta: 15,
+        depth: 50,
+        viewDistance: 25
+    };
     dropdownMenuLinkSelector.innerText = 'Bar Graph';
     mainChartConfig.chart.type = 'bar';
+    if (mainChartConfig.chart.options3d) 
+        delete mainChartConfig.chart.options3d;
+    if (homeChartConfig.chart.options3d) 
+        delete homeChartConfig.chart.options3d;
+    if (workChartConfig.chart.options3d) 
+        delete workChartConfig.chart.options3d;
+    if (!mainChartConfig.chart.options3d)
+        mainChartConfig.chart.options3d = barGraph3d;
+    if (!homeChartConfig.chart.options3d)
+        homeChartConfig.chart.options3d = barGraph3d;
+    if (!workChartConfig.chart.options3d)
+        workChartConfig.chart.options3d = barGraph3d;
     chart = Highcharts.chart('mainchart', mainChartConfig);
     homeChartConfig.chart.type = 'bar';
     homechart = Highcharts.chart('homechart', homeChartConfig);
@@ -275,6 +314,12 @@ function generateBarGraph() {
 function generateScatter() {
     dropdownMenuLinkSelector.innerText = 'Scatter Plot';
     mainChartConfig.chart.type = 'scatter';
+    if (mainChartConfig.chart.options3d) 
+        delete mainChartConfig.chart.options3d;
+    if (homeChartConfig.chart.options3d) 
+        delete homeChartConfig.chart.options3d;
+    if (workChartConfig.chart.options3d) 
+        delete workChartConfig.chart.options3d;
     chart = Highcharts.chart('mainchart', mainChartConfig);
     homeChartConfig.chart.type = 'scatter';
     homechart = Highcharts.chart('homechart', homeChartConfig);
@@ -283,8 +328,27 @@ function generateScatter() {
 }
 
 function generateColumn() {
+    let columnGraph3d = {
+        enabled: true,
+        alpha: 15,
+        beta: 15,
+        depth: 50,
+        viewDistance: 25
+    };
     dropdownMenuLinkSelector.innerText = 'Column Graph';
     mainChartConfig.chart.type = 'column';
+    if (mainChartConfig.chart.options3d) 
+        delete mainChartConfig.chart.options3d;
+    if (homeChartConfig.chart.options3d) 
+        delete homeChartConfig.chart.options3d;
+    if (workChartConfig.chart.options3d) 
+        delete workChartConfig.chart.options3d;
+    if (!mainChartConfig.chart.options3d)
+        mainChartConfig.chart.options3d = columnGraph3d;
+    if (!homeChartConfig.chart.options3d)
+        homeChartConfig.chart.options3d = columnGraph3d;
+    if (!workChartConfig.chart.options3d)
+        workChartConfig.chart.options3d = columnGraph3d;
     chart = Highcharts.chart('mainchart', mainChartConfig);
     homeChartConfig.chart.type = 'column';
     homechart = Highcharts.chart('homechart', homeChartConfig);
@@ -293,8 +357,38 @@ function generateColumn() {
 }
 
 function generatePie() {
+    let pieGraph3d = {
+        enabled: true,
+        alpha: 45,
+        beta: 0,
+        depth: 50,
+    };
     dropdownMenuLinkSelector.innerText = 'Pie Chart';
     mainChartConfig.chart.type = 'pie';
+    if (mainChartConfig.plotOptions.pie) 
+        delete mainChartConfig.plotOptions.pie;
+    if (homeChartConfig.plotOptions.pie) 
+        delete homeChartConfig.plotOptions.pie;
+    if (workChartConfig.plotOptions.pie) 
+        delete workChartConfig.plotOptions.pie;
+    mainChartConfig.plotOptions.pie = {allowPointSelect: true};
+    mainChartConfig.plotOptions.pie.depth = 35;
+    homeChartConfig.plotOptions.pie = {allowPointSelect: true};
+    homeChartConfig.plotOptions.pie.depth = 35;
+    workChartConfig.plotOptions.pie = {allowPointSelect: true};
+    workChartConfig.plotOptions.pie.depth = 35;
+    if (mainChartConfig.chart.options3d) 
+        delete mainChartConfig.chart.options3d;
+    if (homeChartConfig.chart.options3d) 
+        delete homeChartConfig.chart.options3d;
+    if (workChartConfig.chart.options3d) 
+        delete workChartConfig.chart.options3d;
+    if (!mainChartConfig.chart.options3d)
+        mainChartConfig.chart.options3d = pieGraph3d;
+    if (!homeChartConfig.chart.options3d)
+        homeChartConfig.chart.options3d = pieGraph3d;
+    if (!workChartConfig.chart.options3d)
+        workChartConfig.chart.options3d = pieGraph3d;
     chart = Highcharts.chart('mainchart', mainChartConfig);
     homeChartConfig.chart.type = 'pie';
     homechart = Highcharts.chart('homechart', homeChartConfig);
@@ -359,12 +453,3 @@ document.addEventListener('DOMContentLoaded', function () {
     homechart = Highcharts.chart('homechart', homeChartConfig);
     
     workchart = Highcharts.chart('workchart', workChartConfig);
-
-    /*
-    options3d: {
-            enabled: true,
-            alpha: 15,
-            beta: 15,
-            depth: 50,
-            viewDistance: 25
-        }*/

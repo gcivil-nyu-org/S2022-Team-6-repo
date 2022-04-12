@@ -10,21 +10,28 @@
     <a href="#" onclick="showWorkChart()">Workplace</a>
 </div>
 
-<div class="dropdown" style="float: right;">
+<div id="datePicker" class="dropdown" style="float: right;">
+    <label class="btn btn-dark" for="from">From:</label>
+    <input class="btn btn-dark" type="date" id="dateFrom" name="from">
+    <label class="btn btn-dark" for="to">To:</label>
+    <input class="btn btn-dark" type="date" id="dateTo" name="dateTo">
+</div>
+
+<div id="countyDropDownMain" class="dropdown" style="float: right;">
     <a class="btn btn-dark dropdown-toggle" role="button" id="dropdownCountyLink" data-bs-toggle="dropdown" aria-expanded="false">
         New York City
     </a>
   
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
         {% for county in counties %}
-            <li><a class="dropdown-item" value="{{county}}" onclick="generateCountySpecificGraph('{{county}}')">{{county}}</a></li>
+            <li style="cursor: pointer;"><a class="dropdown-item" value="{{county}}" onclick="generateCountySpecificGraph('{{county}}')">{{county}}</a></li>
         {% endfor %}
     </ul>
 </div>
 
 <div class="dropdown" style="float: right;">
     <a class="btn btn-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-        Graph
+        Line Graph
     </a>
   
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
