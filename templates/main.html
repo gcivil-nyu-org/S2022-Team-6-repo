@@ -44,7 +44,9 @@
             _df_2021 = {{ df_2021 | safe }};
             _df_2021_home = {{ df_2021_home | safe }};
             _df_2021_work = {{ df_2021_work | safe }};
-            _categories_2021 = {{categories_2021 | safe }}; 
+            _categories_2021 = {{categories_2021 | safe }};
+            _locations = {{ locations | safe }}
+            _df_2021_all = {{ df_2021_all | safe }} 
         </script>
         <script src="{% static 'js/monitor/script.js' %}"></script>
     {% endif %}

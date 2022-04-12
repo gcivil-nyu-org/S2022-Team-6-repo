@@ -3,11 +3,23 @@
 
 {% block content %}
 
-<div id="mySidebar" class="sidebar" style="top: 92px;">
+<div id="mySidebar" class="sidebar" style="top: 92px; position: absolute;">
     <!-- a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a -->
     <a href="#" onclick="showMainChart()">General</a>
     <a href="#" onclick="showHomeChart()">Home</a>
     <a href="#" onclick="showWorkChart()">Workplace</a>
+</div>
+
+<div class="dropdown" style="float: right;">
+    <a class="btn btn-dark dropdown-toggle" role="button" id="dropdownCountyLink" data-bs-toggle="dropdown" aria-expanded="false">
+        New York City
+    </a>
+  
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        {% for county in counties %}
+            <li><a class="dropdown-item" value="{{county}}" onclick="generateCountySpecificGraph('{{county}}')">{{county}}</a></li>
+        {% endfor %}
+    </ul>
 </div>
 
 <div class="dropdown" style="float: right;">

@@ -54,6 +54,11 @@ def base(request):
     total_notify = requests + non_compliance
     streak_today = check_upload_today(username)
 
+    counties = historical.county.dropna().unique()
+    counties = counties[counties != "Unknown"]
+    df_2021_all = df.dropna()
+    df_2021_all = (df_2021_all[["date", "cases", "county"]].values).tolist()
+
     context = {
         "page_name": "Monitor",
         "username": username,
@@ -68,7 +73,8 @@ def base(request):
         "categories_2021": categories,
         "df_2021_home": df_2021_home,
         "df_2021_work": df_2021_work,
-        "home_location": userdata.home_adress,
-        "work_location": userdata.work_address,
+        "locations": [home_location, work_location],
+        "counties": counties,
+        "df_2021_all": df_2021_all,
     }
     return render(request, "monitor/index.html", context)
