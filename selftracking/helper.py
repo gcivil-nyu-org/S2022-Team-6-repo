@@ -1,5 +1,6 @@
 from .models import SelfTrack
 import datetime
+from circle.models import CircleUser
 
 
 def check_date_uplaoded(username, default=True):
@@ -58,3 +59,20 @@ def get_longest_streak(username):
         .latest("date_uploaded")
         .largest_streak
     )
+
+
+def get_all_connections(username):
+    connections = set()
+
+    for circle in CircleUser.objects.filter(username=username):
+
+        current_circle_id = circle.circle_id.circle_id
+
+        for user in CircleUser.objects.filter(circle_id=current_circle_id):
+            if user.username.username != username:
+                connections.add(user.username.username)
+
+    if len(connections) == 0:
+        return None
+
+    return connections

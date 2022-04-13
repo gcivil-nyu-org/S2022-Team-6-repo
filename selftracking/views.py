@@ -12,7 +12,13 @@ from .helper import (
     get_current_streak,
     get_longest_streak,
     check_upload_today,
+    get_all_connections,
 )
+
+from .driver import add_user_met, add_location_visited
+
+from monitor.driver import get_s3_client, get_data
+
 
 import datetime
 
@@ -23,6 +29,8 @@ def selftrack(request, username):
     try:
         username = signing.loads(request.session["user_key"])
         userdata = UserData.objects.get(username=username)
+        _, client_object = get_s3_client()
+        historical, _, _ = get_data(client_object)
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
@@ -46,10 +54,13 @@ def selftrack(request, username):
     if not uploaded_today:
 
         if request.method == "POST" and "track" in request.POST:
+
             selftrack = SelfTrack()
             selftrack.username = UserData.objects.get(username=username)
-            selftrack.user_met = request.POST.get("user_met")
-            selftrack.location_visited = request.POST.get("location_visited")
+            selftrack.user_met = add_user_met(request.POST.getlist("user_met"))
+            selftrack.location_visited = add_location_visited(
+                request.POST.getlist("location_visited")
+            )
 
             uploaded_yesterday = check_uploaded_yesterday(username)
 
@@ -74,6 +85,12 @@ def selftrack(request, username):
     longest_streak = get_longest_streak(username)
 
     streak_today = check_upload_today(username)
+    streak_yesterday = check_uploaded_yesterday(username)
+
+    connections = get_all_connections(username)
+    counties = historical.county.dropna().unique()
+    counties = counties[counties != "Unknown"]
+
     context = {
         "page_name": "SelfTrack",
         "username": username,
@@ -85,5 +102,9 @@ def selftrack(request, username):
         # other
         "current_streak": current_streak,
         "longest_streak": longest_streak,
+        "streak_yesterday": streak_yesterday,
+        "selftrack": True,
+        "counties": counties,
+        "connections": connections,
     }
     return render(request, "selftracking/self_track.html", context)
