@@ -8,7 +8,7 @@ from .hashes import PBKDF2WrappedSHA1PasswordHasher
 from .models import UserData, Privacy
 from .helper import update_compliance
 from circle.models import CircleUser
-
+from alert.models import Alert
 from monitor.driver import get_s3_client, get_data
 
 
@@ -81,7 +81,7 @@ def user_profile(request, username):
             if "last_name" in request.POST:
                 userdata.lastname = request.POST["last_name"]
 
-            if "dob" in request.POST:
+            if "dob" in request.POST and request.POST["dob"]:
                 userdata.dob = request.POST["dob"]
 
             if "phone" in request.POST:
@@ -105,6 +105,7 @@ def user_profile(request, username):
                     userdata.username + "." + user_image.name.split(".")[-1]
                 )
                 userdata.user_image = user_image
+
             userdata.save()
         except Exception:
             messages.error(request, "Invalid Field")
@@ -273,6 +274,8 @@ def signin(request):
             password = hasher.encode(request.POST.get("password"), "test123")
 
             user = UserData.objects.get(username=username)
+            print(user.password)
+            print(password)
             if user.password == password:
                 user_enc = signing.dumps(username)
                 request.session["user_key"] = user_enc
@@ -298,22 +301,36 @@ def signup(request):
                 messages.error(request, "Password Do Not Match!!")
                 return render(request, "login/signup.html", context)
 
-            userdata = UserData()
-            userdata.firstname = request.POST.get("firstname")
-            userdata.lastname = request.POST.get("lastname")
-            userdata.username = request.POST.get("username")
-            userdata.email = request.POST.get("email")
-            hasher = PBKDF2WrappedSHA1PasswordHasher()
-            userdata.password = hasher.encode(request.POST.get("password"), "test123")
-            userdata.save()
+            try:
+                UserData.objects.get(username=request.POST.get("username"))
+                messages.error(request, "Username Already Exist!!")
+                return render(request, "login/signup.html", context)
 
-            privacy = Privacy()
-            privacy.username = UserData.objects.get(
-                username=request.POST.get("username")
-            )
-            privacy.save()
+            except Exception:
+                userdata = UserData()
+                userdata.firstname = request.POST.get("firstname")
+                userdata.lastname = request.POST.get("lastname")
+                userdata.username = request.POST.get("username")
+                userdata.email = request.POST.get("email")
+                hasher = PBKDF2WrappedSHA1PasswordHasher()
+                userdata.password = hasher.encode(
+                    request.POST.get("password"), "test123"
+                )
+                userdata.save()
 
-            return HttpResponseRedirect(reverse("login:signin"))
+                privacy = Privacy()
+                privacy.username = UserData.objects.get(
+                    username=request.POST.get("username")
+                )
+                privacy.save()
+
+                alert = Alert()
+                alert.username = UserData.objects.get(
+                    username=request.POST.get("username")
+                )
+                alert.save()
+
+                return HttpResponseRedirect(reverse("login:signin"))
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
@@ -322,7 +339,10 @@ def signup(request):
 
 
 def logout(request):
-    del request.session["user_key"]
+    try:
+        del request.session["user_key"]
+    except Exception:
+        return HttpResponseRedirect(reverse("login:index"))
 
     return HttpResponseRedirect(reverse("login:index"))
 

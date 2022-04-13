@@ -31,15 +31,19 @@ def base(request):
         return HttpResponseRedirect(url)
 
     df = historical[
-        (historical.date < "2022-01-01") & (historical.date >= "2021-08-01")
+        (historical.date < "2022-01-01") & (historical.date >= "2021-01-01")
     ]
 
     df_2021 = df[df.county == "New York City"]
     df_2021 = (df_2021[["date", "cases"]].values).tolist()
     categories = [convert_datetime(df_2021[i][0]) for i in range(0, 153)]
 
-    home_location = "New York City"  # pragma: no cover
-    work_location = "Orleans"  # pragma: no cover
+    home_location = userdata.home_adress  # pragma: no cover
+    work_location = userdata.work_address  # pragma: no cover
+    if home_location is None or len(home_location) == 0:
+        home_location = "New York City"
+    if work_location is None or len(work_location) == 0:
+        work_location = "New York City"
 
     df_2021_home = (df[df.county == home_location][["date", "cases"]].values).tolist()
     df_2021_work = (df[df.county == work_location][["date", "cases"]].values).tolist()
@@ -49,6 +53,11 @@ def base(request):
 
     total_notify = requests + non_compliance
     streak_today = check_upload_today(username)
+
+    counties = historical.county.dropna().unique()
+    counties = counties[counties != "Unknown"]
+    df_2021_all = df.dropna()
+    df_2021_all = (df_2021_all[["date", "cases", "county"]].values).tolist()
 
     context = {
         "page_name": "Monitor",
@@ -64,5 +73,8 @@ def base(request):
         "categories_2021": categories,
         "df_2021_home": df_2021_home,
         "df_2021_work": df_2021_work,
+        "locations": [home_location, work_location],
+        "counties": counties,
+        "df_2021_all": df_2021_all,
     }
     return render(request, "monitor/index.html", context)

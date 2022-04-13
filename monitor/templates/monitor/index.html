@@ -3,23 +3,43 @@
 
 {% block content %}
 
-<div id="mySidebar" class="sidebar" style="top: 92px;">
+<div id="mySidebar" class="sidebar" style="top: 92px; position: absolute;">
     <!-- a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a -->
     <a href="#" onclick="showMainChart()">General</a>
     <a href="#" onclick="showHomeChart()">Home</a>
     <a href="#" onclick="showWorkChart()">Workplace</a>
 </div>
 
-<div class="dropdown">
-    <a class="btn btn-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-        Graph
+<div id="datePicker" class="dropdown" style="float: right;">
+    <label class="btn btn-dark" for="from">From:</label>
+    <input class="btn btn-dark" type="date" id="dateFrom" name="from">
+    <label class="btn btn-dark" for="to">To:</label>
+    <input class="btn btn-dark" type="date" id="dateTo" name="dateTo">
+</div>
+
+<div id="countyDropDownMain" class="dropdown" style="float: right;">
+    <a class="btn btn-dark dropdown-toggle" role="button" id="dropdownCountyLink" data-bs-toggle="dropdown" aria-expanded="false">
+        New York City
     </a>
   
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-      <li><a class="dropdown-item" href="#">Line Graph</a></li>
+        {% for county in counties %}
+            <li style="cursor: pointer;"><a class="dropdown-item" value="{{county}}" onclick="generateCountySpecificGraph('{{county}}')">{{county}}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="dropdown" style="float: right;">
+    <a class="btn btn-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+        Line Graph
+    </a>
+  
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+      <li><a class="dropdown-item" href="#" onclick="generateLineGraph()">Line Graph</a></li>
       <li><a class="dropdown-item" href="#" onclick="generateBarGraph()"> Bar Graph </a></li>
       <li><a class="dropdown-item" href="#" onclick="generateColumn()"> Column Chart </a></li>
       <li><a class="dropdown-item" href="#" onclick="generateScatter()"> Scatter Plot </a></li>
+      <li><a class="dropdown-item" href="#" onclick="generatePie()"> Pie Chart </a></li>
     </ul>
 </div>
 

@@ -7,7 +7,7 @@ from django.utils.timezone import now
 class SelfTrack(models.Model):
     date_uploaded = models.DateTimeField(default=now, editable=False)
     username = models.ForeignKey(UserData, on_delete=models.CASCADE)
-    user_met = models.CharField(max_length=100)
-    location_visited = models.CharField(max_length=100)
+    user_met = models.TextField(null=True)
+    location_visited = models.TextField(null=True)
     streak = models.IntegerField(default=0)
     largest_streak = models.IntegerField(default=0)
