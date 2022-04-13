@@ -437,9 +437,10 @@ class AtomicTests(TransactionTestCase):
                 "signup-button": "",
                 "password": "coviguard",
                 "confirmpassword": "coviguard",
-                "firstname": "",
+                "firstname": "Eashan",
                 "lastname": "TestLastName",
                 "email": "test@gmail.com",
+                "username": "EashanKaushik",
             },
         )
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
