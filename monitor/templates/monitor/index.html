@@ -22,7 +22,7 @@
         New York City
     </a>
   
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    <ul class="dropdown-menu scrollable-menu" aria-labelledby="dropdownMenuLink">
         {% for county in counties %}
             <li style="cursor: pointer;"><a class="dropdown-item" value="{{county}}" onclick="generateCountySpecificGraph('{{county}}')">{{county}}</a></li>
         {% endfor %}

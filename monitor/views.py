@@ -34,6 +34,8 @@ def base(request):
         (historical.date < "2022-01-01") & (historical.date >= "2021-01-01")
     ]
 
+    df = df[df.state == 'New York']
+
     df_2021 = df[df.county == "New York City"]
     df_2021 = (df_2021[["date", "cases"]].values).tolist()
     categories = [convert_datetime(df_2021[i][0]) for i in range(0, 153)]
@@ -54,7 +56,8 @@ def base(request):
     total_notify = requests + non_compliance
     streak_today = check_upload_today(username)
 
-    counties = historical.county.dropna().unique()
+    counties = historical[historical.state == 'New York']
+    counties = counties.county.dropna().unique()
     counties = counties[counties != "Unknown"]
     df_2021_all = df.dropna()
     df_2021_all = (df_2021_all[["date", "cases", "county"]].values).tolist()
