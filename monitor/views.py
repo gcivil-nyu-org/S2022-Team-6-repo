@@ -30,6 +30,8 @@ def base(request):
         url = reverse("login:error")
         return HttpResponseRedirect(url)
 
+    # print(historical)
+
     df = historical[
         (historical.date < "2022-01-01") & (historical.date >= "2021-01-01")
     ]
