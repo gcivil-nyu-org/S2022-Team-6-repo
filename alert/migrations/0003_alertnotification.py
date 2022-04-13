@@ -7,17 +7,30 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('login', '0008_userdata_user_image'),
-        ('alert', '0002_alert_home_alert_case_alert_home_alert_death_and_more'),
+        ("login", "0008_userdata_user_image"),
+        ("alert", "0002_alert_home_alert_case_alert_home_alert_death_and_more"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='AlertNotification',
+            name="AlertNotification",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('notification', models.CharField(max_length=300)),
-                ('username', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='login.userdata')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("notification", models.CharField(max_length=300)),
+                (
+                    "username",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="login.userdata"
+                    ),
+                ),
             ],
         ),
     ]

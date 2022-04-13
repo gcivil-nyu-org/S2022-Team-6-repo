@@ -9,7 +9,7 @@ class Alert(models.Model):
     location_data_case = models.TextField(null=True)
     location_data_death = models.TextField(null=True)
     location_alert_case = models.BooleanField(default=False)
-    location_alert_death= models.BooleanField(default=False)
+    location_alert_death = models.BooleanField(default=False)
     home_alert_case = models.BooleanField(default=False)
     home_alert_death = models.BooleanField(default=False)
     work_alert_case = models.BooleanField(default=False)
@@ -17,6 +17,7 @@ class Alert(models.Model):
     people_data = models.TextField(null=True)
     people_alert = models.BooleanField(default=False)
     alert = models.BooleanField(default=False)
+
 
 class AlertNotification(models.Model):
     username = models.ForeignKey(UserData, on_delete=models.CASCADE)

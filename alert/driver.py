@@ -5,6 +5,7 @@ import json
 from alert.models import Alert
 from login.models import UserData
 
+
 def home_alert(home_address, historical, yesterday):
     alert_case = False
     alert_death = False
@@ -44,18 +45,20 @@ def work_alert(work_address, historical, yesterday):
 
 def people_met_alert(people_met, historical, yesterday):
     people_alert = list()
-    
+
     jsonDec = json.decoder.JSONDecoder()
     people = jsonDec.decode(people_met)
-    
+
     if len(people) != 0:
-        
+
         for person in people:
-            alert = Alert.objects.get(username=UserData.objects.get(username=person)).alert
+            alert = Alert.objects.get(
+                username=UserData.objects.get(username=person)
+            ).alert
             people_alert.append(alert)
     else:
         people_alert, False
-    
+
     return people_alert, np.any(np.array(people_alert))
 
 
@@ -96,6 +99,7 @@ def location_visited_alert(location_visted, historical, yesterday):
         np.any(np.array(location_alert_case)),
         np.any(np.array(location_alert_death)),
     )
+
 
 def get_model_data(data):
     return json.dumps(data)

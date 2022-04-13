@@ -3,4 +3,3 @@ from .models import Alert, AlertNotification
 
 admin.site.register(Alert)
 admin.site.register(AlertNotification)
-
