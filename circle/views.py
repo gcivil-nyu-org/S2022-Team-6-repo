@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
+
 from django.urls import reverse
+from django.template.loader import render_to_string
 
 from .models import Circle, CirclePolicy, CircleUser, RequestCircle
 from login.models import UserData
@@ -29,6 +31,8 @@ from selftracking.helper import check_upload_today
 
 from django.core import signing
 
+import json
+
 
 def circle(request, username):
     try:
@@ -39,9 +43,7 @@ def circle(request, username):
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
-    
-    
-    # if request.method == "POST" and "search" in re/
+
     circle_user_data = CircleUser.objects.filter(username=username)
 
     request_user_data, requests = get_notifications(username=username)
@@ -55,6 +57,67 @@ def circle(request, username):
     total_notify = requests + non_compliance
     streak_today = check_upload_today(username)
 
+    # AJAX
+    search = request.GET.get("q")
+
+    circles = list()
+    if search:
+        for circle_user in circle_user_data:
+
+            circleone = Circle.objects.filter(
+                circle_id=circle_user.circle_id.circle_id, circle_name__icontains=search
+            )
+            if circleone:
+                circles.append(circle_user)
+                # print(circleone.circle_id)
+
+    ctx = {}
+    ctx["circles"] = circles
+
+    does_req_accept_json = request.accepts("application/json")
+    is_ajax_request = (
+        request.headers.get("x-requested-with") == "XMLHttpRequest"
+        and does_req_accept_json
+    )
+
+    if is_ajax_request:
+        if len(circles) != 0:
+            html = render_to_string(
+                template_name="circle-search.html",
+                context={
+                    "page_name": "Circle",
+                    "username": username,
+                    "userdata": userdata,
+                    "request_user_data": request_user_data,
+                    "total_notify": total_notify,
+                    "three_non_compliance": three_non_compliance,
+                    "streak_today": streak_today,
+                    # other
+                    "circles": circles,
+                    "recent_circles": recent_circles,
+                },
+            )
+        else:
+            html = render_to_string(
+                template_name="circle-search.html",
+                context={
+                    "page_name": "Circle",
+                    "username": username,
+                    "userdata": userdata,
+                    "request_user_data": request_user_data,
+                    "total_notify": total_notify,
+                    "three_non_compliance": three_non_compliance,
+                    "streak_today": streak_today,
+                    # other
+                    "circle_user_data": circle_user_data,
+                    "recent_circles": recent_circles,
+                },
+            )
+
+        data_dict = {"html_from_view": html}
+
+        return JsonResponse(data=data_dict, safe=False)
+
     context = {
         "page_name": "Circle",
         "username": username,
@@ -66,7 +129,9 @@ def circle(request, username):
         # Other
         "circle_user_data": circle_user_data,
         "recent_circles": recent_circles,
+        # "qs_json": json.dumps(list(circle_user_data.values())),
     }
+
     return render(request, "circle/circle.html", context)
 
 
