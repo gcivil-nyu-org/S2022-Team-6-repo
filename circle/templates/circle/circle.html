@@ -64,7 +64,7 @@
             </div>
         </div>
 
-        <div class="container my-5 mx-5 border" id="replaceable-content">
+        <div class="container my-5 mx-5" id="replaceable-content">
             {% include 'circle-search.html' %}
         </div>
     </section>
@@ -79,7 +79,7 @@
     
     const endpoint = '/circle/{{username}}/'
     console.log(endpoint)
-    const delay_by_in_ms = 400
+    const delay_by_in_ms = 200
     let scheduled_function = false
 
     let ajax_call = function (endpoint, request_parameters) {

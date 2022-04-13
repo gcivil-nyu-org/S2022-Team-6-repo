@@ -113,7 +113,7 @@ def user_profile(request, username):
     # user logged in
     userdata = UserData.objects.get(username=username)
 
-    historical = historical[historical.state == 'New York']
+    historical = historical[historical.state == "New York"]
     counties = historical.county.dropna().unique()
     counties = counties[counties != "Unknown"]
 
@@ -314,9 +314,7 @@ def signup(request):
             userdata.username = request.POST.get("username")
             userdata.email = request.POST.get("email")
             hasher = PBKDF2WrappedSHA1PasswordHasher()
-            userdata.password = hasher.encode(
-                request.POST.get("password"), "test123"
-            )
+            userdata.password = hasher.encode(request.POST.get("password"), "test123")
             userdata.save()
 
             privacy = Privacy()
@@ -326,9 +324,7 @@ def signup(request):
             privacy.save()
 
             alert = Alert()
-            alert.username = UserData.objects.get(
-                username=request.POST.get("username")
-            )
+            alert.username = UserData.objects.get(username=request.POST.get("username"))
             alert.save()
 
             return HttpResponseRedirect(reverse("login:signin"))
