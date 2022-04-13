@@ -5,25 +5,40 @@
 <section>
    <div class="container">
       <div class="row">
-         <div class="col-md-5 mx-auto my-5 p-4 bg-secondary border">
+         <div class="col-md-5 mx-auto my-5 p-4 bg-light border">
             <div id="first">
-               <div class="myform form ">
+               <div class="myform form">
                   <div class="logo mb-3">
                      <div class="col-md-12 text-center">
                         Welcome to <h1>Self Tracking</h1>
                      </div>
                   </div>
                   {% if not streak_today %}
-                  <form action="" method="post">
+                  <form action="" method="post" class="bg-light border p-3">
                      {% csrf_token %}
-                     <div class="form-group">
-                        <label for="exampleInputEmail1">People you Met</label>
-                        <input type="text" name="user_met" id="user_met" class="form-control" required>
-                     </div><br>
-                     <div class="form-group">
-                        <label for="exampleInputEmail1">Places Visited</label>
-                        <input type="text" name="location_visited" id="location_visited" class="form-control" required>
-                     </div><br>
+                     <div class="form-group p-2">
+                        <label for="user_met">People you Met: </label>
+                        <select multiple="" class="label ui selection fluid dropdown" name="user_met" id="user_met" multiple>
+                           {% if connections %}
+                              <option value="">Select Connections</option>
+                              {% for connection in connections %}
+                                 <option value="{{connection}}">{{connection}}</option>
+                              {% endfor %}
+                           {% else %}
+                              <option value="">No Connections</option>
+                           {% endif %}
+                        </select>
+                     </div>
+
+                     <div class="form-group p-2">
+                           <label for="location_visited">Places Visited: </label>
+                           <select multiple class="label ui selection fluid dropdown" name="location_visited" id="location_visited">
+                                 <option value="">Select County</option>
+                                 {% for county in counties %}
+                                    <option value="{{county}}">{{county}}</option>
+                                 {% endfor %}
+                           </select>
+                     </div>
                      <div class="col-md-12 text-center ">
                         <button type="submit" name="track" class=" btn btn-block mybtn btn-primary tx-tfm">Submit</button>
                      </div>
@@ -43,7 +58,11 @@
       <div class="row">
          <div class="col-md-5 mx-auto my-5 p-4 bg-success border">
             <div class="col-md-12 text-center">
-               <h2>Your Current Streak: {{current_streak}}</h2>
+               {% if streak_yesterday or streak_today %}
+                  <h2>Your Current Streak: {{current_streak}}</h2>
+               {% else %}
+                  <h2>Your Current Streak: 0</h2>
+               {% endif %}
             </div>
             <div class="col-md-12 text-center">
                <h2>Your Longest Streak: {{longest_streak}}</h2>

@@ -3,20 +3,14 @@ let mainChartSelector = document.querySelector("#mainchart_1");
 let homechartSelector = document.querySelector("#homechart_1");
 let workchartSelector = document.querySelector("#workchart_1");
 let dropdownMenuLinkSelector = document.querySelector("#dropdownMenuLink");
+let countyDropDownMain = document.querySelector("#countyDropDownMain");
 let chart,homechart,workchart;
 let mainChartConfig = {
     chart: {
-        type: 'spline',
-        options3d: {
-            enabled: true,
-            alpha: 15,
-            beta: 15,
-            depth: 50,
-            viewDistance: 25
-        }
+        type: 'spline'
     },
     title: {
-        text: 'NYC Covid Cases'
+        text: 'New York City Covid Cases'
     },
     xAxis: [
         {
@@ -50,8 +44,6 @@ let mainChartConfig = {
         }
     },
 
-    colors: ['#6CF'],
-
     series: [
     {
         showInLegend: false,
@@ -83,12 +75,16 @@ let homeChartConfig = {
         type: 'spline'
     },
     title: {
-        text: 'Home Covid Cases'
+        text: _locations[0] + ' Covid Cases'
     },
+    exporting: { enabled: false },
+
+    credits: {
+        enabled: false
+      },
     xAxis: [
         {
-            'categories': ["January", "February", "March", "April", "May", "June", "July", "August", "September", 
-            "October", "November", "December"],
+            'type': "category",
         title: {
             text: 'Month'
         },
@@ -100,8 +96,7 @@ let homeChartConfig = {
         }
     },
     tooltip: {
-        headerFormat: '<b>{series.name}</b><br>',
-        pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+        pointFormat: '{point.x}: {point.y}'
     },
 
     plotOptions: {
@@ -113,9 +108,9 @@ let homeChartConfig = {
         }
     },
 
-    colors: ['#39F'],
-
     series: [{
+        showInLegend: false,
+        name: "",
         data: generateseriesData(_df_2021_home)
     }],
 
@@ -144,12 +139,16 @@ let workChartConfig = {
         type: 'spline'
     },
     title: {
-        text: 'Work Covid Cases'
+        text: _locations[1] + ' Covid Cases'
     },
+    exporting: { enabled: false },
+
+    credits: {
+        enabled: false
+      },
     xAxis: [
         {
-            'categories': ["January", "February", "March", "April", "May", "June", "July", "August", "September", 
-            "October", "November", "December"],
+            'type': "category",
         title: {
             text: 'Month'
         },
@@ -161,8 +160,7 @@ let workChartConfig = {
         }
     },
     tooltip: {
-        headerFormat: '<b>{series.name}</b><br>',
-        pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+        pointFormat: '{point.x}: {point.y}'
     },
 
     plotOptions: {
@@ -174,9 +172,9 @@ let workChartConfig = {
         }
     },
 
-    colors: ['#036'],
-
     series: [{
+        showInLegend: false,
+        name: "",
         data: generateseriesData(_df_2021_work)
     }],
 
@@ -224,18 +222,7 @@ function closeNav() {
     document.getElementById("main").style.marginLeft= "0";
 }
 
-function changeCss () {
-    //var side_bar = document.querySelector(".sidebar");
-    let side_bar = document.querySelector("#mySidebar");
-    let toggle_bar = document.querySelector("#toggleBtn")
-    this.scrollY > 30 ? side_bar.style.top = "0px" : side_bar.style.top = "92px";
-    this.scrollY > 30 ? toggle_bar.style.top = "0px" : toggle_bar.style.top = "132px";
-}
-
 function showMainChart() {
-    //let mainChart = document.querySelector("#mainchart");
-    //let homechart = document.querySelector("#homechart");
-    //let workchart = document.querySelector("#workchart");
     if (mainChartSelector.classList && mainChartSelector.classList.contains('hideChart')) {
         mainChartSelector.classList.remove('hideChart');
     }
@@ -245,12 +232,12 @@ function showMainChart() {
     if (workchartSelector.classList && !workchartSelector.classList.contains('hideChart')) {
         workchartSelector.classList.add('hideChart');
     }
+    if (countyDropDownMain.classList && countyDropDownMain.classList.contains('hideChart')) {
+        countyDropDownMain.classList.remove('hideChart');
+    }
 }
 
 function showHomeChart() {
-    //let mainChart = document.querySelector("#mainchart");
-    //let homechart = document.querySelector("#homechart");
-    //let workchart = document.querySelector("#workchart");
     if (mainChartSelector.classList && !mainChartSelector.classList.contains('hideChart')) {
         mainChartSelector.classList.add('hideChart');
     }
@@ -260,12 +247,12 @@ function showHomeChart() {
     if (workchartSelector.classList && !workchartSelector.classList.contains('hideChart')) {
         workchartSelector.classList.add('hideChart');
     }
+    if (countyDropDownMain.classList && !countyDropDownMain.classList.contains('hideChart')) {
+        countyDropDownMain.classList.add('hideChart');
+    }
 }
 
 function showWorkChart() {
-    //let mainChart = document.querySelector("#mainchart");
-    //let homechart = document.querySelector("#homechart");
-    //let workchart = document.querySelector("#workchart");
     if (mainChartSelector.classList && !mainChartSelector.classList.contains('hideChart')) {
         mainChartSelector.classList.add('hideChart');
     }
@@ -275,55 +262,138 @@ function showWorkChart() {
     if (workchartSelector.classList && workchartSelector.classList.contains('hideChart')) {
         workchartSelector.classList.remove('hideChart');
     }
+    if (countyDropDownMain.classList && !countyDropDownMain.classList.contains('hideChart')) {
+        countyDropDownMain.classList.add('hideChart');
+    }
 }
 
 function generateLineGraph() {
     dropdownMenuLinkSelector.innerText = 'Line Graph';
     mainChartConfig.chart.type = 'spline';
+    if (mainChartConfig.chart.options3d) 
+        delete mainChartConfig.chart.options3d;
+    if (homeChartConfig.chart.options3d) 
+        delete homeChartConfig.chart.options3d;
+    if (workChartConfig.chart.options3d) 
+        delete workChartConfig.chart.options3d;
     chart = Highcharts.chart('mainchart', mainChartConfig);
     homeChartConfig.chart.type = 'spline';
-    chart = Highcharts.chart('homechart', homeChartConfig);
+    homechart = Highcharts.chart('homechart', homeChartConfig);
     workChartConfig.chart.type = 'spline';
-    chart = Highcharts.chart('workchart', workChartConfig);
+    workchart = Highcharts.chart('workchart', workChartConfig);
 }
 function generateBarGraph() {
+    let barGraph3d = {
+        enabled: true,
+        alpha: 15,
+        beta: 15,
+        depth: 50,
+        viewDistance: 25
+    };
     dropdownMenuLinkSelector.innerText = 'Bar Graph';
     mainChartConfig.chart.type = 'bar';
+    if (mainChartConfig.chart.options3d) 
+        delete mainChartConfig.chart.options3d;
+    if (homeChartConfig.chart.options3d) 
+        delete homeChartConfig.chart.options3d;
+    if (workChartConfig.chart.options3d) 
+        delete workChartConfig.chart.options3d;
+    if (!mainChartConfig.chart.options3d)
+        mainChartConfig.chart.options3d = barGraph3d;
+    if (!homeChartConfig.chart.options3d)
+        homeChartConfig.chart.options3d = barGraph3d;
+    if (!workChartConfig.chart.options3d)
+        workChartConfig.chart.options3d = barGraph3d;
     chart = Highcharts.chart('mainchart', mainChartConfig);
     homeChartConfig.chart.type = 'bar';
-    chart = Highcharts.chart('homechart', homeChartConfig);
+    homechart = Highcharts.chart('homechart', homeChartConfig);
     workChartConfig.chart.type = 'bar';
-    chart = Highcharts.chart('workchart', workChartConfig);
+    workchart = Highcharts.chart('workchart', workChartConfig);
 }
 
 function generateScatter() {
     dropdownMenuLinkSelector.innerText = 'Scatter Plot';
     mainChartConfig.chart.type = 'scatter';
+    if (mainChartConfig.chart.options3d) 
+        delete mainChartConfig.chart.options3d;
+    if (homeChartConfig.chart.options3d) 
+        delete homeChartConfig.chart.options3d;
+    if (workChartConfig.chart.options3d) 
+        delete workChartConfig.chart.options3d;
     chart = Highcharts.chart('mainchart', mainChartConfig);
     homeChartConfig.chart.type = 'scatter';
-    chart = Highcharts.chart('homechart', homeChartConfig);
+    homechart = Highcharts.chart('homechart', homeChartConfig);
     workChartConfig.chart.type = 'scatter';
-    chart = Highcharts.chart('workchart', workChartConfig);
+    workchart = Highcharts.chart('workchart', workChartConfig);
 }
 
 function generateColumn() {
+    let columnGraph3d = {
+        enabled: true,
+        alpha: 15,
+        beta: 15,
+        depth: 50,
+        viewDistance: 25
+    };
     dropdownMenuLinkSelector.innerText = 'Column Graph';
     mainChartConfig.chart.type = 'column';
+    if (mainChartConfig.chart.options3d) 
+        delete mainChartConfig.chart.options3d;
+    if (homeChartConfig.chart.options3d) 
+        delete homeChartConfig.chart.options3d;
+    if (workChartConfig.chart.options3d) 
+        delete workChartConfig.chart.options3d;
+    if (!mainChartConfig.chart.options3d)
+        mainChartConfig.chart.options3d = columnGraph3d;
+    if (!homeChartConfig.chart.options3d)
+        homeChartConfig.chart.options3d = columnGraph3d;
+    if (!workChartConfig.chart.options3d)
+        workChartConfig.chart.options3d = columnGraph3d;
     chart = Highcharts.chart('mainchart', mainChartConfig);
     homeChartConfig.chart.type = 'column';
-    chart = Highcharts.chart('homechart', homeChartConfig);
+    homechart = Highcharts.chart('homechart', homeChartConfig);
     workChartConfig.chart.type = 'column';
-    chart = Highcharts.chart('workchart', workChartConfig);
+    workchart = Highcharts.chart('workchart', workChartConfig);
 }
 
 function generatePie() {
+    let pieGraph3d = {
+        enabled: true,
+        alpha: 45,
+        beta: 0,
+        depth: 50,
+    };
     dropdownMenuLinkSelector.innerText = 'Pie Chart';
     mainChartConfig.chart.type = 'pie';
+    if (mainChartConfig.plotOptions.pie) 
+        delete mainChartConfig.plotOptions.pie;
+    if (homeChartConfig.plotOptions.pie) 
+        delete homeChartConfig.plotOptions.pie;
+    if (workChartConfig.plotOptions.pie) 
+        delete workChartConfig.plotOptions.pie;
+    mainChartConfig.plotOptions.pie = {allowPointSelect: true};
+    mainChartConfig.plotOptions.pie.depth = 35;
+    homeChartConfig.plotOptions.pie = {allowPointSelect: true};
+    homeChartConfig.plotOptions.pie.depth = 35;
+    workChartConfig.plotOptions.pie = {allowPointSelect: true};
+    workChartConfig.plotOptions.pie.depth = 35;
+    if (mainChartConfig.chart.options3d) 
+        delete mainChartConfig.chart.options3d;
+    if (homeChartConfig.chart.options3d) 
+        delete homeChartConfig.chart.options3d;
+    if (workChartConfig.chart.options3d) 
+        delete workChartConfig.chart.options3d;
+    if (!mainChartConfig.chart.options3d)
+        mainChartConfig.chart.options3d = pieGraph3d;
+    if (!homeChartConfig.chart.options3d)
+        homeChartConfig.chart.options3d = pieGraph3d;
+    if (!workChartConfig.chart.options3d)
+        workChartConfig.chart.options3d = pieGraph3d;
     chart = Highcharts.chart('mainchart', mainChartConfig);
     homeChartConfig.chart.type = 'pie';
-    chart = Highcharts.chart('homechart', homeChartConfig);
+    homechart = Highcharts.chart('homechart', homeChartConfig);
     workChartConfig.chart.type = 'pie';
-    chart = Highcharts.chart('workchart', workChartConfig);
+    workchart = Highcharts.chart('workchart', workChartConfig);
 }
 
 function generateseriesData(data) {
@@ -359,7 +429,22 @@ function generateDrillDownData(data) {
     return finalData;
 }
 
-window.addEventListener("scroll", changeCss , false);
+function generateCountySpecificGraph(value) {
+    document.querySelector('#dropdownCountyLink').innerText = value;
+    let countyData = [];
+    for (i in _df_2021_all) {
+        if (_df_2021_all[i][2] == value) {
+            dateToCasesArray = [];
+            dateToCasesArray.push(_df_2021_all[i][0]);
+            dateToCasesArray.push(_df_2021_all[i][1]);
+            countyData.push(dateToCasesArray);
+        }
+    }
+    mainChartConfig.series[0]['data'] = generateseriesData(countyData);
+    mainChartConfig.drilldown = generateDrillDownData(countyData);
+    mainChartConfig.title.text = value + ' Covid Cases';
+    chart = Highcharts.chart('mainchart', mainChartConfig);
+}
 
 document.addEventListener('DOMContentLoaded', function () {
     chart = Highcharts.chart('mainchart', mainChartConfig);
