@@ -113,6 +113,7 @@ def user_profile(request, username):
     # user logged in
     userdata = UserData.objects.get(username=username)
 
+    historical = historical[historical.state == "New York"]
     counties = historical.county.dropna().unique()
     counties = counties[counties != "Unknown"]
 
@@ -294,46 +295,42 @@ def signup(request):
 
     context = {"page_name": "SignUp"}
 
-    try:
-        if request.method == "POST" and "signup-button" in request.POST:
+    # try:
+    if request.method == "POST" and "signup-button" in request.POST:
 
-            if request.POST.get("password") != request.POST.get("confirmpassword"):
-                messages.error(request, "Password Do Not Match!!")
-                return render(request, "login/signup.html", context)
+        if request.POST.get("password") != request.POST.get("confirmpassword"):
+            messages.error(request, "Password Do Not Match!!")
+            return render(request, "login/signup.html", context)
 
-            try:
-                UserData.objects.get(username=request.POST.get("username"))
-                messages.error(request, "Username Already Exist!!")
-                return render(request, "login/signup.html", context)
+        try:
+            UserData.objects.get(username=request.POST.get("username"))
+            messages.error(request, "Username Already Exist!!")
+            return render(request, "login/signup.html", context)
 
-            except Exception:
-                userdata = UserData()
-                userdata.firstname = request.POST.get("firstname")
-                userdata.lastname = request.POST.get("lastname")
-                userdata.username = request.POST.get("username")
-                userdata.email = request.POST.get("email")
-                hasher = PBKDF2WrappedSHA1PasswordHasher()
-                userdata.password = hasher.encode(
-                    request.POST.get("password"), "test123"
-                )
-                userdata.save()
+        except Exception:
+            userdata = UserData()
+            userdata.firstname = request.POST.get("firstname")
+            userdata.lastname = request.POST.get("lastname")
+            userdata.username = request.POST.get("username")
+            userdata.email = request.POST.get("email")
+            hasher = PBKDF2WrappedSHA1PasswordHasher()
+            userdata.password = hasher.encode(request.POST.get("password"), "test123")
+            userdata.save()
 
-                privacy = Privacy()
-                privacy.username = UserData.objects.get(
-                    username=request.POST.get("username")
-                )
-                privacy.save()
+            privacy = Privacy()
+            privacy.username = UserData.objects.get(
+                username=request.POST.get("username")
+            )
+            privacy.save()
 
-                alert = Alert()
-                alert.username = UserData.objects.get(
-                    username=request.POST.get("username")
-                )
-                alert.save()
+            alert = Alert()
+            alert.username = UserData.objects.get(username=request.POST.get("username"))
+            alert.save()
 
-                return HttpResponseRedirect(reverse("login:signin"))
-    except Exception:
-        url = reverse("login:error")
-        return HttpResponseRedirect(url)
+            return HttpResponseRedirect(reverse("login:signin"))
+    # except Exception:
+    #     url = reverse("login:error")
+    #     return HttpResponseRedirect(url)
 
     return render(request, "login/signup.html", context)
 

@@ -4,7 +4,7 @@ let homechartSelector = document.querySelector("#homechart_1");
 let workchartSelector = document.querySelector("#workchart_1");
 let dropdownMenuLinkSelector = document.querySelector("#dropdownMenuLink");
 let countyDropDownMain = document.querySelector("#countyDropDownMain");
-let chart,homechart,workchart;
+let chart, homechart, workchart;
 let mainChartConfig = {
     chart: {
         type: 'spline'
@@ -15,9 +15,9 @@ let mainChartConfig = {
     xAxis: [
         {
             'type': "category",
-        title: {
-            text: 'Month'
-        },
+            title: {
+                text: 'Month'
+            },
         }
     ],
 
@@ -25,7 +25,7 @@ let mainChartConfig = {
 
     credits: {
         enabled: false
-      },
+    },
 
     yAxis: {
         title: {
@@ -45,11 +45,11 @@ let mainChartConfig = {
     },
 
     series: [
-    {
-        showInLegend: false,
-        name: "",
-        data: generateseriesData(_df_2021)
-    }],
+        {
+            showInLegend: false,
+            name: "",
+            data: generateseriesData(_df_2021)
+        }],
 
     responsive: {
         rules: [{
@@ -81,13 +81,13 @@ let homeChartConfig = {
 
     credits: {
         enabled: false
-      },
+    },
     xAxis: [
         {
             'type': "category",
-        title: {
-            text: 'Month'
-        },
+            title: {
+                text: 'Month'
+            },
         }
     ],
     yAxis: {
@@ -145,13 +145,13 @@ let workChartConfig = {
 
     credits: {
         enabled: false
-      },
+    },
     xAxis: [
         {
             'type': "category",
-        title: {
-            text: 'Month'
-        },
+            title: {
+                text: 'Month'
+            },
         }
     ],
     yAxis: {
@@ -216,10 +216,10 @@ function openNav() {
     document.getElementById("mySidebar").style.width = "250px";
     document.getElementById("main").style.marginLeft = "250px";
 }
-  
+
 function closeNav() {
     document.getElementById("mySidebar").style.width = "0";
-    document.getElementById("main").style.marginLeft= "0";
+    document.getElementById("main").style.marginLeft = "0";
 }
 
 function showMainChart() {
@@ -270,11 +270,11 @@ function showWorkChart() {
 function generateLineGraph() {
     dropdownMenuLinkSelector.innerText = 'Line Graph';
     mainChartConfig.chart.type = 'spline';
-    if (mainChartConfig.chart.options3d) 
+    if (mainChartConfig.chart.options3d)
         delete mainChartConfig.chart.options3d;
-    if (homeChartConfig.chart.options3d) 
+    if (homeChartConfig.chart.options3d)
         delete homeChartConfig.chart.options3d;
-    if (workChartConfig.chart.options3d) 
+    if (workChartConfig.chart.options3d)
         delete workChartConfig.chart.options3d;
     chart = Highcharts.chart('mainchart', mainChartConfig);
     homeChartConfig.chart.type = 'spline';
@@ -283,27 +283,14 @@ function generateLineGraph() {
     workchart = Highcharts.chart('workchart', workChartConfig);
 }
 function generateBarGraph() {
-    let barGraph3d = {
-        enabled: true,
-        alpha: 15,
-        beta: 15,
-        depth: 50,
-        viewDistance: 25
-    };
     dropdownMenuLinkSelector.innerText = 'Bar Graph';
     mainChartConfig.chart.type = 'bar';
-    if (mainChartConfig.chart.options3d) 
+    if (mainChartConfig.chart.options3d)
         delete mainChartConfig.chart.options3d;
-    if (homeChartConfig.chart.options3d) 
+    if (homeChartConfig.chart.options3d)
         delete homeChartConfig.chart.options3d;
-    if (workChartConfig.chart.options3d) 
+    if (workChartConfig.chart.options3d)
         delete workChartConfig.chart.options3d;
-    if (!mainChartConfig.chart.options3d)
-        mainChartConfig.chart.options3d = barGraph3d;
-    if (!homeChartConfig.chart.options3d)
-        homeChartConfig.chart.options3d = barGraph3d;
-    if (!workChartConfig.chart.options3d)
-        workChartConfig.chart.options3d = barGraph3d;
     chart = Highcharts.chart('mainchart', mainChartConfig);
     homeChartConfig.chart.type = 'bar';
     homechart = Highcharts.chart('homechart', homeChartConfig);
@@ -314,11 +301,11 @@ function generateBarGraph() {
 function generateScatter() {
     dropdownMenuLinkSelector.innerText = 'Scatter Plot';
     mainChartConfig.chart.type = 'scatter';
-    if (mainChartConfig.chart.options3d) 
+    if (mainChartConfig.chart.options3d)
         delete mainChartConfig.chart.options3d;
-    if (homeChartConfig.chart.options3d) 
+    if (homeChartConfig.chart.options3d)
         delete homeChartConfig.chart.options3d;
-    if (workChartConfig.chart.options3d) 
+    if (workChartConfig.chart.options3d)
         delete workChartConfig.chart.options3d;
     chart = Highcharts.chart('mainchart', mainChartConfig);
     homeChartConfig.chart.type = 'scatter';
@@ -328,27 +315,16 @@ function generateScatter() {
 }
 
 function generateColumn() {
-    let columnGraph3d = {
-        enabled: true,
-        alpha: 15,
-        beta: 15,
-        depth: 50,
-        viewDistance: 25
-    };
+
     dropdownMenuLinkSelector.innerText = 'Column Graph';
     mainChartConfig.chart.type = 'column';
-    if (mainChartConfig.chart.options3d) 
+    if (mainChartConfig.chart.options3d)
         delete mainChartConfig.chart.options3d;
-    if (homeChartConfig.chart.options3d) 
+    if (homeChartConfig.chart.options3d)
         delete homeChartConfig.chart.options3d;
-    if (workChartConfig.chart.options3d) 
+    if (workChartConfig.chart.options3d)
         delete workChartConfig.chart.options3d;
-    if (!mainChartConfig.chart.options3d)
-        mainChartConfig.chart.options3d = columnGraph3d;
-    if (!homeChartConfig.chart.options3d)
-        homeChartConfig.chart.options3d = columnGraph3d;
-    if (!workChartConfig.chart.options3d)
-        workChartConfig.chart.options3d = columnGraph3d;
+
     chart = Highcharts.chart('mainchart', mainChartConfig);
     homeChartConfig.chart.type = 'column';
     homechart = Highcharts.chart('homechart', homeChartConfig);
@@ -365,23 +341,23 @@ function generatePie() {
     };
     dropdownMenuLinkSelector.innerText = 'Pie Chart';
     mainChartConfig.chart.type = 'pie';
-    if (mainChartConfig.plotOptions.pie) 
+    if (mainChartConfig.plotOptions.pie)
         delete mainChartConfig.plotOptions.pie;
-    if (homeChartConfig.plotOptions.pie) 
+    if (homeChartConfig.plotOptions.pie)
         delete homeChartConfig.plotOptions.pie;
-    if (workChartConfig.plotOptions.pie) 
+    if (workChartConfig.plotOptions.pie)
         delete workChartConfig.plotOptions.pie;
-    mainChartConfig.plotOptions.pie = {allowPointSelect: true};
+    mainChartConfig.plotOptions.pie = { allowPointSelect: true };
     mainChartConfig.plotOptions.pie.depth = 35;
-    homeChartConfig.plotOptions.pie = {allowPointSelect: true};
+    homeChartConfig.plotOptions.pie = { allowPointSelect: true };
     homeChartConfig.plotOptions.pie.depth = 35;
-    workChartConfig.plotOptions.pie = {allowPointSelect: true};
+    workChartConfig.plotOptions.pie = { allowPointSelect: true };
     workChartConfig.plotOptions.pie.depth = 35;
-    if (mainChartConfig.chart.options3d) 
+    if (mainChartConfig.chart.options3d)
         delete mainChartConfig.chart.options3d;
-    if (homeChartConfig.chart.options3d) 
+    if (homeChartConfig.chart.options3d)
         delete homeChartConfig.chart.options3d;
-    if (workChartConfig.chart.options3d) 
+    if (workChartConfig.chart.options3d)
         delete workChartConfig.chart.options3d;
     if (!mainChartConfig.chart.options3d)
         mainChartConfig.chart.options3d = pieGraph3d;
@@ -397,27 +373,33 @@ function generatePie() {
 }
 
 function generateseriesData(data) {
-    monthToCasesMap = {"January": 0, "February": 0, "March": 0, "April": 0, "May": 0, "June": 0, "July": 0, "August": 0, "September": 0, 
-    "October": 0, "November": 0, "December": 0};
-    monthNumberToNameMap = {"01": "January", "02": "February", "03": "March", "04": "April", "05": "May", "06": "June", 
-    "07": "July","08": "August", "09": "September", "10": "October", "11": "November", "12": "December"};
+    monthToCasesMap = {
+        "January": 0, "February": 0, "March": 0, "April": 0, "May": 0, "June": 0, "July": 0, "August": 0, "September": 0,
+        "October": 0, "November": 0, "December": 0
+    };
+    monthNumberToNameMap = {
+        "01": "January", "02": "February", "03": "March", "04": "April", "05": "May", "06": "June",
+        "07": "July", "08": "August", "09": "September", "10": "October", "11": "November", "12": "December"
+    };
     seriesDataMap = [];
     for (temp in data) {
         monthToCasesMap[monthNumberToNameMap[data[temp][0].split("-")[1]]] += data[temp][1];
     }
     for (temp in monthToCasesMap) {
-        let temp1 = {"name": temp, "y": monthToCasesMap[temp], "drilldown": temp};
+        let temp1 = { "name": temp, "y": monthToCasesMap[temp], "drilldown": temp };
         seriesDataMap.push(temp1);
     }
     return seriesDataMap;
 }
 
 function generateDrillDownData(data) {
-    drilldownData = [{"id": "January", "data": []}, {"id": "February", "data": []}, {"id": "March", "data": []}, {"id": "April", "data": []},
-    {"id": "May", "data": []}, {"id": "June", "data": []}, {"id": "July", "data": []}, {"id": "August", "data": []}, {"id": "September", "data": []},
-    {"id": "October", "data": []}, {"id": "November", "data": []}, {"id": "December", "data": []}];
-    monthNumberToNameMap = {"01": "January", "02": "February", "03": "March", "04": "April", "05": "May", "06": "June", 
-    "07": "July","08": "August", "09": "September", "10": "October", "11": "November", "12": "December"};
+    drilldownData = [{ "id": "January", "data": [] }, { "id": "February", "data": [] }, { "id": "March", "data": [] }, { "id": "April", "data": [] },
+    { "id": "May", "data": [] }, { "id": "June", "data": [] }, { "id": "July", "data": [] }, { "id": "August", "data": [] }, { "id": "September", "data": [] },
+    { "id": "October", "data": [] }, { "id": "November", "data": [] }, { "id": "December", "data": [] }];
+    monthNumberToNameMap = {
+        "01": "January", "02": "February", "03": "March", "04": "April", "05": "May", "06": "June",
+        "07": "July", "08": "August", "09": "September", "10": "October", "11": "November", "12": "December"
+    };
     for (temp in data) {
         for (temp2 in drilldownData) {
             if (drilldownData[temp2]["id"] == monthNumberToNameMap[data[temp][0].split("-")[1]]) {
@@ -425,7 +407,7 @@ function generateDrillDownData(data) {
             }
         }
     }
-    finalData = {"series": drilldownData};
+    finalData = { "series": drilldownData };
     return finalData;
 }
 
@@ -449,7 +431,7 @@ function generateCountySpecificGraph(value) {
 document.addEventListener('DOMContentLoaded', function () {
     chart = Highcharts.chart('mainchart', mainChartConfig);
 });
-    
-    homechart = Highcharts.chart('homechart', homeChartConfig);
-    
-    workchart = Highcharts.chart('workchart', workChartConfig);
+
+homechart = Highcharts.chart('homechart', homeChartConfig);
+
+workchart = Highcharts.chart('workchart', workChartConfig);

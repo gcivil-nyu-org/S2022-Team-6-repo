@@ -13,7 +13,7 @@
                     <div class="card col-lg-3 col-md-5 mx-2 my-2">
                         <div class="dropdown">
                             <button type="button" class="btn" data-bs-toggle="dropdown" aria-expanded="false" style="float: right; background-color: white; margin: 0%;padding: 0%;">
-                                <img src="{%static 'img/circle_options.jpeg'%}"></img>
+                                <img src="{% static 'img/circle_options.jpeg'%}"></img>
                             </button>
                             <ul class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton1" style="min-width: auto;">
                                 {% if data.is_admin %}
@@ -51,43 +51,70 @@
     <section id="your-circle" class="p-5 bg-light">
         <h2 class="text-left text-primary">Your Circles</h2>
         <hr>
-        <div class="container my-5 mx-5">
+        <div class="container-fluid my-5">
             <div class="row">
-                {% for data in circle_user_data %}
-                    <div class="card col-lg-3 col-md-5 mx-2 my-2">
-                        <div class="dropdown">
-                            <button type="button" class="btn" data-bs-toggle="dropdown" aria-expanded="false" style="float: right; background-color: white; margin: 0%;padding: 0%;">
-                                <img src="{%static 'img/circle_options.jpeg'%}"></img>
-                            </button>
-                            <ul class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton1" style="min-width: auto;">
-                                {% if data.is_admin %}
-                                <li>
-                                    <a href="{% url 'circle:deletecircle' username data.circle_id.circle_id%}">
-                                        <button type="button" class="btn btn-outline-primary" style="width: 137.47px;">Delete Circle</button>
-                                    </a>
-                                </li>
-                                <li>
-                                    <button type="button" class="btn btn-outline-primary">Edit Permission</button>
-                                </li>
-                                {% else %}
-                                <li>
-                                    <a href="{% url 'circle:exitcircle' username data.circle_id.circle_id%}">
-                                        <button type="button" class="btn btn-outline-primary">Exit Circle</button>
-                                    </a>
-                                </li>
-                                {% endif %}
-                            </ul>
-                        </div>
-                        <img class="rounded mx-auto d-block card-img-top my-3" height="250" width="250" src="{{ data.circle_id.group_image.url }}" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title text-center">{{data.circle_id.circle_name}}</h5>
-                        </div>
-                        <a href="{% url 'circle:user_circle' data.username.username data.circle_id.circle_id %}">
-                            <button type="button" class="btn btn-outline-primary btn-lg col-12 my-3">Enter Circle</button>
-                        </a>
-                    </div>
-                {% endfor %}
+                <div class="m-auto col-lg-10">
+                    <form>
+                    <div class="input-group mb-3">
+                            <i id="search-icon" class="bi bi-search m-1 px-1"></i>
+                            <input class="form-control" type="text" name="user-input" id="user-input" placeholder="Search">
+                    <div>
+                    </form>
+                </div>
             </div>
+        </div>
+
+        <div class="container my-5 mx-5" id="replaceable-content">
+            {% include 'circle-search.html' %}
         </div>
     </section>
 {% endblock %}
+
+{% block script %}
+<script>
+    const user_input = $("#user-input")
+    const search_icon = $('#search-icon')
+    const artists_div = $('#replaceable-content')
+    
+    
+    const endpoint = '/circle/{{username}}/'
+    console.log(endpoint)
+    const delay_by_in_ms = 200
+    let scheduled_function = false
+
+    let ajax_call = function (endpoint, request_parameters) {
+        $.getJSON(endpoint, request_parameters)
+            .done(response => {
+                // fade out the artists_div, then:
+                artists_div.fadeTo('slow', 0).promise().then(() => {
+                    // replace the HTML contents
+                    artists_div.html(response['html_from_view'])
+                    // fade-in the div with new contents
+                    artists_div.fadeTo('slow', 1)
+                    // stop animating search icon
+                    search_icon.removeClass('blink')
+                })
+            })
+        }
+        
+        $("#user-input").on("keyup", function () {
+
+            console.log('keyup');
+
+            const request_parameters = {
+                q: $(this).val() // value of user_input: the HTML element with ID user-input
+            }
+
+            // start animating the search icon with the CSS class
+            search_icon.addClass('blink')
+
+            // if scheduled_function is NOT false, cancel the execution of the function
+            if (scheduled_function) {
+                clearTimeout(scheduled_function)
+            }
+
+            // setTimeout returns the ID of the function to be executed
+            scheduled_function = setTimeout(ajax_call, delay_by_in_ms, endpoint, request_parameters)
+        })
+</script>
+{% endblock script %}
