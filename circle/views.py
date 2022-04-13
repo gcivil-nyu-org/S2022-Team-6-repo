@@ -41,7 +41,7 @@ def circle(request, username):
         return HttpResponseRedirect(url)
     
     
-    if request.method == "POST" and "search" in re/
+    # if request.method == "POST" and "search" in re/
     circle_user_data = CircleUser.objects.filter(username=username)
 
     request_user_data, requests = get_notifications(username=username)
