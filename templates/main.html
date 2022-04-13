@@ -59,7 +59,7 @@
 
     {% if selftrack %}
     	<script src="{% static 'js/selftrack/jquery.min.js' %}"></script>
-        <script src="{% static 'js/selftrack/popper.js' %}"></script>
+        {% comment %} <script src="{% static 'js/selftrack/popper.js' %}"></script> {% endcomment %}
         <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.js"></script>
         <script src="{% static 'js/selftrack/main.js' %}"></script>
     {% endif %}
