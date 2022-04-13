@@ -31,8 +31,6 @@ from selftracking.helper import check_upload_today
 
 from django.core import signing
 
-import json
-
 
 def circle(request, username):
     try:

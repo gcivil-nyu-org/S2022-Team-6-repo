@@ -1,4 +1,3 @@
-import pandas as pd
 import numpy as np
 
 import json
@@ -69,7 +68,7 @@ def location_visited_alert(location_visted, historical, yesterday):
     jsonDec = json.decoder.JSONDecoder()
     locations = jsonDec.decode(location_visted)
 
-    if len(location_visted_list) != 0:
+    if len(locations) != 0:
 
         for location in locations:
             location_historical = historical[historical.county == location].copy()
