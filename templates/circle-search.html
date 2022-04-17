@@ -1,0 +1,78 @@
+{% load static %}
+
+{% if circles %}
+    <div class="row">
+        {% for data in circles %}
+            <div class="card col-lg-3 col-md-5 mx-2 my-2">
+                <div class="dropdown">
+                    <button type="button" class="btn" data-bs-toggle="dropdown" aria-expanded="false" style="float: right; background-color: white; margin: 0%;padding: 0%;">
+                        <img src="{%static 'img/circle_options.jpeg'%}"></img>
+                    </button>
+                    <ul class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton1" style="min-width: auto;">
+                        {% if data.is_admin %}
+                        <li>
+                            <a href="{% url 'circle:deletecircle' username data.circle_id.circle_id %}">
+                                <button type="button" class="btn btn-outline-primary" style="width: 137.47px;">Delete Circle</button>
+                            </a>
+                        </li>
+                        <li>
+                            <button type="button" class="btn btn-outline-primary">Edit Permission</button>
+                        </li>
+                        {% else %}
+                        <li>
+                            <a href="{% url 'circle:exitcircle' username data.circle_id.circle_id %}">
+                                <button type="button" class="btn btn-outline-primary">Exit Circle</button>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <img class="rounded mx-auto d-block card-img-top my-3" height="250" width="250" src="{{ data.circle_id.group_image.url }}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title text-center">{{data.circle_id.circle_name}}</h5>
+                </div>
+                <a href="{% url 'circle:user_circle' username data.circle_id.circle_id %}">
+                    <button type="button" class="btn btn-outline-primary btn-lg col-12 my-3">Enter Circle</button>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+
+{% else %}
+    <div class="row">
+        {% for data in circle_user_data %}
+            <div class="card col-lg-3 col-md-5 mx-2 my-2">
+                <div class="dropdown">
+                    <button type="button" class="btn" data-bs-toggle="dropdown" aria-expanded="false" style="float: right; background-color: white; margin: 0%;padding: 0%;">
+                        <img src="{%static 'img/circle_options.jpeg'%}"></img>
+                    </button>
+                    <ul class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton1" style="min-width: auto;">
+                        {% if data.is_admin %}
+                        <li>
+                            <a href="{% url 'circle:deletecircle' username data.circle_id.circle_id%}">
+                                <button type="button" class="btn btn-outline-primary" style="width: 137.47px;">Delete Circle</button>
+                            </a>
+                        </li>
+                        <li>
+                            <button type="button" class="btn btn-outline-primary">Edit Permission</button>
+                        </li>
+                        {% else %}
+                        <li>
+                            <a href="{% url 'circle:exitcircle' username data.circle_id.circle_id%}">
+                                <button type="button" class="btn btn-outline-primary">Exit Circle</button>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <img class="rounded mx-auto d-block card-img-top my-3" height="250" width="250" src="{{ data.circle_id.group_image.url }}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title text-center">{{data.circle_id.circle_name}}</h5>
+                </div>
+                <a href="{% url 'circle:user_circle' data.username.username data.circle_id.circle_id %}">
+                    <button type="button" class="btn btn-outline-primary btn-lg col-12 my-3">Enter Circle</button>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}

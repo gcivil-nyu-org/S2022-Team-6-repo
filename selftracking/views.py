@@ -88,6 +88,7 @@ def selftrack(request, username):
     streak_yesterday = check_uploaded_yesterday(username)
 
     connections = get_all_connections(username)
+    historical = historical[historical.state == "New York"]
     counties = historical.county.dropna().unique()
     counties = counties[counties != "Unknown"]
 
