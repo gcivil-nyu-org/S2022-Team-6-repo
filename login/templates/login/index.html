@@ -5,11 +5,10 @@
   <section class="bg-light text-dark p-5 p-lg-0 pt-lg-5 text-center text-sm-start">
     <div class="container">
       <div class="d-sm-flex align-items-center justify-content-between">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&display=swap" rel="style">
         <div>
           <h1>{% if session_valid %} Welcome {% else %} Become a {% endif %}<span class="text-warning">#CoviGuardian </span></h1>
-          <p class="lead my-4">Lorem ipsum dolor sit amet,
-            consectetur adipisicing elit. Explicabo,
-            corporis quis ! Nostrum aperiam incidunt asperiores quis ratione porro libero illum.
+          <p class="lead my-4"> Win the Battle Against COVID-19
           </p>
           {% if not session_valid %}
             <a href="{% url 'login:signup' %}">
@@ -37,11 +36,8 @@
             <div class="card-body text-center">
               <div class="h1 mb-3"><i class="bi bi-pencil-square"></i></div>
               <h3 class="card-title mb-3">Self-Tracking</h3>
-              <p class="card-text">Lorem ipsum dolor sit amet consectetur,
-                adipisicing elit. Impedit voluptatum quas repudiandae eaque ducimus neque deserunt,
-                illo quisquam ! In commodi perferendis unde,
-                fuga alias aperiam at iure mollitia laboriosam maxime nisi veritatis inventore rem cupiditate.
-                Quas laudantium suscipit hic ! Voluptatum ! </p>
+              <p class="card-text"> You can self track yourself by entering the mates in your circle and the location met
+              </p>
             </div>
           </div>
         </div>
@@ -51,10 +47,7 @@
             <div class="card-body text-center">
               <div class="h1 mb-3"><i class="bi bi-bell-fill"></i></div>
               <h3 class=" card-title mb-3">Alerts</h3>
-              <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores reiciendis
-                mollitia error fugiat ab quia similique deserunt ad accusantium pariatur quaerat aperiam
-                praesentium consectetur modi omnis facere sint laboriosam magni molestiae,
-                itaque distinctio nobis expedita. Eius expedita quisquam aspernatur eum? </p>
+              <p class="card-text"> Alerts with high risk status to stay safe during the pandemic </p>
             </div>
           </div>
         </div>
@@ -64,11 +57,9 @@
             <div class="card-body text-center">
               <div class="h1 mb-3"><i class="bi bi-people-fill"></i></div>
               <h3 class="card-title mb-3">Circles</h3>
-              <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. A delectus tenetur
-                sint qui esse architecto,
-                consequatur neque alias officiis nisi iusto dolorum vero ullam possimus autem. Nostrum eligendi
-                architecto itaque rem? Porro quibusdam velit corrupti,
-                itaque dicta ratione sit fugit. </p>
+              <p class="card-text">Circles are the groups where you can join based on location 
+                and be updated with the vaccination and the location which is at high risk
+              </p>
             </div>
           </div>
         </div>
@@ -83,13 +74,8 @@
         <div class="col-md"><img src="{% static 'img/covid.png' %}" class="img-fluid" alt="" /></div>
         <div class="col-md p-5">
           <h2>Take charge against Covid</h2>
-          <p class="lead">Lorem ipsum dolor,
-            sit amet consectetur adipisicing elit. Similique deleniti possimus magnam corporis ratione facere !
+          <p class="lead">Be the warrior in yourself
           </p>
-          <p>Lorem ipsum dolor sit,
-            amet consectetur adipisicing elit. Cumque reiciendis eius autem eveniet mollitia,
-            at asperiores suscipit quae similique laboriosam iste minus placeat odit velit quos,
-            nulla architecto amet voluptates? </p>
         </div>
       </div>
     </div>
@@ -105,8 +91,7 @@
             <div class="card-body text-center"><img src="{% static 'img/eashan.jpeg' %}" class="img-thumbnail rounded-circle mb-3"
                 alt="" />
               <h3 class="card-title mb-3">Eashan Kaushik</h3>
-              <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
-                accusamus nobis sed cupiditate iusto? Quibusdam. </p><a href="#"><i
+              <p class="card-text"> </p><a href="#"><i
                   class="bi bi-linkedin text-dark mx-1"></i></a>
             </div>
           </div>
@@ -116,8 +101,7 @@
             <div class="card-body text-center"><img src="{% static 'img/srijan.JPEG' %}"
                 class="img-thumbnail rounded-circle mb-3 develop" alt="" />
               <h3 class="card-title mb-3">Srijan Malhotra</h3>
-              <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
-                accusamus nobis sed cupiditate iusto? Quibusdam. </p><a href="#"><i
+              <p class="card-text"></p><a href="#"><i
                   class="bi bi-linkedin text-dark mx-1"></i></a>
             </div>
           </div>
@@ -127,8 +111,7 @@
             <div class="card-body text-center"><img src="{% static 'img/chinmay.jpeg' %}"
                 class="img-thumbnail rounded-circle mb-3 develop" alt="" />
               <h3 class="card-title mb-3">Chinmay Kulkarni</h3>
-              <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
-                accusamus nobis sed cupiditate iusto? Quibusdam. </p><a href="#"><i
+              <p class="card-text"></p><a href="#"><i
                   class="bi bi-linkedin text-dark mx-1"></i></a>
             </div>
           </div>
@@ -138,8 +121,7 @@
             <div class="card-body text-center"><img src="{% static 'img/pranav.jpeg' %}"
                 class="img-thumbnail rounded-circle mb-3 develop" alt="" />
               <h3 class="card-title mb-3">Pranav Singh</h3>
-              <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
-                accusamus nobis sed cupiditate iusto? Quibusdam. </p><a href="#"><i
+              <p class="card-text"></p><a href="#"><i
                   class="bi bi-linkedin text-dark mx-1"></i></a>
             </div>
           </div>
@@ -149,8 +131,7 @@
             <div class="card-body text-center"><img src="{% static 'img/shardha.jpg' %}"
                 class="img-thumbnail rounded-circle mb-3 develop" alt="" />
               <h3 class="card-title mb-3">Shardha Koul</h3>
-              <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
-                accusamus nobis sed cupiditate iusto? Quibusdam. </p><a href="#"><i
+              <p class="card-text"> </p><a href="#"><i
                   class="bi bi-linkedin text-dark mx-1"></i></a>
             </div>
           </div>

@@ -7,9 +7,10 @@ a{
   text-decoration:none !important;
 }
 h1,h2,h3{
-  font-family: 'Times New Roman', cursive;
+  font-family: 'Open Sans', sans-serif;
 }
 .myform{
+    font-family: 'Open Sans', sans-serif;
     position: relative;
     display: -ms-flexbox;
     display: flex;
@@ -18,7 +19,7 @@ h1,h2,h3{
     flex-direction: column;
     width: 100%;
     pointer-events: auto;
-    background-color: #fff;
+    background-color: #abc4ff;
     background-clip: padding-box;
     border: 1px solid rgba(0,0,0,.2);
     border-radius: 1.1rem;
@@ -26,9 +27,11 @@ h1,h2,h3{
     max-width: 500px;
      }
      .tx-tfm{
+
      text-transform:uppercase;
      }
-     .mybtn{
+     .mybtn{ 
+     background: #000000;
      border-radius:50px;
      }
     
@@ -66,4 +69,7 @@ h1,h2,h3{
       form .error {
      color: #ff0000;
      }
-    
+
+     .bg-secondary {
+      background-color: #e2eafc!important;
+  }

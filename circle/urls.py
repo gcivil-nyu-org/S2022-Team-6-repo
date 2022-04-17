@@ -21,8 +21,4 @@ urlpatterns = [
         views.delete_circle,
         name="deletecircle",
     ),
-    path(
-        "search_circles",
-        views.search_circles,
-        name="search_circles",)
 ]

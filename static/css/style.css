@@ -38,3 +38,15 @@
   animation-timing-function: ease-in-out;
   animation-direction: alternate;
 }
+
+.h1,h2,h3{
+  font-family: 'Open Sans', sans-serif;
+}
+
+.container{
+  font-family: 'Open Sans', sans-serif;
+}
+
+.container-sm{
+  font-family: 'Open Sans', sans-serif;
+}
