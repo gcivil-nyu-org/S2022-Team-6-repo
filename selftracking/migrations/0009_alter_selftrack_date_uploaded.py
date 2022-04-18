@@ -7,13 +7,13 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('selftracking', '0008_alter_selftrack_unique_together_and_more'),
+        ("selftracking", "0008_alter_selftrack_unique_together_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='selftrack',
-            name='date_uploaded',
+            model_name="selftrack",
+            name="date_uploaded",
             field=models.DateTimeField(default=django.utils.timezone.now),
         ),
     ]

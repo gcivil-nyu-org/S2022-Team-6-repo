@@ -10,7 +10,7 @@ from alert.driver import (
     people_met_alert,
     location_visited_alert,
     get_model_data,
-    notify_alerts
+    notify_alerts,
 )
 from monitor.driver import get_s3_client, get_data
 
@@ -35,14 +35,14 @@ class Command(BaseCommand):
 
             historical = historical[historical.state == "New York"]
             historical = historical[
-                (historical.date <= yesterday) & (historical.date >= ten_days_from_today)
+                (historical.date <= yesterday)
+                & (historical.date >= ten_days_from_today)
             ]
 
             alerts = Alert.objects.all()
 
-
             for alert in alerts:
-                
+
                 data_alert_case = list()
                 data_alert_death = list()
                 location_alert_case = False
@@ -62,7 +62,7 @@ class Command(BaseCommand):
                     date_uploaded__date=datetime.datetime.now().date()
                     + datetime.timedelta(days=-1),
                 )
-                
+
                 # print(location_visited)
 
                 try:
@@ -114,7 +114,7 @@ class Command(BaseCommand):
                 user_alert = Alert.objects.get(username=username)
 
                 user_alert.location_alert_case = location_alert_case
-        
+
                 user_alert.location_alert_death = location_alert_death
 
                 user_alert.home_alert_case = home_address_case
@@ -134,23 +134,22 @@ class Command(BaseCommand):
                     or work_address_case
                     or work_address_death
                 )
-                
+
                 # print(f'Location case data: {data_alert_case}, alert {location_alert_case}')
                 # print(f'Location death data:{data_alert_death}, alert {location_alert_death}')
-                
+
                 # print(f'Work case alert: {work_address_case}')
                 # print(f'Work death alert:{home_address_death}')
-                
-                
+
                 # print(f'Home case alert: {home_address_case}')
                 # print(f'Home death alert:{home_address_death}')
-                
+
                 # print(f'User Alert One {user_alert.alert}')
 
                 user_alert.save()
 
             for alert in alerts:
-                
+
                 people_data = list()
                 people_alert = False
                 # People Met
@@ -166,9 +165,9 @@ class Command(BaseCommand):
                 # print(people_met)
                 try:
                     if people_met[0].user_met != "42a7b2626eae970122e01f65af2f5092":
-                        
+
                         # print(people_met[0].user_met)
-                        
+
                         people_data, people_alert = people_met_alert(
                             people_met[0].user_met, historical, yesterday
                         )
@@ -187,20 +186,19 @@ class Command(BaseCommand):
                 user_alert.people_alert = people_alert
 
                 user_alert.alert = user_alert.alert or people_alert
-                
+
                 # print(f'User Alert Two {people_alert}')
                 # print(f'People Data {people_data}')
 
                 user_alert.save()
-        
 
             users = UserData.objects.all()
-            
+
             for user in users.iterator():
                 notify_alerts(user)
 
         except Exception:
-            self.stdout.write(self.style.ERROR('Internal Error - EK'))
+            self.stdout.write(self.style.ERROR("Internal Error - EK"))
             return
 
         self.stdout.write(self.style.SUCCESS("Successfully Updated all alerts"))

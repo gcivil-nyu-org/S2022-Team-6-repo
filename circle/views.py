@@ -292,7 +292,7 @@ def notify(request):
 
     streak_today = check_upload_today(username)
     alert = get_alert(username=username)
-    
+
     context = {
         "page_name": "Notifications",
         "username": username,

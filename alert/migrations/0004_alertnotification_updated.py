@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('alert', '0003_alertnotification'),
+        ("alert", "0003_alertnotification"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='alertnotification',
-            name='updated',
+            model_name="alertnotification",
+            name="updated",
             field=models.DateTimeField(default=None),
         ),
     ]

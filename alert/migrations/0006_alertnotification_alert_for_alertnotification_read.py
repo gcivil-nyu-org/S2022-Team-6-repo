@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('alert', '0005_alter_alertnotification_updated'),
+        ("alert", "0005_alter_alertnotification_updated"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='alertnotification',
-            name='alert_for',
+            model_name="alertnotification",
+            name="alert_for",
             field=models.CharField(max_length=300, null=True),
         ),
         migrations.AddField(
-            model_name='alertnotification',
-            name='read',
+            model_name="alertnotification",
+            name="read",
             field=models.BooleanField(default=False),
         ),
     ]

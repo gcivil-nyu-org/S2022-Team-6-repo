@@ -25,19 +25,20 @@ def alert_user(request, username):
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
-    
-    
-    alert_notifications = AlertNotification.objects.filter(username=username).order_by('updated')
+
+    alert_notifications = AlertNotification.objects.filter(username=username).order_by(
+        "updated"
+    )
     paginator = Paginator(alert_notifications, ALERT_PER_PAGE)
-    page = request.GET.get('page')
+    page = request.GET.get("page")
     alert_notification = paginator.get_page(page)
-    
+
     if request.method == "POST" and "read-button" in request.POST:
-        for id in request.POST.getlist('id'):
+        for id in request.POST.getlist("id"):
             read_alert = AlertNotification.objects.get(id=id)
             read_alert.read = True
             read_alert.save()
-    
+
     request_user_data, requests = get_notifications(username=username)
     three_non_compliance, non_compliance = get_all_non_compliance(username, True)
     total_notify = requests + non_compliance
@@ -54,9 +55,7 @@ def alert_user(request, username):
         "streak_today": streak_today,
         "alert": alert,
         # other
-        "alert_notification": alert_notification
-        
-        
+        "alert_notification": alert_notification,
     }
 
     return render(request, "alert/alert.html", context)
