@@ -7,18 +7,18 @@
       <div class="d-sm-flex align-items-center justify-content-between">
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&display=swap" rel="style">
         <div>
-          <h1>{% if session_valid %} Welcome {% else %} Become a {% endif %}<span class="text-warning">#CoviGuardian </span></h1>
+          <h1>{% if session_valid %} Welcome {% else %} Become a {% endif %}<span class="palette-text">#CoviGuardian </span></h1>
           <p class="lead my-4"> Win the Battle Against COVID-19
           </p>
           {% if not session_valid %}
             <a href="{% url 'login:signup' %}">
-              <button class="btn btn-primary btn-lg">Get started</button>
+              <button class="btn btn-get-started btn-lg">Get started</button>
             </a>
             <br><br>
             <p class="lead my-6">
               <small>
-              Already a member? 
-              <a href="{% url 'login:signin' %}" class="link-warning">Sign in here</a>
+              Already a member?
+              <a href="{% url 'login:signin' %}" class="link-warning" style="color: #ABC4FF !important ;">Sign in here</a>
               </small>
             </p>
           {% endif %}
@@ -32,7 +32,7 @@
     <div class="container">
       <div class="row text-secondary g-4">
         <div class="col-md">
-          <div class="card bg-primary text-light">
+          <div class="card bg-primary text-light" style="background-color: #ABC4FF !important ;">
             <div class="card-body text-center">
               <div class="h1 mb-3"><i class="bi bi-pencil-square"></i></div>
               <h3 class="card-title mb-3">Self-Tracking</h3>
@@ -43,7 +43,7 @@
         </div>
 
         <div class="col-md">
-          <div class="card bg-danger text-light">
+          <div class="card bg-danger text-light" style="background-color: #C1D3FE !important ;">
             <div class="card-body text-center">
               <div class="h1 mb-3"><i class="bi bi-bell-fill"></i></div>
               <h3 class=" card-title mb-3">Alerts</h3>
@@ -53,7 +53,7 @@
         </div>
 
         <div class="col-md">
-          <div class="card bg-primary text-light">
+          <div class="card bg-primary text-light" style="background-color: #ABC4FF !important ;">
             <div class="card-body text-center">
               <div class="h1 mb-3"><i class="bi bi-people-fill"></i></div>
               <h3 class="card-title mb-3">Circles</h3>
@@ -82,12 +82,12 @@
   </section>
 
   <!-- Developers -->
-  <section id="developers" class="p-5 bg-primary">
-    <div class="container">
+  <section id="developers" class="p-5 bg-primary" style="background-color: #ABC4FF !important ;">
+    <div class="container" style="background-color: #ABC4FF !important ;">
       <h2 class="text-center text-white">Our Developers</h2><br>
       <div class="row g-5">
         <div class="col-md-6 col-lg-3">
-          <div class="card bg-light">
+          <div class="card bg-light" style="background-color: #D7E3FC !important ;">
             <div class="card-body text-center"><img src="{% static 'img/eashan.jpeg' %}" class="img-thumbnail rounded-circle mb-3"
                 alt="" />
               <h3 class="card-title mb-3">Eashan Kaushik</h3>
@@ -97,7 +97,7 @@
           </div>
         </div>
         <div class="col-md-6 col-lg-3">
-          <div class="card bg-light">
+          <div class="card bg-light" style="background-color: #D7E3FC !important ;">
             <div class="card-body text-center"><img src="{% static 'img/srijan.JPEG' %}"
                 class="img-thumbnail rounded-circle mb-3 develop" alt="" />
               <h3 class="card-title mb-3">Srijan Malhotra</h3>
@@ -107,7 +107,7 @@
           </div>
         </div>
         <div class="col-md-6 col-lg-3">
-          <div class="card bg-light">
+          <div class="card bg-light" style="background-color: #D7E3FC !important ;">
             <div class="card-body text-center"><img src="{% static 'img/chinmay.jpeg' %}"
                 class="img-thumbnail rounded-circle mb-3 develop" alt="" />
               <h3 class="card-title mb-3">Chinmay Kulkarni</h3>
@@ -117,7 +117,7 @@
           </div>
         </div>
         <div class="col-md-6 col-lg-3">
-          <div class="card bg-light">
+          <div class="card bg-light" style="background-color: #D7E3FC !important ;">
             <div class="card-body text-center"><img src="{% static 'img/pranav.jpeg' %}"
                 class="img-thumbnail rounded-circle mb-3 develop" alt="" />
               <h3 class="card-title mb-3">Pranav Singh</h3>
@@ -127,7 +127,7 @@
           </div>
         </div>
         <div class="col-md-3 mx-auto">
-          <div class="card bg-light">
+          <div class="card bg-light" style="background-color: #D7E3FC !important ;">
             <div class="card-body text-center"><img src="{% static 'img/shardha.jpg' %}"
                 class="img-thumbnail rounded-circle mb-3 develop" alt="" />
               <h3 class="card-title mb-3">Shardha Koul</h3>

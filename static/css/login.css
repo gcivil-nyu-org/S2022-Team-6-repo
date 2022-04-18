@@ -19,7 +19,7 @@ h1,h2,h3{
     flex-direction: column;
     width: 100%;
     pointer-events: auto;
-    background-color: #abc4ff;
+    background-color: #EDF2FB;
     background-clip: padding-box;
     border: 1px solid rgba(0,0,0,.2);
     border-radius: 1.1rem;
@@ -71,5 +71,5 @@ h1,h2,h3{
      }
 
      .bg-secondary {
-      background-color: #e2eafc!important;
+      background-color: #B6CCFE!important;
   }

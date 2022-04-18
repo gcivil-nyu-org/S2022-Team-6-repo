@@ -50,3 +50,11 @@
 .container-sm{
   font-family: 'Open Sans', sans-serif;
 }
+
+.btn-get-started{
+  background-color: #ABC4FF;
+}
+
+.palette-text{
+  color: #ABC4FF;
+}

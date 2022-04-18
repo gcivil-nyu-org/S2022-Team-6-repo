@@ -12,7 +12,7 @@
         <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        
+
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.css">
         <link rel="stylesheet" href="{% static 'css/selftrack/style.css' %}">
     {% endif %}
@@ -40,7 +40,7 @@
     {% endblock content %}
 
     {% include 'footer.html' %}
-    
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="{% static 'assets/dist/js/bootstrap.bundle.min.js' %}"></script>
@@ -61,7 +61,7 @@
             _df_2021_work = {{ df_2021_work | safe }};
             _categories_2021 = {{categories_2021 | safe }};
             _locations = {{ locations | safe }}
-            _df_2021_all = {{ df_2021_all | safe }} 
+            _df_2021_all = {{ df_2021_all | safe }}
         </script>
         <script src="{% static 'js/monitor/script.js' %}"></script>
     {% endif %}

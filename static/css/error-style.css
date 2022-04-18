@@ -41,7 +41,7 @@ body{
 	overflow-x:hidden;
 	color:#fff;
 	font-size:14px;
-	
+
 }
 html,
 body {
@@ -142,7 +142,7 @@ h1.head span:after{
 .bwt-footer-copyright a{ color: #fff; font-weight: 500; }
 
 @media (max-width: 1024px) {
-  
+
 h1.head {
   font-size: 200px;
   letter-spacing: 25px;
@@ -151,7 +151,7 @@ h1.head {
 }
 
 @media (max-width: 768px) {
-  
+
 h1.head {
   font-size: 150px;
   letter-spacing: 25px;
@@ -162,7 +162,7 @@ h1.head {
 }
 
 @media (max-width: 640px) {
-  
+
 h1.head {
   font-size: 150px;
   letter-spacing: 0;
