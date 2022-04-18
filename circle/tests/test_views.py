@@ -2,6 +2,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from circle.models import Circle, CircleUser, RecentCircle, Policy, RequestCircle
 from login.models import UserData, Privacy
+from alert.models import Alert
 import datetime
 
 
@@ -66,6 +67,18 @@ class TestView(TestCase):
             dob=datetime.datetime.now(),
             work_address="1122",
             home_adress="1122",
+        )
+
+        self.alert = Alert.objects.create(
+            username=self.userdata,
+        )
+
+        self.alert_2 = Alert.objects.create(
+            username=self.userdata_2,
+        )
+
+        self.alert_3 = Alert.objects.create(
+            username=self.userdata_3,
         )
 
         self.privacy = Privacy.objects.create(username=self.userdata)

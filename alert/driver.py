@@ -1,7 +1,7 @@
 import numpy as np
 
 import json
-from alert.models import Alert
+from alert.models import Alert, AlertNotification
 from login.models import UserData
 
 
@@ -19,7 +19,7 @@ def home_alert(home_address, historical, yesterday):
         if death_average < int(historical[historical.date == yesterday].deaths):
             alert_death = True
 
-    print(alert_case, alert_death)
+    # print(alert_case, alert_death)
     return alert_case, alert_death
 
 
@@ -38,12 +38,13 @@ def work_alert(work_address, historical, yesterday):
         if death_average < int(historical[historical.date == yesterday].deaths):
             alert_death = True
 
-    print(alert_case, alert_death)
+    # print(alert_case, alert_death)
     return alert_case, alert_death
 
 
 def people_met_alert(people_met, historical, yesterday):
     people_alert = list()
+    people_data = list()
 
     jsonDec = json.decoder.JSONDecoder()
     people = jsonDec.decode(people_met)
@@ -51,19 +52,28 @@ def people_met_alert(people_met, historical, yesterday):
     if len(people) != 0:
 
         for person in people:
+
             alert = Alert.objects.get(
                 username=UserData.objects.get(username=person)
             ).alert
-            people_alert.append(alert)
-    else:
-        people_alert, False
 
-    return people_alert, np.any(np.array(people_alert))
+            if alert:
+                people_data.append(person)
+
+            people_alert.append(alert)
+
+    else:
+        people_data, False
+
+    return people_data, np.any(np.array(people_alert))
 
 
 def location_visited_alert(location_visted, historical, yesterday):
     location_alert_case = list()
     location_alert_death = list()
+
+    data_alert_case = list()
+    data_alert_death = list()
 
     jsonDec = json.decoder.JSONDecoder()
     locations = jsonDec.decode(location_visted)
@@ -80,6 +90,7 @@ def location_visited_alert(location_visted, historical, yesterday):
                 location_historical[location_historical.date == yesterday].cases
             ):
                 location_alert_case.append(True)
+                data_alert_case.append(location)
             else:
                 location_alert_case.append(False)
 
@@ -87,14 +98,15 @@ def location_visited_alert(location_visted, historical, yesterday):
                 location_historical[location_historical.date == yesterday].deaths
             ):
                 location_alert_death.append(True)
+                data_alert_death.append(location)
             else:
                 location_alert_death.append(False)
     else:
-        return location_alert_case, location_alert_death, False, False
+        return data_alert_case, data_alert_death, False, False
 
     return (
-        location_alert_case,
-        location_alert_death,
+        data_alert_case,
+        data_alert_death,
         np.any(np.array(location_alert_case)),
         np.any(np.array(location_alert_death)),
     )
@@ -102,3 +114,77 @@ def location_visited_alert(location_visted, historical, yesterday):
 
 def get_model_data(data):
     return json.dumps(data)
+
+
+def create_notification(user, message, alert_for):
+
+    alert_notification = AlertNotification()
+
+    alert_notification.username = user
+    alert_notification.notification = message
+    alert_notification.alert_for = alert_for
+
+    alert_notification.save()
+
+
+def notify_alerts(user):
+
+    alert = Alert.objects.get(username=user.username)
+
+    jsonDec = json.decoder.JSONDecoder()
+    # recent_circle_list = jsonDec.decode(recentcircle.recent_circle)
+    if alert.alert:
+
+        if alert.location_alert_case:
+            location_data_case = jsonDec.decode(alert.location_data_case)
+
+            for location in location_data_case:
+                create_notification(
+                    user, f"High cases at recorded at {location}.", "location_visited"
+                )
+
+        if alert.location_alert_death:
+            location_data_death = jsonDec.decode(alert.location_data_death)
+
+            for location in location_data_death:
+                create_notification(
+                    user, f"High deaths at recorded at {location}.", "location_visited"
+                )
+
+        if alert.home_alert_case:
+            if user.home_adress:
+                create_notification(
+                    user,
+                    f"High cases at recorded at Home Location {user.home_adress}.",
+                    "home",
+                )
+
+        if alert.home_alert_death:
+            if user.home_adress:
+                create_notification(
+                    user,
+                    f"High deaths at recorded at Home Location {user.home_adress}.",
+                    "home",
+                )
+
+        if alert.work_alert_case:
+            if user.work_address:
+                create_notification(
+                    user,
+                    f"High cases at recorded at Work Location {user.work_address}.",
+                    "work_space",
+                )
+
+        if alert.work_alert_death:
+            if user.work_address:
+                create_notification(
+                    user,
+                    f"High deaths at recorded at Work Location {user.work_address}.",
+                    "work_space",
+                )
+
+        if alert.people_alert:
+            people = jsonDec.decode(alert.people_data)
+
+            for person in people:
+                create_notification(user, f"User {person} at High Risk.", "people_met")

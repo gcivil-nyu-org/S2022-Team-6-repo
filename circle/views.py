@@ -29,6 +29,9 @@ from .driver import (
 
 from selftracking.helper import check_upload_today
 
+from alert.helper import get_alert
+
+
 from django.core import signing
 
 
@@ -54,6 +57,7 @@ def circle(request, username):
 
     total_notify = requests + non_compliance
     streak_today = check_upload_today(username)
+    alert = get_alert(username=username)
 
     # AJAX
     search = request.GET.get("q")
@@ -90,6 +94,7 @@ def circle(request, username):
                     "total_notify": total_notify,
                     "three_non_compliance": three_non_compliance,
                     "streak_today": streak_today,
+                    "alert": alert,
                     # other
                     "circles": circles,
                     "recent_circles": recent_circles,
@@ -106,6 +111,7 @@ def circle(request, username):
                     "total_notify": total_notify,
                     "three_non_compliance": three_non_compliance,
                     "streak_today": streak_today,
+                    "alert": alert,
                     # other
                     "circle_user_data": circle_user_data,
                     "recent_circles": recent_circles,
@@ -124,6 +130,7 @@ def circle(request, username):
         "total_notify": total_notify,
         "three_non_compliance": three_non_compliance,
         "streak_today": streak_today,
+        "alert": alert,
         # Other
         "circle_user_data": circle_user_data,
         "recent_circles": recent_circles,
@@ -170,7 +177,7 @@ def current_circle(request, username, circle_id):
         circle_request = None
 
     streak_today = check_upload_today(username)
-
+    alert = get_alert(username=username)
     context = {
         "page_name": circle_data.circle_id.circle_name,
         "username": username,
@@ -179,6 +186,7 @@ def current_circle(request, username, circle_id):
         "total_notify": total_notify,
         "three_non_compliance": three_non_compliance,
         "streak_today": streak_today,
+        "alert": alert,
         # Other
         "circle_user_data": circle_user_data,
         "circle_data": circle_data,
@@ -242,7 +250,7 @@ def create(request):
     total_notify = requests + non_compliance
 
     streak_today = check_upload_today(username)
-
+    alert = get_alert(username=username)
     context = {
         "page_name": "Add Circle",
         "username": username,
@@ -251,6 +259,7 @@ def create(request):
         "total_notify": total_notify,
         "three_non_compliance": three_non_compliance,
         "streak_today": streak_today,
+        "alert": alert,
         # Other
         "circle_user_data": circle_user_data,
     }
@@ -282,6 +291,7 @@ def notify(request):
     total_notify = requests + non_compliance
 
     streak_today = check_upload_today(username)
+    alert = get_alert(username=username)
 
     context = {
         "page_name": "Notifications",
@@ -291,6 +301,7 @@ def notify(request):
         "total_notify": total_notify,
         "three_non_compliance": three_non_compliance,
         "streak_today": streak_today,
+        "alert": alert,
         # Other
         "all_requests": all_requests,
         "all_non_compliance": all_non_compliance,

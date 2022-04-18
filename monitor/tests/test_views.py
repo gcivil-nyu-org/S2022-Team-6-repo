@@ -1,6 +1,7 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from login.models import UserData
+from alert.models import Alert
 import datetime
 
 
@@ -20,6 +21,11 @@ class TestViews(TestCase):
             email="test@gmail.com",
             dob=datetime.datetime.now(),
         )
+
+        self.alert = Alert.objects.create(
+            username=self.userdata,
+        )
+
         self.user_monitor_url = reverse("monitor:user_monitor")
         self.client2 = Client()
         self.session2 = self.client2.session

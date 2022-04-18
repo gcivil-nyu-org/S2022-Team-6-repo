@@ -5,7 +5,7 @@ from django.utils.timezone import now
 
 # Create your models here.
 class SelfTrack(models.Model):
-    date_uploaded = models.DateTimeField(default=now, editable=False)
+    date_uploaded = models.DateTimeField(default=now, editable=True)
     username = models.ForeignKey(UserData, on_delete=models.CASCADE)
     user_met = models.TextField(null=True)
     location_visited = models.TextField(null=True)

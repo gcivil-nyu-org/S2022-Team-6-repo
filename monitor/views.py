@@ -16,6 +16,8 @@ from django.core import signing
 from .helper import convert_datetime
 from selftracking.helper import check_upload_today
 
+from alert.helper import get_alert
+
 from login.models import UserData
 
 
@@ -29,8 +31,6 @@ def base(request):
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
-
-    # print(historical)
 
     df = historical[
         (historical.date < "2022-01-01") & (historical.date >= "2021-01-01")
@@ -57,6 +57,7 @@ def base(request):
 
     total_notify = requests + non_compliance
     streak_today = check_upload_today(username)
+    alert = get_alert(username=username)
 
     counties = historical[historical.state == "New York"]
     counties = counties.county.dropna().unique()
@@ -73,6 +74,7 @@ def base(request):
         "three_non_compliance": three_non_compliance,
         "streak_today": streak_today,
         "monitor": True,
+        "alert": alert,
         # other
         "df_2021": df_2021,
         "categories_2021": categories,

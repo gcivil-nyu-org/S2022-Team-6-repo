@@ -19,6 +19,7 @@ from .driver import add_user_met, add_location_visited
 
 from monitor.driver import get_s3_client, get_data
 
+from alert.helper import get_alert
 
 import datetime
 
@@ -86,6 +87,7 @@ def selftrack(request, username):
 
     streak_today = check_upload_today(username)
     streak_yesterday = check_uploaded_yesterday(username)
+    alert = get_alert(username=username)
 
     connections = get_all_connections(username)
     historical = historical[historical.state == "New York"]
@@ -100,6 +102,7 @@ def selftrack(request, username):
         "total_notify": total_notify,
         "three_non_compliance": three_non_compliance,
         "streak_today": streak_today,
+        "alert": alert,
         # other
         "current_streak": current_streak,
         "longest_streak": longest_streak,
