@@ -8,6 +8,7 @@ from login.models import UserData
 
 from circle.helper import get_notifications, get_all_non_compliance
 from selftracking.helper import check_upload_today
+from .helper import get_alert
 
 
 # Create your views here.
@@ -18,11 +19,16 @@ def alert_user(request, username):
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
+    
+    
+    
+    
 
     request_user_data, requests = get_notifications(username=username)
     three_non_compliance, non_compliance = get_all_non_compliance(username, True)
     total_notify = requests + non_compliance
     streak_today = check_upload_today(username)
+    alert = get_alert(username=username)
 
     context = {
         "page_name": "Alert",
@@ -32,6 +38,10 @@ def alert_user(request, username):
         "total_notify": total_notify,
         "three_non_compliance": three_non_compliance,
         "streak_today": streak_today,
+        "alert": alert,
+        # other
+        
+        
     }
 
     return render(request, "alert/alert.html", context)

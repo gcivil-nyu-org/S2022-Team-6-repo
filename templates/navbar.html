@@ -44,14 +44,21 @@
                     <li class="nav-item">
                         <a href="{% url 'monitor:user_monitor' %}" class="nav-link">Monitor</a>
                     </li>
-                    <li class="nav-item">
+                   <li class="nav-item">
                         <a style="text-decoration: none" href="{% url 'alert:alert_user' username %}">
                         <button type="button" class="btn btn-light position-relative">
-                            <p class="text-danger">Alerts</p>
-                            <span
-                                class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
-                                <span class="visually-hidden">New alerts</span>
-                            </span>
+                            
+                            <p class="text-secondary">Alert</p>
+                            {% if alert %}
+                                <span
+                                    class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                                    {% comment %} {{ total_notify }} {% endcomment %}
+                                    <span class="visually-hidden">New alerts</span>
+                                </span>
+                            {% endif %}
+                                {% comment %} <p class="text-danger">Self-Track</p>
+                            {% endif %} {% endcomment %}
+
                         </button>
                         </a>
                     </li>
