@@ -3,7 +3,6 @@ import numpy as np
 import json
 from alert.models import Alert, AlertNotification
 from login.models import UserData
-from selftracking.models import SelfTrack
 
 
 def home_alert(home_address, historical, yesterday):

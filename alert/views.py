@@ -17,6 +17,7 @@ from .helper import get_alert
 # Global Variable
 ALERT_PER_PAGE = 3
 
+
 # Create your views here.
 def alert_user(request, username):
     try:
