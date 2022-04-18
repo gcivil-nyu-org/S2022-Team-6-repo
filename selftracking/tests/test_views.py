@@ -2,6 +2,8 @@ from django.test import TestCase, Client
 from selftracking.models import SelfTrack
 from django.urls import reverse
 from login.models import UserData
+from alert.models import Alert
+
 import datetime
 
 
@@ -23,6 +25,11 @@ class TestViews(TestCase):
             work_address="1122",
             home_adress="1122",
         )
+
+        self.alert = Alert.objects.create(
+            username=self.userdata,
+        )
+
         self.selftrack_data = SelfTrack.objects.create(
             date_uploaded=datetime.datetime.now(),
             username=self.userdata,
