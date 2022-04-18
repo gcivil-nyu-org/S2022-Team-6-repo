@@ -23,3 +23,5 @@ class AlertNotification(models.Model):
     username = models.ForeignKey(UserData, on_delete=models.CASCADE)
     notification = models.CharField(max_length=300)
     updated = models.DateTimeField(auto_now_add=True)
+    read = models.BooleanField(default=False)
+    alert_for = models.CharField(max_length=300, null=True)

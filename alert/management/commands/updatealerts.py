@@ -22,7 +22,6 @@ class Command(BaseCommand):
     help = "Update the Alert for all users"
 
     def handle(self, *args, **options):
-        # TODO: Try Catch block
         try:
             _, client_object = get_s3_client()
             historical, _, _ = get_data(client_object)
