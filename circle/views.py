@@ -73,7 +73,6 @@ def circle(request, username):
             )
             if circleone:
                 circles.append(circle_user)
-                # print(circleone.circle_id)
 
     ctx = {}
     ctx["circles"] = circles
@@ -170,7 +169,7 @@ def current_circle(request, username, circle_id):
         policies.append(policy.policy_id)
 
     # check user alerts
-    user_alert = get_user_alert(circle_id=circle_id)
+    user_alert, user_alert_data = get_user_alert(circle_id=circle_id)
 
     # circle compliance status
     circle_compliance, is_compliant = get_circle_compliance(circle_id=circle_id)
@@ -179,8 +178,8 @@ def current_circle(request, username, circle_id):
     # ...
     # }
 
+    # check if vaccination policy needs to be uploaded
     check_vacinated_policy = check_vacination_policy(circle_id=circle_id)
-
     # if circle admin show number of pending request
     if circle_data.is_admin:
         circle_request = get_circle_requests(circle_id)
@@ -211,6 +210,7 @@ def current_circle(request, username, circle_id):
         "circle_compliance": circle_compliance,
         "is_compliant": is_compliant,
         "user_alert": user_alert,
+        "user_alert_data": user_alert_data,
         "check_vacinated_policy": check_vacinated_policy,
     }
 

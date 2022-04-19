@@ -15,7 +15,7 @@ from selftracking.helper import check_upload_today
 from .helper import get_alert
 
 # Global Variable
-ALERT_PER_PAGE = 3
+ALERT_PER_PAGE = 10
 
 
 # Create your views here.
@@ -28,7 +28,7 @@ def alert_user(request, username):
         return HttpResponseRedirect(url)
 
     alert_notifications = AlertNotification.objects.filter(username=username).order_by(
-        "updated"
+        "-updated"
     )
 
     if len(alert_notifications) > 0:

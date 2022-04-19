@@ -12,32 +12,40 @@ from alert.models import Alert
 from login.models import UserData
 
 import json
+import numpy as np
 
 
 def check_vacination_policy(circle_id):
 
-    circle_policy = CirclePolicy.objects.filter(
-        circle_id=Circle.objects.get(circle_id=circle_id)
-    )
-
-    for policy in circle_policy.iterator():
-        if policy.policy_id == 1:
-            return True
-
+    if len(CirclePolicy.objects.filter(circle_id=circle_id, policy_id=1)) > 0:
+        return True
     return False
 
 
 def get_user_alert(circle_id):
     user_alert = dict()
+    user_alert_data = dict()
     circle_data = CircleUser.objects.filter(circle_id=circle_id)
 
     for circle in circle_data.iterator():
-        Alert.objects.get(username=circle.username)
-        user_alert[circle.username.username] = Alert.objects.get(
-            username=circle.username
-        ).alert
+        user_alert_data[circle.username.username] = dict()
+        # location_alert_case
+        if len(CirclePolicy.objects.filter(circle_id=circle_id, policy_id=3)) > 0:
+            user_alert_data[circle.username.username][
+                "Location Visited"
+            ] = Alert.objects.get(username=circle.username).location_alert_case
 
-    return user_alert
+        # people_alert
+        if len(CirclePolicy.objects.filter(circle_id=circle_id, policy_id=2)) > 0:
+            user_alert_data[circle.username.username]["People Met"] = Alert.objects.get(
+                username=circle.username
+            ).people_alert
+
+        user_alert[circle.username.username] = np.any(
+            np.array(user_alert_data[circle.username.username].values())
+        )
+
+    return user_alert, user_alert_data
 
 
 def get_circle_compliance(circle_id):
