@@ -44,7 +44,52 @@
                      </div>
                   </form>
                   {% else %}
-                     <h2>Data already uploaded</h2>
+
+                     <form action="" method="post" class="bg-light border p-3">
+                        {% csrf_token %}
+                        
+                        <div class="form-group p-2">
+                           <label for="user_met">People you Met: </label>
+                           <select multiple="" class="label ui selection fluid dropdown" name="user_met" id="user_met" multiple>
+                              {% if connections %}
+                                 <option value="">Select Connections</option>
+                                 {% for connection in connections %}
+                                    <option value="{{connection}}" {% if connection in already_met %} selected {% endif %}>{{connection}}</option>
+                                 {% endfor %}
+                              {% else %}
+                                 <option value="">No Connections</option>
+                              {% endif %}
+                           </select>
+                        </div>
+
+                        <div class="form-group p-2">
+                              <label for="location_visited">Places Visited: </label>
+                              <select multiple class="label ui selection fluid dropdown" name="location_visited" id="location_visited">
+                                    <option value="">Select County</option>
+                                    {% for county in counties %}
+                                       <option value="{{county}}" {% if county in already_visited %} selected {% endif %}>{{county}}</option>
+                                    {% endfor %}
+                              </select>
+                        </div>
+
+                        <div class="col-md-12 text-center ">
+                           <button type="submit" name="track-update" class=" btn btn-block mybtn btn-primary tx-tfm">Update</button>
+                        </div>
+                     </form>
+                     {% if messages %}
+                        {% for message in messages %}
+                           {% if message.tags == 'error' %}
+                              <div class="alert alert-danger my-2" role="alert">
+                                 {{message}}
+                              </div>
+                           {% endif %}
+                           {% if message.tags == 'success' %}
+                              <div class="alert alert-success my-2" role="alert">
+                                 {{message}}
+                              </div>
+                           {% endif %}
+                        {% endfor %}
+                     {% endif %}   
                   {% endif %}
                </div>
             </div>
