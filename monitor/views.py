@@ -51,10 +51,10 @@ def base(request):
 
     home_location = userdata.home_adress  # pragma: no cover
     work_location = userdata.work_address  # pragma: no cover
-    if home_location is None or len(home_location) == 0:
-        home_location = "New York City"
-    if work_location is None or len(work_location) == 0:
-        work_location = "New York City"
+    # if home_location is None or len(home_location) == 0:
+    #     home_location = "New York City"
+    # if work_location is None or len(work_location) == 0:
+    #     work_location = "New York City"
 
     df_2021_home = (df[df.county == home_location][["date", "cases"]].values).tolist()
     df_2021_work = (df[df.county == work_location][["date", "cases"]].values).tolist()
@@ -84,7 +84,6 @@ def base(request):
         "streak_today": streak_today,
         "monitor": True,
         "alert": alert,
-        # other
         "df_2021": df_2021,
         "categories_2021": categories,
         "df_2021_home": df_2021_home,
@@ -93,5 +92,7 @@ def base(request):
         "counties": counties,
         "df_2021_all": df_2021_all,
         "historical": historical,
+        "home_location": home_location,
+        "work_location": work_location,
     }
     return render(request, "monitor/index.html", context)
