@@ -54,18 +54,44 @@
             </div>
         </div>
         <div id="homechart_1" class="container hideChart">
-            <div class="row">
-                <div class="col-11 mx-auto p-0 my-5 border-dark">
-                    <div id="homechart"></div>
+            {% if home_location %}
+                <div class="row">
+                    <div class="col-11 mx-auto p-0 my-5 border-dark">
+                        <div id="homechart"></div>
+                    </div>
                 </div>
-            </div>
+            {% else %}
+                <div class="row">
+                    <div class="col-lg-4 mx-auto p-3 my-5 border-dark bg-light text-center">
+                        <p class="text-muted">Oops! No data to display</p>
+                        <a href="{% url 'login:settings' username 'profile' %}">
+                            <button type="button" class="btn btn-outline-primary">
+                                Update Home Location
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
         </div>
         <div id="workchart_1" class="container hideChart">
-            <div class="row">
-                <div class="col-11 mx-auto p-0 my-5 border-dark">
-                    <div id="workchart"></div>
+            {% if work_location %}
+                <div class="row">
+                    <div class="col-11 mx-auto p-0 my-5 border-dark">
+                        <div id="workchart"></div>
+                    </div>
                 </div>
-            </div>
+            {% else %}
+                <div class="row">
+                    <div class="col-lg-4 mx-auto p-3 my-5 border-dark bg-light text-center">
+                        <p class="text-muted">Oops! No data to display</p>
+                        <a href="{% url 'login:settings' username 'profile' %}">
+                            <button type="button" class="btn btn-outline-primary">
+                                Update Work Location
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div> 
