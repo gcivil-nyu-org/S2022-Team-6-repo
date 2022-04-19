@@ -30,6 +30,12 @@ def alert_user(request, username):
     alert_notifications = AlertNotification.objects.filter(username=username).order_by(
         "updated"
     )
+    
+    if len(alert_notifications) > 0:
+        alerts_available = True
+    else:
+        alerts_available = False
+        
     paginator = Paginator(alert_notifications, ALERT_PER_PAGE)
     page = request.GET.get("page")
     alert_notification = paginator.get_page(page)
@@ -57,6 +63,7 @@ def alert_user(request, username):
         "alert": alert,
         # other
         "alert_notification": alert_notification,
+        "alerts_available": alerts_available
     }
 
     return render(request, "alert/alert.html", context)
