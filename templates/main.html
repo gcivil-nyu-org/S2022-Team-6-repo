@@ -61,13 +61,17 @@
         <script src="https://code.highcharts.com/modules/export-data.js"></script>
         <script src="https://code.highcharts.com/modules/drilldown.js"></script>
         <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
         <script>
             _df_2021 = {{ df_2021 | safe }};
             _df_2021_home = {{ df_2021_home | safe }};
             _df_2021_work = {{ df_2021_work | safe }};
-            _categories_2021 = {{categories_2021 | safe }};
+            //_categories_2021 = {{categories_2021 | safe }};
             _locations = {{ locations | safe }}
             _df_2021_all = {{ df_2021_all | safe }} 
+            historical = {{ historical | safe }};
         </script>
         <script src="{% static 'js/monitor/script.js' %}"></script>
     {% endif %}

@@ -9,12 +9,14 @@
     <a href="#" onclick="showHomeChart()">Home</a>
     <a href="#" onclick="showWorkChart()">Workplace</a>
 </div>
-
+<div>
+    <button class="btn btn-block mybtn btn-primary tx-tfm" style="float: right;" onclick="showDatewiseChart()">Search</button>
+</div>
 <div id="datePicker" class="dropdown" style="float: right;">
     <label class="btn btn-dark" for="from">From:</label>
-    <input class="btn btn-dark" type="date" id="dateFrom" name="from">
+    <input class="btn" type="text" id="dateFrom" name="from" style="background-color: white; color:black; border-color:black">
     <label class="btn btn-dark" for="to">To:</label>
-    <input class="btn btn-dark" type="date" id="dateTo" name="dateTo">
+    <input class="btn" type="text" id="dateTo" name="dateTo" style="background-color: white; color:black; border-color:black">
 </div>
 
 <div id="countyDropDownMain" class="dropdown" style="float: right;">
