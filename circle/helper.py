@@ -5,13 +5,26 @@ from .models import (
     CirclePolicyCompliance,
     RecentCircle,
 )
+
+from alert.models import Alert
+
 from login.models import UserData
 
 import json
 
-
+def get_user_alert(circle_id):
+    user_alert = dict()
+    circle_data = CircleUser.objects.filter(circle_id=circle_id)
+    
+    for circle in circle_data.iterator():
+        Alert.objects.get(username=circle.username)
+        user_alert[circle.username.username] = Alert.objects.get(username=circle.username).alert
+    
+    return user_alert
+    
 def get_circle_compliance(circle_id):
     compliance_dict = dict()
+    is_compliant = dict()
 
     circle_compliance = CirclePolicyCompliance.objects.filter(circle_id=circle_id)
 
@@ -26,8 +39,15 @@ def get_circle_compliance(circle_id):
             compliance_dict[compliance.username.username][
                 compliance.policy_id.policy_id
             ] = "Not Compliant"
+            
+    for key, values in compliance_dict.items():
+        
+        if 'Not Compliant' in values.values():
+            is_compliant[key] = False
+        else:
+            is_compliant[key] = True
 
-    return compliance_dict
+    return compliance_dict, is_compliant
 
 
 def get_all_non_compliance(username, get_three):

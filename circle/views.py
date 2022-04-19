@@ -15,6 +15,7 @@ from .helper import (
     get_circle_compliance,
     get_recent_circles,
     check_recent_circle,
+    get_user_alert,
 )
 from .driver import (
     create_request,
@@ -150,34 +151,46 @@ def current_circle(request, username, circle_id):
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
-
+    
+    # Delete Request for user
     if request.method == "POST" and "remove_user" in request.POST:
         remove_user(username, request.POST.get("remove_user"), circle_id)
-
+        
+    # Get CircleUser object for username
     circle_data = CircleUser.objects.get(circle_id=circle_id, username=username)
-
-    add_recent_circle(circle_data)  # TODO: Recent Circle
+    
+    # add to recent circle, get circle user data and circle policies for header
+    add_recent_circle(circle_data)
     circle_user_data = CircleUser.objects.filter(circle_id=circle_id)
-    circle_policy = CirclePolicy.objects.filter(circle_id=circle_id)
-
-    circle_compliance = get_circle_compliance(circle_id=circle_id)
-
+        
     policies = []
-    for policy in circle_policy:
+    
+    for policy in CirclePolicy.objects.filter(circle_id=circle_id):
         policies.append(policy.policy_id)
-
-    request_user_data, requests = get_notifications(username=username)
-    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
-
-    total_notify = requests + non_compliance
-
+        
+    # check user alerts
+    user_alert = get_user_alert(circle_id=circle_id)
+        
+    # circle compliance status
+    circle_compliance, is_compliant = get_circle_compliance(circle_id=circle_id)
+    # {
+    #     username: 'Compliant'/ 'Non Compliant', 
+        # ...
+    # }
+    
+    # if circle admin show number of pending request
     if circle_data.is_admin:
         circle_request = get_circle_requests(circle_id)
     else:
         circle_request = None
-
+        
+    # Navbar Data
+    request_user_data, requests = get_notifications(username=username)
+    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
+    total_notify = requests + non_compliance
     streak_today = check_upload_today(username)
     alert = get_alert(username=username)
+    
     context = {
         "page_name": circle_data.circle_id.circle_name,
         "username": username,
@@ -194,7 +207,8 @@ def current_circle(request, username, circle_id):
         "is_admin": circle_data.is_admin,
         "policies": policies,
         "circle_compliance": circle_compliance,
-        # "group_image": group_image,
+        "is_compliant": is_compliant,
+        "user_alert": user_alert,
     }
 
     return render(request, "circle/current-circle.html", context)

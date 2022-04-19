@@ -1,6 +1,12 @@
 {% extends 'main.html' %}
 {% load static %}
-{% comment %} {% load media %} {% endcomment %}
+{% load get_value %}
+
+{% block stylesheettwo %}
+    <link rel="stylesheet" href="{% static 'css/circle/style_members.css' %}" />
+{% endblock stylesheettwo %}
+
+
 {% block content %}
 <!-- intro -->
 <section class="bg-light p-1">
@@ -30,73 +36,81 @@
     </div>
 </section>
 
-{% comment %} <!-- table --> {% endcomment %}
 <section>
-    <div class="container-fluid">
-        <table class="table table-hover table-success">
-            <thead>
-                <tr>
-                    <th class="table-light text-center" scope="col">Username</th>
-                    <th class="table-light text-center" scope="col">Home Status</th>
-                    <th class="table-light text-center" scope="col">Workplace Status</th>
-                    <th class="table-light text-center" scope="col">Last Updated</th>
-                    {% for policy in policies %}
-                        <th class="table-light text-center" scope="col">{{ policy.policy_name }}</th>
-                    {% endfor %}
-                    {% if is_admin %}
-                        <th class="table-light text-center" scope="col"></th>
-                    {% endif %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for data in circle_user_data %}
-                    <tr>
-                        <td class="table-danger text-center">{{data.username.username}} {% if data.is_admin %} (Admin) {% endif %}</td>
-                        <td class="table-danger text-center">Risk</td>
-                        <td class="table-danger text-center">Safe</td>
-                        <td class="table-danger text-center">3 days ago</td>
-                            {% for key, value in circle_compliance.items %}
-                                {% if key == data.username.username %}
-                                    {% for key1, value1 in value.items %}
-                                            <td class="table-danger text-center">{{value1}}</td>
-                                    {% endfor %}
-                                {% endif %}
-                            {% endfor %}
+    <div class="container bg-light my-5 p-3 col-lg-4">
+        <h3 class="m-b-50 heading-line">Members
+            {% comment %} <i class="bi bi-exclamation-square-fill text-danger"></i> {% endcomment %}
+        </h3>
+        {% for data in circle_user_data %}
+            <div class="member-ui_dd-content">
+                <div class="member-list {% if user_alert|hash:data.username.username %} member-list--alert {% else %} member-list--safe {% endif %} {% if data.is_admin %} member-list--admin {% else %} member-list--member {% endif %}">
+                    <div class="member-list_content">
+                        <div class="member-list_img"> 
+                            <img src="{{ data.username.user_image.url }}" alt="user"> 
+                        </div>
+                        <div class="member-list_detail">
+                            <h4>{{data.username.username}}</h4>
+                            <a href="{% url 'login:settings' data.username.username 'profile' %}"><button type="button" class="btn btn-outline-warning">Profile</button></a>
+                            {% comment %}
+                            # TODO: Non compliance
+                            # Alert: circle alert {% endcomment %}
+                            {% comment %} {% define "btn-outline-danger" as action %} {% endcomment %}
+                            {% comment %} {{ is_compliant[data.username.username] }} {% endcomment %}
+                            <button type="button" class="btn {% if is_compliant|hash:data.username.username %} btn-outline-success {% else %} btn-outline-danger {% endif %}" data-bs-toggle="modal" data-bs-target="#{{ data.username.username }}">
+                                <i class="bi bi-question-square-fill"></i>
+                            </button>
+
+                            <button type="button" class="btn {% if user_alert|hash:data.username.username %} btn-outline-danger {% else %} btn-outline-success {% endif %}" data-bs-toggle="modal" data-bs-target="#{{ data.username.username }}">
+                                <i class="bi bi-exclamation-diamond-fill"></i>
+                            </button>
+
+                            </form>
+
+                        </div>
+                    </div>
+                    
+
+                    <div class="member-list_feature-btn">
                         {% if is_admin %}
                             {% if data.is_member %}
-                            <td class="table-danger text-center">
-                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#{{ data.username.username }}">
+                                <button type="button" class="btn btn-outline-danger member-list" data-bs-toggle="modal" data-bs-target="#{{ data.username.username }}">
                                     <i class="bi bi-x-lg"></i>
                                 </button>
-                            </td>
-                            <!-- Modal -->
-                            <div class="modal fade" id="{{ data.username.username }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-body">
-                                            Are you sure you want to remove {{data.username.username}}?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <form action="" method="post">
-                                                {% csrf_token %}
-                                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-                                                <button class="btn btn-outline-danger" type="submit" name="remove_user" value="{{data.username.username}}">
-                                                    Yes
-                                                </button>
-                                            </form>
+                                <!-- Modal -->
+                                <div class="modal fade" id="{{ data.username.username }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-body">
+                                                Are you sure you want to remove {{data.username.username}}?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <form action="" method="post">
+                                                    {% csrf_token %}
+                                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                                    <button class="btn btn-outline-danger" type="submit" name="remove_user" value="{{data.username.username}}">
+                                                        Yes
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            {% else %}
-                                <td class="table-danger text-center"></td>
                             {% endif %}
                         {% endif %}
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-    </section>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
 
+
+<section class="bg-light">
+    <div class="container">
+        <div>
+            {% include 'user-search.html' %}
+        </div>
+    </div>
+</section>
 
 {% endblock content %}
