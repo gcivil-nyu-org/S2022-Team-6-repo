@@ -5,6 +5,7 @@ let workchartSelector = document.querySelector("#workchart_1");
 let dropdownMenuLinkSelector = document.querySelector("#dropdownMenuLink");
 let countyDropDownMain = document.querySelector("#countyDropDownMain");
 let chart, homechart, workchart;
+const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 let mainChartConfig = {
     chart: {
         type: 'spline'
@@ -373,15 +374,25 @@ function generatePie() {
 }
 
 function generateseriesData(data) {
-    monthToCasesMap = {
-        "January": 0, "February": 0, "March": 0, "April": 0, "May": 0, "June": 0, "July": 0, "August": 0, "September": 0,
-        "October": 0, "November": 0, "December": 0
-    };
+    //monthToCasesMap = {
+    //    "December": 0, "January": 0, "February": 0, "March": 0, "April": 0, "May": 0, "June": 0, "July": 0, "August": 0, "September": 0,
+    //    "October": 0, "November": 0
+    //};
+    monthToCasesMap = {};
+    currentMonthName = new Date().getMonth();
+    let i = 0;
+    for (i=currentMonthName+1;i<=11;i++) {
+        monthToCasesMap[months[i]] = 0;
+    }
+    for (i=0;i<=currentMonthName;i++) {
+        monthToCasesMap[months[i]] = 0;
+    }
     monthNumberToNameMap = {
         "01": "January", "02": "February", "03": "March", "04": "April", "05": "May", "06": "June",
         "07": "July", "08": "August", "09": "September", "10": "October", "11": "November", "12": "December"
     };
     seriesDataMap = [];
+    let finalSeriesDataMap = [];
     for (temp in data) {
         monthToCasesMap[monthNumberToNameMap[data[temp][0].split("-")[1]]] += data[temp][1];
     }
@@ -389,7 +400,12 @@ function generateseriesData(data) {
         let temp1 = { "name": temp, "y": monthToCasesMap[temp], "drilldown": temp };
         seriesDataMap.push(temp1);
     }
-    return seriesDataMap;
+    for (temp in seriesDataMap) {
+        if (seriesDataMap[temp].y != 0) {
+            finalSeriesDataMap.push(seriesDataMap[temp]);
+        }
+    }
+    return finalSeriesDataMap;
 }
 
 function generateDrillDownData(data) {
@@ -407,7 +423,13 @@ function generateDrillDownData(data) {
             }
         }
     }
-    finalData = { "series": drilldownData };
+    let finalDrillDownData = [];
+    for (temp in drilldownData) {
+        if (drilldownData[temp].data.length != 0) {
+            finalDrillDownData.push(drilldownData[temp])
+        }
+    }
+    finalData = { "series": finalDrillDownData };
     return finalData;
 }
 
@@ -428,8 +450,34 @@ function generateCountySpecificGraph(value) {
     chart = Highcharts.chart('mainchart', mainChartConfig);
 }
 
+function showDatewiseChart() {
+    let fromDateValueStr = $('#dateFrom');
+    let toDateValueStr = $('#dateTo');
+    let fromDateValue = new Date(fromDateValueStr.val());
+    let toDateValue = new Date(toDateValueStr.val());
+    let currentDate = new Date();
+    if (fromDateValue > toDateValue) {
+        alert("From date should not be greater than To date");
+    }
+    if (fromDateValue > currentDate || toDateValue > currentDate) {
+        alert("From Date or To Date cannot be greater than current date");
+    }
+    let res = [];
+    for (index in historical) {
+        let tempDate = new Date(historical[index][0]);
+        if (tempDate >= fromDateValue && tempDate <= toDateValue) {
+            res.push(historical[index]);
+        }
+    }
+    mainChartConfig.series[0].data = generateseriesData(res);
+    mainChartConfig.drilldown = generateDrillDownData(res);
+    chart = Highcharts.chart('mainchart', mainChartConfig);
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     chart = Highcharts.chart('mainchart', mainChartConfig);
+    $( "#dateFrom" ).datepicker();
+    $( "#dateTo" ).datepicker({maxDate: new Date()});
 });
 
 homechart = Highcharts.chart('homechart', homeChartConfig);
