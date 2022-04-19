@@ -8,7 +8,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&display=swap" rel="style">
         <div>
           <h1>{% if session_valid %} Welcome {% else %} Become a {% endif %}<span class="palette-text">#CoviGuardian </span></h1>
-          <p class="lead my-4"> Win the Battle Against COVID-19
+          <p class="lead my-4"> Complete Covid tracking for you and your circle!
           </p>
           {% if not session_valid %}
             <a href="{% url 'login:signup' %}">
@@ -36,8 +36,7 @@
             <div class="card-body text-center">
               <div class="h1 mb-3"><i class="bi bi-pencil-square"></i></div>
               <h3 class="card-title mb-3">Self-Tracking</h3>
-              <p class="card-text"> You can self track yourself by entering the mates in your circle and the location met
-              </p>
+              <p class="card-text"> Keep a track and tab of everyone you care out with our self-reporting feature. </p>
             </div>
           </div>
         </div>
@@ -47,7 +46,7 @@
             <div class="card-body text-center">
               <div class="h1 mb-3"><i class="bi bi-bell-fill"></i></div>
               <h3 class=" card-title mb-3">Alerts</h3>
-              <p class="card-text"> Alerts with high risk status to stay safe during the pandemic </p>
+              <p class="card-text"> Get notified about prognosis in all your 'Circles' based on the policies set by your group.</p>
             </div>
           </div>
         </div>
@@ -57,9 +56,7 @@
             <div class="card-body text-center">
               <div class="h1 mb-3"><i class="bi bi-people-fill"></i></div>
               <h3 class="card-title mb-3">Circles</h3>
-              <p class="card-text">Circles are the groups where you can join based on location 
-                and be updated with the vaccination and the location which is at high risk
-              </p>
+              <p class="card-text"> Colleagues ? Hobby group ? Classmates ? Join your circle today or create one!              </p>
             </div>
           </div>
         </div>
