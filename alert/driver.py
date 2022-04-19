@@ -140,7 +140,7 @@ def notify_alerts(user):
 
             for location in location_data_case:
                 create_notification(
-                    user, f"High cases at recorded at {location}.", "location_visited"
+                    user, f"High cases recorded at {location}.", "location_visited"
                 )
 
         if alert.location_alert_death:
@@ -148,14 +148,14 @@ def notify_alerts(user):
 
             for location in location_data_death:
                 create_notification(
-                    user, f"High deaths at recorded at {location}.", "location_visited"
+                    user, f"High deaths recorded at {location}.", "location_visited"
                 )
 
         if alert.home_alert_case:
             if user.home_adress:
                 create_notification(
                     user,
-                    f"High cases at recorded at Home Location {user.home_adress}.",
+                    f"High cases recorded at Home Location {user.home_adress}.",
                     "home",
                 )
 
@@ -163,7 +163,7 @@ def notify_alerts(user):
             if user.home_adress:
                 create_notification(
                     user,
-                    f"High deaths at recorded at Home Location {user.home_adress}.",
+                    f"High deaths recorded at Home Location {user.home_adress}.",
                     "home",
                 )
 
@@ -171,7 +171,7 @@ def notify_alerts(user):
             if user.work_address:
                 create_notification(
                     user,
-                    f"High cases at recorded at Work Location {user.work_address}.",
+                    f"High cases recorded at Work Location {user.work_address}.",
                     "work_space",
                 )
 
@@ -179,7 +179,7 @@ def notify_alerts(user):
             if user.work_address:
                 create_notification(
                     user,
-                    f"High deaths at recorded at Work Location {user.work_address}.",
+                    f"High deaths recorded at Work Location {user.work_address}.",
                     "work_space",
                 )
 

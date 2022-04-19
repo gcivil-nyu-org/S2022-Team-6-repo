@@ -5,16 +5,21 @@ from login.models import UserData
 from alert.models import Alert
 
 import datetime
+import json
 
 
 class TestViews(TestCase):
     def setUp(self):
         self.client = Client()
+
         self.session = self.client.session
+
         self.session[
             "user_key"
         ] = "IkVhc2hhbkthdXNoaWsi:1nYapk:h76qaIXuhZkcmoL0DPN_lCrB_88Cs2ezsLn1vMXe0cY"
+
         self.session.save()
+
         self.userdata = UserData.objects.create(
             firstname="Chinmay",
             lastname="Kulkarni",
@@ -33,17 +38,21 @@ class TestViews(TestCase):
         self.selftrack_data = SelfTrack.objects.create(
             date_uploaded=datetime.datetime.now(),
             username=self.userdata,
-            user_met="met1",
-            location_visited="11225",
+            user_met=json.dumps(["met1"]),
+            location_visited=json.dumps(["11225"]),
             streak=9,
             largest_streak=10,
         )
+
         self.SelfTrackData = SelfTrack.objects.create(
             date_uploaded=datetime.datetime.now(),
             username=self.userdata,
-            user_met="met1",
-            location_visited="11225",
+            user_met=json.dumps(["met1"]),
+            location_visited=json.dumps(["11225"]),
+            streak=9,
+            largest_streak=10,
         )
+
         self.selftrack_url = reverse(
             "selftracking:selftrack",
             args=["cs55"],
@@ -53,10 +62,15 @@ class TestViews(TestCase):
             "selftracking:selftrack",
             args=["EashanKaushik"],
         )
+
         self.client2 = Client()
+
         self.session2 = self.client2.session
+
         self.session2["user_key"] = None
+
         self.session2.save()
+
         self.selftrack_url_real2 = reverse(
             "selftracking:selftrack",
             args=[None],
