@@ -1,6 +1,14 @@
 from django.test import TestCase, Client
 from django.urls import reverse
-from circle.models import Circle, CircleUser, RecentCircle, Policy, RequestCircle
+from circle.models import (
+    Circle,
+    CircleUser,
+    RecentCircle,
+    Policy,
+    RequestCircle,
+    CirclePolicyCompliance,
+    CirclePolicy,
+)
 from login.models import UserData, Privacy
 from alert.models import Alert
 import datetime
@@ -113,6 +121,25 @@ class TestView(TestCase):
             policy_name="TestPolicy",
             policy_desc="TestPolicyDesc",
             policy_level=0,
+        )
+
+        self.circle_policy = CirclePolicy.objects.create(
+            circle_id=self.circle,
+            policy_id=self.policy,
+        )
+
+        self.cirlce_compliance = CirclePolicyCompliance.objects.create(
+            circle_id=self.circle,
+            policy_id=self.policy,
+            username=self.userdata,
+            compliance=False,
+        )
+
+        self.cirlce_compliance_2 = CirclePolicyCompliance.objects.create(
+            circle_id=self.circle,
+            policy_id=self.policy,
+            username=self.userdata_2,
+            compliance=False,
         )
 
         self.request_circle = RequestCircle.objects.create(

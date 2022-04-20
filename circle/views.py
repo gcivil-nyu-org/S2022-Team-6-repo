@@ -15,6 +15,9 @@ from .helper import (
     get_circle_compliance,
     get_recent_circles,
     check_recent_circle,
+    get_user_alert,
+    check_vacination_policy,
+    streak_uploaded,
 )
 from .driver import (
     create_request,
@@ -71,7 +74,6 @@ def circle(request, username):
             )
             if circleone:
                 circles.append(circle_user)
-                # print(circleone.circle_id)
 
     ctx = {}
     ctx["circles"] = circles
@@ -151,31 +153,74 @@ def current_circle(request, username, circle_id):
         url = reverse("login:error")
         return HttpResponseRedirect(url)
 
+    search = False
+    searched_user = list()
+    search_user_found = False
+
+    # Delete Request for user
     if request.method == "POST" and "remove_user" in request.POST:
         remove_user(username, request.POST.get("remove_user"), circle_id)
 
+    # Search user
+    if request.method == "POST" and "search-users-submit" in request.POST:
+        search = True
+        search_query = request.POST.get("search-users")
+        users_found = UserData.objects.filter(username__icontains=search_query)
+
+        searched_user = list()
+        search_user_found = False
+
+        for user_found in users_found.iterator():
+
+            try:
+                search_user = CircleUser.objects.get(
+                    circle_id=circle_id, username=user_found
+                )
+                search_user_found = True
+                searched_user.append(search_user)
+            except Exception:
+                pass
+
+        if not search_user_found > 0:
+            messages.error(request, f"No Username {search_query}!")
+
+    # Get CircleUser object for username
     circle_data = CircleUser.objects.get(circle_id=circle_id, username=username)
 
-    add_recent_circle(circle_data)  # TODO: Recent Circle
+    # add to recent circle, get circle user data
+    add_recent_circle(circle_data)
     circle_user_data = CircleUser.objects.filter(circle_id=circle_id)
-    circle_policy = CirclePolicy.objects.filter(circle_id=circle_id)
 
-    circle_compliance = get_circle_compliance(circle_id=circle_id)
+    # check last streak uploaded
+    streak_last_updated, stread_date_updated = streak_uploaded(circle_id=circle_id)
 
+    # circle policies for header
     policies = []
-    for policy in circle_policy:
+    for policy in CirclePolicy.objects.filter(circle_id=circle_id):
         policies.append(policy.policy_id)
 
-    request_user_data, requests = get_notifications(username=username)
-    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
+    # check user alerts
+    user_alert, user_alert_data = get_user_alert(circle_id=circle_id)
 
-    total_notify = requests + non_compliance
+    # circle compliance status
+    circle_compliance, is_compliant = get_circle_compliance(circle_id=circle_id)
+    # {
+    #     username: 'Compliant'/ 'Non Compliant',
+    # ...
+    # }
 
+    # check if vaccination policy needs to be uploaded
+    check_vacinated_policy = check_vacination_policy(circle_id=circle_id)
+    # if circle admin show number of pending request
     if circle_data.is_admin:
         circle_request = get_circle_requests(circle_id)
     else:
         circle_request = None
 
+    # Navbar Data
+    request_user_data, requests = get_notifications(username=username)
+    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
+    total_notify = requests + non_compliance
     streak_today = check_upload_today(username)
     alert = get_alert(username=username)
     context = {
@@ -188,13 +233,21 @@ def current_circle(request, username, circle_id):
         "streak_today": streak_today,
         "alert": alert,
         # Other
+        "search_user_found": search_user_found,
+        "searched_user": searched_user,
+        "search": search,
         "circle_user_data": circle_user_data,
         "circle_data": circle_data,
         "circle_request": circle_request,
         "is_admin": circle_data.is_admin,
         "policies": policies,
         "circle_compliance": circle_compliance,
-        # "group_image": group_image,
+        "is_compliant": is_compliant,
+        "user_alert": user_alert,
+        "user_alert_data": user_alert_data,
+        "check_vacinated_policy": check_vacinated_policy,
+        "stread_date_updated": stread_date_updated,
+        "streak_last_updated": streak_last_updated,
     }
 
     return render(request, "circle/current-circle.html", context)

@@ -4,14 +4,78 @@ from .models import (
     RequestCircle,
     CirclePolicyCompliance,
     RecentCircle,
+    CirclePolicy,
 )
+
+from alert.models import Alert
+from selftracking.models import SelfTrack
 from login.models import UserData
 
 import json
+import numpy as np
+
+
+def streak_uploaded(circle_id):
+    streak_last_updated = dict()
+    stread_date_updated = dict()
+
+    for user in CircleUser.objects.filter(circle_id=circle_id).iterator():
+        try:
+            self_track = SelfTrack.objects.filter(username=user.username).latest(
+                "date_uploaded"
+            )
+            if (
+                self_track.user_met != "42a7b2626eae970122e01f65af2f5092"
+                and self_track.location_visited != "42a7b2626eae970122e01f65af2f5092"
+            ):
+                streak_last_updated[user.username.username] = True
+                stread_date_updated[
+                    user.username.username
+                ] = self_track.date_uploaded.date()
+            else:
+                streak_last_updated[user.username.username] = False
+        except Exception:
+            streak_last_updated[user.username.username] = False
+
+    return streak_last_updated, stread_date_updated
+
+
+def check_vacination_policy(circle_id):
+
+    if len(CirclePolicy.objects.filter(circle_id=circle_id, policy_id=1)) > 0:
+        return True
+    return False
+
+
+def get_user_alert(circle_id):
+    user_alert = dict()
+    user_alert_data = dict()
+    circle_data = CircleUser.objects.filter(circle_id=circle_id)
+
+    for circle in circle_data.iterator():
+        user_alert_data[circle.username.username] = dict()
+        # location_alert_case
+        if len(CirclePolicy.objects.filter(circle_id=circle_id, policy_id=3)) > 0:
+            user_alert_data[circle.username.username][
+                "Location Visited"
+            ] = Alert.objects.get(username=circle.username).location_alert_case
+
+        # people_alert
+        if len(CirclePolicy.objects.filter(circle_id=circle_id, policy_id=2)) > 0:
+            user_alert_data[circle.username.username]["People Met"] = Alert.objects.get(
+                username=circle.username
+            ).people_alert
+
+        user_alert[circle.username.username] = np.any(
+            np.array(list(user_alert_data[circle.username.username].values())), axis=0
+        )
+
+    return user_alert, user_alert_data
 
 
 def get_circle_compliance(circle_id):
     compliance_dict = dict()
+    is_compliant = dict()
 
     circle_compliance = CirclePolicyCompliance.objects.filter(circle_id=circle_id)
 
@@ -21,13 +85,20 @@ def get_circle_compliance(circle_id):
         if compliance.compliance:
             compliance_dict[compliance.username.username][
                 compliance.policy_id.policy_id
-            ] = "Compliant"
+            ] = True
         else:
             compliance_dict[compliance.username.username][
                 compliance.policy_id.policy_id
-            ] = "Not Compliant"
+            ] = False
 
-    return compliance_dict
+    for key, values in compliance_dict.items():
+
+        if False in values.values():
+            is_compliant[key] = False
+        else:
+            is_compliant[key] = True
+
+    return compliance_dict, is_compliant
 
 
 def get_all_non_compliance(username, get_three):
