@@ -38,3 +38,123 @@
   animation-timing-function: ease-in-out;
   animation-direction: alternate;
 }
+
+.custom-bg-light{
+  background-color: #D7E3FC;
+}
+
+.custom-bg-mid{
+  background-color: #C1D3FE;
+}
+
+.custom-bg-darker{
+  background-color: #B6CCFE;
+}
+
+.custom-bg-darkest{
+  background-color: #ABC4FF;
+}
+
+.custom-text-light{
+  color: #D7E3FC;
+}
+
+.custom-text-mid{
+  color: #C1D3FE;
+}
+
+.custom-text-darker{
+  color: #B6CCFE;
+}
+
+.custom-text-darkest{
+  color: #ABC4FF;
+}
+
+.palette-text{
+  color: #ABC4FF;
+}
+
+.get-started{
+  background-color: #ABC4FF !important;
+  transition: all 0.5s;
+  cursor: pointer;
+  transition-duration: 0.4s !important;
+  border-radius: 4px !important;}
+
+
+
+.get-started span {
+  display: inline-block;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.get-started span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.get-started:hover span {
+  padding-right: 25px;
+}
+
+.get-started:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
+.intro-cards{
+  background-color: #ABC4FF !important;
+  transition-duration: 0.1s !important;
+  border-radius: 4px !important;
+}
+
+.intro-cards:hover{
+  background-color: #C1D3FE !important;
+}
+
+.dark-card{
+  background-color: #ABC4FF;
+  transition-duration: 0.4s;
+}
+
+.dark-card:hover {
+  background-color: #C1D3FE !important;
+}
+
+.mid-card{
+  background-color: #C1D3FE;
+  transition-duration: 0.4s;
+}
+
+.mid-card:hover {
+  background-color: #ABC4FF !important;
+}
+
+.dev-bg{
+  background-color: #ABC4FF !important;
+  border-radius: 8px;
+}
+
+.dev-contrast-card{
+  background-color: #CCDBFD !important;
+  border-radius: 8px;
+}
+
+.sign-up{
+  border: 2px solid #ABC4FF;
+  background-color: white;
+  color: black;
+  transition-duration: 0.3s !important;
+}
+
+.sign-up:hover {
+  background-color: #ABC4FF !important;
+}
