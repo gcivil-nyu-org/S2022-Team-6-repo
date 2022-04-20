@@ -1,6 +1,7 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from login.models import UserData
+from alert.models import Alert
 import datetime
 
 
@@ -24,6 +25,9 @@ class TestView(TestCase):
             work_address="1122",
             home_adress="1122",
         )
+        self.alert = Alert.objects.create(
+            username=self.userdata,
+        )
 
         self.client2 = Client()
         self.session2 = self.client2.session
@@ -41,3 +45,8 @@ class TestView(TestCase):
         self.assertEqual(response.status_code, 302)
         url = reverse("login:error")
         self.assertEqual(url, response.url)
+
+    def test_alerts(self):
+        response=self.client2.get( self.alert)
+        self.assertEqual(response.status_code, 404)
+        print(response)
