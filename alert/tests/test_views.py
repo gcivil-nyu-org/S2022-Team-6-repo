@@ -29,17 +29,35 @@ class TestView(TestCase):
             username=self.userdata,
         )
 
+     
+        self.alert_url = reverse(
+            "alert:alert_user",
+            args=["EashanKaushik"],
+            
+        )
+            
         self.client2 = Client()
         self.session2 = self.client2.session
         self.session2["user_key"] = None
         self.session2.save()
 
-        self.alert_url = reverse(
+        self.alert_url_real2 = reverse(
             "alert:alert_user",
-            args=["EashanKaushik"],
-        )
+            args=[None],
 
-    def test_user2_circle(self):
+        )   
+    def test_alert_data(self):
+        response = self.client.get(self.alert_url_real2)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "alert/alert.html")
+
+    def test_user2_alert(self):
+        response = self.client2.get(self.alert_url_real2)
+        self.assertEqual(response.status_code, 302)
+        url = reverse("login:error")
+        self.assertEqual(url, response.url)
+
+    def test_user2_alert(self):
         response = self.client2.get(self.alert_url)
         # print(response.status_code)
         self.assertEqual(response.status_code, 302)
@@ -50,3 +68,6 @@ class TestView(TestCase):
         response = self.client2.get(self.alert)
         self.assertEqual(response.status_code, 404)
         print(response)
+
+
+    
