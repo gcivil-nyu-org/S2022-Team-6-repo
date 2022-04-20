@@ -1,6 +1,6 @@
 from django.test import TestCase, Client
 from django.urls import reverse
-from login.models import UserData, Privacy
+from login.models import UserData
 import datetime
 
 
