@@ -15,9 +15,7 @@ class Circle(models.Model):
     admin_username = models.ForeignKey(UserData, on_delete=models.CASCADE)
     no_of_users = models.IntegerField(default=1)
     created = models.DateTimeField(auto_now_add=True)
-    group_image = models.ImageField(
-        default=random_img, upload_to="media/circle/", null=True, blank=True
-    )
+    group_image = models.ImageField(default=random_img, upload_to="media/circle/")
 
 
 class CircleUser(models.Model):

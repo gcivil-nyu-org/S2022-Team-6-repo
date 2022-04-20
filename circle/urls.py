@@ -21,4 +21,9 @@ urlpatterns = [
         views.delete_circle,
         name="deletecircle",
     ),
+    path(
+        "editpermission/<str:username>/<str:circle_id>/",
+        views.edit_permission,
+        name="editpermission",
+    ),
 ]

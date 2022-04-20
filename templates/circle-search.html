@@ -16,7 +16,9 @@
                             </a>
                         </li>
                         <li>
-                            <button type="button" class="btn btn-outline-primary">Edit Permission</button>
+                            <a href="{% url 'circle:editpermission' username data.circle_id.circle_id %}">
+                                <button type="button" class="btn btn-outline-primary">Edit</button>
+                            </a>
                         </li>
                         {% else %}
                         <li>
@@ -54,7 +56,9 @@
                             </a>
                         </li>
                         <li>
-                            <button type="button" class="btn btn-outline-primary">Edit Permission</button>
+                            <a href="{% url 'circle:editpermission' username data.circle_id.circle_id %}">
+                                <button type="button" class="btn btn-outline-primary">Edit</button>
+                            </a>
                         </li>
                         {% else %}
                         <li>
