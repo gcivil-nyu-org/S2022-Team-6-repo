@@ -112,7 +112,7 @@ def location_visited_alert(location_visted, historical, yesterday):
 
 
 def get_model_data(data):
-    return json.dumps(data)
+    return json.dumps(data)  # pragma: no cover
 
 
 def create_notification(user, message, alert_for):

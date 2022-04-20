@@ -3,11 +3,11 @@ from .models import SelfTrack
 
 
 def add_user_met(user_met):
-    return json.dumps(user_met)
+    return json.dumps(user_met)  # pragma: no cover
 
 
 def add_location_visited(location_visited):
-    return json.dumps(location_visited)
+    return json.dumps(location_visited)  # pragma: no cover
 
 
 def get_user_met(username):
@@ -18,7 +18,7 @@ def get_user_met(username):
         if len(user_met) != 0:
             return jsonDec.decode(selftrack.user_met)
 
-    return None
+    return None  # pragma: no cover
 
 
 def get_location_visited(username):
@@ -30,4 +30,4 @@ def get_location_visited(username):
         if len(location_visited) != 0:
             return jsonDec.decode(selftrack.location_visited)
 
-    return None
+    return None  # pragma: no cover
