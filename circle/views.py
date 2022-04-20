@@ -17,6 +17,7 @@ from .helper import (
     check_recent_circle,
     get_user_alert,
     check_vacination_policy,
+    streak_uploaded,
 )
 from .driver import (
     create_request,
@@ -152,19 +153,49 @@ def current_circle(request, username, circle_id):
         url = reverse("login:error")
         return HttpResponseRedirect(url)
 
+    search = False
+    searched_user = list()
+    search_user_found = False
+
     # Delete Request for user
     if request.method == "POST" and "remove_user" in request.POST:
         remove_user(username, request.POST.get("remove_user"), circle_id)
 
+    # Search user
+    if request.method == "POST" and "search-users-submit" in request.POST:
+        search = True
+        search_query = request.POST.get("search-users")
+        users_found = UserData.objects.filter(username__icontains=search_query)
+
+        searched_user = list()
+        search_user_found = False
+
+        for user_found in users_found.iterator():
+
+            try:
+                search_user = CircleUser.objects.get(
+                    circle_id=circle_id, username=user_found
+                )
+                search_user_found = True
+                searched_user.append(search_user)
+            except Exception:
+                pass
+
+        if not search_user_found > 0:
+            messages.error(request, f"No Username {search_query}!")
+
     # Get CircleUser object for username
     circle_data = CircleUser.objects.get(circle_id=circle_id, username=username)
 
-    # add to recent circle, get circle user data and circle policies for header
+    # add to recent circle, get circle user data
     add_recent_circle(circle_data)
     circle_user_data = CircleUser.objects.filter(circle_id=circle_id)
 
-    policies = []
+    # check last streak uploaded
+    streak_last_updated, stread_date_updated = streak_uploaded(circle_id=circle_id)
 
+    # circle policies for header
+    policies = []
     for policy in CirclePolicy.objects.filter(circle_id=circle_id):
         policies.append(policy.policy_id)
 
@@ -202,6 +233,9 @@ def current_circle(request, username, circle_id):
         "streak_today": streak_today,
         "alert": alert,
         # Other
+        "search_user_found": search_user_found,
+        "searched_user": searched_user,
+        "search": search,
         "circle_user_data": circle_user_data,
         "circle_data": circle_data,
         "circle_request": circle_request,
@@ -212,6 +246,8 @@ def current_circle(request, username, circle_id):
         "user_alert": user_alert,
         "user_alert_data": user_alert_data,
         "check_vacinated_policy": check_vacinated_policy,
+        "stread_date_updated": stread_date_updated,
+        "streak_last_updated": streak_last_updated,
     }
 
     return render(request, "circle/current-circle.html", context)

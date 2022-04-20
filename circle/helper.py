@@ -8,11 +8,36 @@ from .models import (
 )
 
 from alert.models import Alert
-
+from selftracking.models import SelfTrack
 from login.models import UserData
 
 import json
 import numpy as np
+
+
+def streak_uploaded(circle_id):
+    streak_last_updated = dict()
+    stread_date_updated = dict()
+
+    for user in CircleUser.objects.filter(circle_id=circle_id).iterator():
+        try:
+            self_track = SelfTrack.objects.filter(username=user.username).latest(
+                "date_uploaded"
+            )
+            if (
+                self_track.user_met != "42a7b2626eae970122e01f65af2f5092"
+                and self_track.location_visited != "42a7b2626eae970122e01f65af2f5092"
+            ):
+                streak_last_updated[user.username.username] = True
+                stread_date_updated[
+                    user.username.username
+                ] = self_track.date_uploaded.date()
+            else:
+                streak_last_updated[user.username.username] = False
+        except Exception:
+            streak_last_updated[user.username.username] = False
+
+    return streak_last_updated, stread_date_updated
 
 
 def check_vacination_policy(circle_id):
@@ -42,7 +67,7 @@ def get_user_alert(circle_id):
             ).people_alert
 
         user_alert[circle.username.username] = np.any(
-            np.array(user_alert_data[circle.username.username].values())
+            np.array(list(user_alert_data[circle.username.username].values())), axis=0
         )
 
     return user_alert, user_alert_data
