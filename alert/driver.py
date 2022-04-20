@@ -5,13 +5,13 @@ from login.models import UserData
 
 
 def home_alert(home_address, historical, yesterday):
-    alert_case = False # pragma: no cover
-    alert_death = False # pragma: no cover
+    alert_case = False  # pragma: no cover
+    alert_death = False  # pragma: no cover
     if home_address:
         historical = historical[historical.county == home_address]
 
-        case_average = np.mean(historical.cases) # pragma: no cover
-        death_average = np.mean(historical.deaths) # pragma: no cover
+        case_average = np.mean(historical.cases)  # pragma: no cover
+        death_average = np.mean(historical.deaths)  # pragma: no cover
 
         if case_average < int(historical[historical.date == yesterday].cases):
             alert_case = True
@@ -42,11 +42,11 @@ def work_alert(work_address, historical, yesterday):
 
 
 def people_met_alert(people_met, historical, yesterday):
-    people_alert = list() # pragma: no cover
-    people_data = list() # pragma: no cover
+    people_alert = list()  # pragma: no cover
+    people_data = list()  # pragma: no cover
 
-    jsonDec = json.decoder.JSONDecoder() # pragma: no cover
-    people = jsonDec.decode(people_met) # pragma: no cover
+    jsonDec = json.decoder.JSONDecoder()  # pragma: no cover
+    people = jsonDec.decode(people_met)  # pragma: no cover
 
     if len(people) != 0:
 
@@ -68,11 +68,11 @@ def people_met_alert(people_met, historical, yesterday):
 
 
 def location_visited_alert(location_visted, historical, yesterday):
-    location_alert_case = list() # pragma: no cover
-    location_alert_death = list() # pragma: no cover
+    location_alert_case = list()  # pragma: no cover
+    location_alert_death = list()  # pragma: no cover
 
-    data_alert_case = list() # pragma: no cover
-    data_alert_death = list() # pragma: no cover
+    data_alert_case = list()  # pragma: no cover
+    data_alert_death = list()  # pragma: no cover
 
     jsonDec = json.decoder.JSONDecoder()
     locations = jsonDec.decode(location_visted)

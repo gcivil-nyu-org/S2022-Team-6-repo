@@ -47,6 +47,6 @@ class TestView(TestCase):
         self.assertEqual(url, response.url)
 
     def test_alerts(self):
-        response=self.client2.get( self.alert)
+        response = self.client2.get(self.alert)
         self.assertEqual(response.status_code, 404)
         print(response)
