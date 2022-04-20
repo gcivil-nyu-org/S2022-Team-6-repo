@@ -1,16 +1,6 @@
 from django.test import TestCase, Client
 from django.urls import reverse
-from circle.models import (
-    Circle,
-    CircleUser,
-    RecentCircle,
-    Policy,
-    RequestCircle,
-    CirclePolicyCompliance,
-    CirclePolicy,
-)
 from login.models import UserData, Privacy
-from alert.models import Alert
 import datetime
 
 
