@@ -18,12 +18,14 @@
                             <ul class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton1" style="min-width: auto;">
                                 {% if data.is_admin %}
                                 <li>
-                                    <a href="{% url 'circle:deletecircle' username data.circle_id.circle_id%}">
+                                    <a href="{% url 'circle:deletecircle' username data.circle_id.circle_id %}">
                                         <button type="button" class="btn btn-outline-primary" style="width: 137.47px;">Delete Circle</button>
                                     </a>
                                 </li>
                                 <li>
-                                    <button type="button" class="btn btn-outline-primary">Edit Permission</button>
+                                    <a href="{% url 'circle:editpermission' username data.circle_id.circle_id %}">
+                                        <button type="button" class="btn btn-outline-primary">Edit</button>
+                                    </a>
                                 </li>
                                 {% else %}
                                 <li>

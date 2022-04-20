@@ -364,6 +364,17 @@ def notify(request):
 
 
 def exit_circle(request, username, circle_id):
+
+    try:
+        userdata = UserData.objects.get(username=username)
+        current_username = signing.loads(request.session["user_key"])
+        if current_username != username:
+            raise Exception()
+        CircleUser.objects.get(circle_id=circle_id, username=current_username)
+    except Exception:
+        url = reverse("login:error")
+        return HttpResponseRedirect(url)
+
     admin_user = CircleUser.objects.filter(circle_id=circle_id, is_admin=True)
     remove_user(admin_user[0].username.username, username, circle_id)
 
@@ -372,7 +383,81 @@ def exit_circle(request, username, circle_id):
 
 
 def delete_circle(request, username, circle_id):
+
+    try:
+        userdata = UserData.objects.get(username=username)
+        current_username = signing.loads(request.session["user_key"])
+        if current_username != username:
+            raise Exception()
+        CircleUser.objects.get(
+            circle_id=circle_id, is_admin=True, username=current_username
+        )
+    except Exception:
+        url = reverse("login:error")
+        return HttpResponseRedirect(url)
+
     remove_circle(circle_id)
 
     url = reverse("circle:dashboard", kwargs={"username": username})
     return HttpResponseRedirect(url)
+
+
+def edit_permission(request, username, circle_id):
+
+    try:
+        userdata = UserData.objects.get(username=username)
+        current_username = signing.loads(request.session["user_key"])
+        if current_username != username:
+            raise Exception()
+        CircleUser.objects.get(
+            circle_id=circle_id, is_admin=True, username=current_username
+        )
+    except Exception:
+        url = reverse("login:error")
+        return HttpResponseRedirect(url)
+
+    if request.method == "POST" and "circle_update" in request.POST:
+
+        circle_data = Circle.objects.get(circle_id=circle_id)
+
+        circle_data.circle_name = request.POST.get("circle_name")
+
+        print(request.FILES)
+
+        if request.FILES:
+            print("hello")
+            circle_image = request.FILES["circle_image"]
+            print(type(circle_image))
+            circle_image.name = (
+                str(circle_data.circle_id) + "." + circle_image.name.split(".")[-1]
+            )
+            print(circle_image.name)
+            circle_data.group_image = circle_image
+
+        circle_data.save()
+
+    circle_data = Circle.objects.get(circle_id=circle_id)
+
+    request_user_data, requests = get_notifications(username=username)
+
+    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
+
+    total_notify = requests + non_compliance
+
+    streak_today = check_upload_today(username)
+    alert = get_alert(username=username)
+
+    context = {
+        "page_name": "Edit Permission",
+        "username": username,
+        "userdata": userdata,
+        "request_user_data": request_user_data,
+        "total_notify": total_notify,
+        "three_non_compliance": three_non_compliance,
+        "streak_today": streak_today,
+        "alert": alert,
+        # other
+        "circle_data": circle_data,
+    }
+
+    return render(request, "circle/edit_permission.html", context)
