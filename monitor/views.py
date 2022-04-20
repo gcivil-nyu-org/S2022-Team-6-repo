@@ -19,6 +19,8 @@ from selftracking.helper import check_upload_today
 from alert.helper import get_alert
 
 from login.models import UserData
+from datetime import date, timedelta
+from dateutil.relativedelta import relativedelta
 
 
 def base(request):
@@ -32,9 +34,14 @@ def base(request):
         url = reverse("login:error")
         return HttpResponseRedirect(url)
 
-    df = historical[
-        (historical.date < "2022-01-01") & (historical.date >= "2021-01-01")
-    ]
+    currentTimeDate = date.today() - relativedelta(years=1)
+    currentTimeDate = (currentTimeDate.replace(day=1) + timedelta(days=32)).replace(
+        day=1
+    )
+    currentTimeDate = "20" + currentTimeDate.strftime("%y-%m-%d")
+    df = historical[(historical.date >= currentTimeDate)]
+
+    historical = historical[historical.state == "New York"]
 
     df = df[df.state == "New York"]
 
@@ -44,10 +51,10 @@ def base(request):
 
     home_location = userdata.home_adress  # pragma: no cover
     work_location = userdata.work_address  # pragma: no cover
-    if home_location is None or len(home_location) == 0:
-        home_location = "New York City"
-    if work_location is None or len(work_location) == 0:
-        work_location = "New York City"
+    # if home_location is None or len(home_location) == 0:
+    #     home_location = "New York City"
+    # if work_location is None or len(work_location) == 0:
+    #     work_location = "New York City"
 
     df_2021_home = (df[df.county == home_location][["date", "cases"]].values).tolist()
     df_2021_work = (df[df.county == work_location][["date", "cases"]].values).tolist()
@@ -59,11 +66,13 @@ def base(request):
     streak_today = check_upload_today(username)
     alert = get_alert(username=username)
 
-    counties = historical[historical.state == "New York"]
+    counties = historical
     counties = counties.county.dropna().unique()
     counties = counties[counties != "Unknown"]
     df_2021_all = df.dropna()
     df_2021_all = (df_2021_all[["date", "cases", "county"]].values).tolist()
+
+    historical = (historical[["date", "cases"]].values).tolist()
 
     context = {
         "page_name": "Monitor",
@@ -75,7 +84,6 @@ def base(request):
         "streak_today": streak_today,
         "monitor": True,
         "alert": alert,
-        # other
         "df_2021": df_2021,
         "categories_2021": categories,
         "df_2021_home": df_2021_home,
@@ -83,5 +91,8 @@ def base(request):
         "locations": [home_location, work_location],
         "counties": counties,
         "df_2021_all": df_2021_all,
+        "historical": historical,
+        "home_location": home_location,
+        "work_location": work_location,
     }
     return render(request, "monitor/index.html", context)
