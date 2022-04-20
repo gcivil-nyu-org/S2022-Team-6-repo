@@ -22,13 +22,15 @@ ALERT_PER_PAGE = 10
 def alert_user(request, username):
     try:
         username = signing.loads(request.session["user_key"])
-        userdata = UserData.objects.get(username=username)
+        userdata = UserData.objects.get(username=username)  # pragma: no cover
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
 
-    alert_notifications = AlertNotification.objects.filter(username=username).order_by(
-        "-updated"
+    alert_notifications = AlertNotification.objects.filter(
+        username=username
+    ).order_by(  # pragma: no cover
+        "-updated"  # pragma: no cover
     )
 
     if len(alert_notifications) > 0:
