@@ -44,6 +44,7 @@ def base(request):
     historical = historical[historical.state == "New York"]
 
     df = df[df.state == "New York"]
+    df_2021_all = (df[["date", "cases", "county"]].values).tolist()
 
     df_2021 = df[df.county == "New York City"]
     df_2021 = (df_2021[["date", "cases"]].values).tolist()
@@ -69,10 +70,10 @@ def base(request):
     counties = historical
     counties = counties.county.dropna().unique()
     counties = counties[counties != "Unknown"]
-    df_2021_all = df.dropna()
-    df_2021_all = (df_2021_all[["date", "cases", "county"]].values).tolist()
+    # df_2021_all = df.dropna()
+    # df_2021_all = (df_2021_all[["date", "cases", "county"]].values).tolist()
 
-    historical = (historical[["date", "cases"]].values).tolist()
+    historical = (historical[["date", "cases", "county"]].values).tolist()
 
     context = {
         "page_name": "Monitor",

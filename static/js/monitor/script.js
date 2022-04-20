@@ -216,11 +216,17 @@ function toggleNav() {
 function openNav() {
     document.getElementById("mySidebar").style.width = "250px";
     document.getElementById("main").style.marginLeft = "250px";
+    $('#mainchart').css("width","940px");
+    $('#homechart').css("width","940px");
+    $('#workchart').css("width","940px");
 }
 
 function closeNav() {
     document.getElementById("mySidebar").style.width = "0";
     document.getElementById("main").style.marginLeft = "0";
+    $('#mainchart').css("width","1210px");
+    $('#homechart').css("width","1210px");
+    $('#workchart').css("width","1210px");
 }
 
 function showMainChart() {
@@ -236,6 +242,7 @@ function showMainChart() {
     if (countyDropDownMain.classList && countyDropDownMain.classList.contains('hideChart')) {
         countyDropDownMain.classList.remove('hideChart');
     }
+    chart.reflow();
 }
 
 function showHomeChart() {
@@ -251,6 +258,7 @@ function showHomeChart() {
     if (countyDropDownMain.classList && !countyDropDownMain.classList.contains('hideChart')) {
         countyDropDownMain.classList.add('hideChart');
     }
+    homechart.reflow();
 }
 
 function showWorkChart() {
@@ -266,6 +274,7 @@ function showWorkChart() {
     if (countyDropDownMain.classList && !countyDropDownMain.classList.contains('hideChart')) {
         countyDropDownMain.classList.add('hideChart');
     }
+    workchart.reflow();
 }
 
 function generateLineGraph() {
@@ -380,6 +389,9 @@ function generateseriesData(data) {
     //};
     monthToCasesMap = {};
     currentMonthName = new Date().getMonth();
+    if ($('#dateFrom').val() != "" && $('#dateTo').val() != "") {
+        currentMonthName = (new Date($('#dateFrom').val())).getMonth() - 1;
+    }
     let i = 0;
     for (i=currentMonthName+1;i<=11;i++) {
         monthToCasesMap[months[i]] = 0;
@@ -435,19 +447,24 @@ function generateDrillDownData(data) {
 
 function generateCountySpecificGraph(value) {
     document.querySelector('#dropdownCountyLink').innerText = value;
-    let countyData = [];
-    for (i in _df_2021_all) {
-        if (_df_2021_all[i][2] == value) {
-            dateToCasesArray = [];
-            dateToCasesArray.push(_df_2021_all[i][0]);
-            dateToCasesArray.push(_df_2021_all[i][1]);
-            countyData.push(dateToCasesArray);
-        }
+    if ($('#dateFrom').val() != "" && $('#dateTo').val() != "") {
+        showDatewiseChart();
     }
-    mainChartConfig.series[0]['data'] = generateseriesData(countyData);
-    mainChartConfig.drilldown = generateDrillDownData(countyData);
-    mainChartConfig.title.text = value + ' Covid Cases';
-    chart = Highcharts.chart('mainchart', mainChartConfig);
+    else {
+        let countyData = [];
+        for (i in _df_2021_all) {
+            if (_df_2021_all[i][2] == value) {
+                dateToCasesArray = [];
+                dateToCasesArray.push(_df_2021_all[i][0]);
+                dateToCasesArray.push(_df_2021_all[i][1]);
+                countyData.push(dateToCasesArray);
+            }
+        }
+        mainChartConfig.series[0]['data'] = generateseriesData(countyData);
+        mainChartConfig.drilldown = generateDrillDownData(countyData);
+        mainChartConfig.title.text = value + ' Covid Cases';
+        chart = Highcharts.chart('mainchart', mainChartConfig);
+    }
 }
 
 function showDatewiseChart() {
@@ -463,10 +480,14 @@ function showDatewiseChart() {
         alert("From Date or To Date cannot be greater than current date");
     }
     let res = [];
+    let countyName = document.querySelector('#dropdownCountyLink').innerText;
     for (index in historical) {
         let tempDate = new Date(historical[index][0]);
-        if (tempDate >= fromDateValue && tempDate <= toDateValue) {
-            res.push(historical[index]);
+        if (tempDate >= fromDateValue && tempDate <= toDateValue && countyName == historical[index][2]) {
+            let tempArr = [];
+            tempArr.push(historical[index][0]);
+            tempArr.push(historical[index][1]);
+            res.push(tempArr);
         }
     }
     mainChartConfig.series[0].data = generateseriesData(res);
@@ -478,6 +499,20 @@ document.addEventListener('DOMContentLoaded', function () {
     chart = Highcharts.chart('mainchart', mainChartConfig);
     $( "#dateFrom" ).datepicker();
     $( "#dateTo" ).datepicker({maxDate: new Date()});
+});
+
+$("#dateFrom").on("change",function(){
+    let datetemp = new Date();
+    let fromDate = new Date($(this).val());
+    let year = fromDate.getFullYear();
+    let month = fromDate.getMonth();
+    let day = fromDate.getDate();
+    let dateToBeSet = new Date(year + 1, month - 1, day);
+    if (dateToBeSet > datetemp) {
+        dateToBeSet = datetemp;
+    }
+    $('#dateTo').datepicker('destroy');
+    $("#dateTo").datepicker({maxDate: dateToBeSet});
 });
 
 homechart = Highcharts.chart('homechart', homeChartConfig);
