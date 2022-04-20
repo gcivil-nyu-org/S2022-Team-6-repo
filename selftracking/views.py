@@ -41,7 +41,7 @@ def selftrack(request, username):
 
     try:
         if len(SelfTrack.objects.filter(username=username)) == 0:
-            raise Exception()
+            raise Exception()  # pragma: no cover
     except Exception:
         # if new user
         selftrack = SelfTrack()
