@@ -366,7 +366,7 @@ def notify(request):
 def exit_circle(request, username, circle_id):
 
     try:
-        userdata = UserData.objects.get(username=username)
+        UserData.objects.get(username=username)
         current_username = signing.loads(request.session["user_key"])
         if current_username != username:
             raise Exception()
@@ -385,7 +385,7 @@ def exit_circle(request, username, circle_id):
 def delete_circle(request, username, circle_id):
 
     try:
-        userdata = UserData.objects.get(username=username)
+        UserData.objects.get(username=username)
         current_username = signing.loads(request.session["user_key"])
         if current_username != username:
             raise Exception()
