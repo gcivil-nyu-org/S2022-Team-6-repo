@@ -39,36 +39,84 @@
   animation-direction: alternate;
 }
 
-.custom-bg-light{
-  background-color: #D7E3FC;
+.coviguard-bg-dark{
+  background-color: #0B090A;
 }
 
-.custom-bg-mid{
-  background-color: #C1D3FE;
+.coviguard-bg-dark-light{
+  background-color: #161A1D;
 }
 
-.custom-bg-darker{
-  background-color: #B6CCFE;
+.coviguard-bg-maroon{
+  background-color: #660708;
 }
 
-.custom-bg-darkest{
-  background-color: #ABC4FF;
+.coviguard-bg-dark-red{
+  background-color: #A4161A;
 }
 
-.custom-text-light{
-  color: #D7E3FC;
+.coviguard-bg-red{
+  background-color: #BA181B;
 }
 
-.custom-text-mid{
-  color: #C1D3FE;
+.coviguard-bg-red-light{
+  background-color: #E5383B;
 }
 
-.custom-text-darker{
-  color: #B6CCFE;
+.coviguard-bg-grey{
+  background-color: #B1A7A6;
 }
 
-.custom-text-darkest{
-  color: #ABC4FF;
+.coviguard-bg-grey-light{
+  background-color: #D3D3D3;
+}
+
+.coviguard-bg-plain-grey{
+  background-color: #F5F3F4;
+}
+
+.coviguard-bg-white{
+  background-color: #FFFFFF;
+}
+
+.coviguard-text-dark{
+  color: #0B090A;
+}
+
+.coviguard-text-dark-light{
+  color: #161A1D;
+}
+
+.coviguard-text-maroon{
+  color: #660708;
+}
+
+.coviguard-text-dark-red{
+  color: #A4161A;
+}
+
+.coviguard-text-red{
+  color: #BA181B;
+}
+
+.coviguard-text-red-light{
+  color: #E5383B;
+}
+
+.coviguard-text-grey{
+  color: #B1A7A6;
+}
+
+.coviguard-text-grey-light{
+  color: #D3D3D3;
+}
+
+.coviguard-text-plain-grey{
+  color: #F5F3F4;
+}
+
+.coviguard-text-white{
+  color: #FFFFFF;
 }
 
 .palette-text{
