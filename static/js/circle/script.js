@@ -8,9 +8,21 @@
 
     const mapView = topology.objects.default['hc-recommended-mapview'];
 
-    data.forEach((d, i) => {
-        d.drilldown = d.properties['hc-key'];
-        d.value = i; 
+    let newyorkCases = 0;
+    liveData.forEach((a) => {
+        if (a[0] == 'New York City') {
+            newyorkCases = a[1];
+        }
+    }); 
+    data.forEach((d) => {
+        for (i in liveData) {
+            if (liveData[i][0] == d.name) {
+                d.value = liveData[i][1];
+            }
+            else if (d.name == 'Queens' || d.name == 'Kings' || d.name == 'Bronx' || d.name == 'New York' || d.name == 'Richmond') {
+                d.value = newyorkCases;
+            }
+        }
     });
 
     Highcharts.mapChart('heatMap', {
