@@ -136,6 +136,7 @@ def circle(request, username):
         # Other
         "circle_user_data": circle_user_data,
         "recent_circles": recent_circles,
+        "circle": True,
         # "qs_json": json.dumps(list(circle_user_data.values())),
     }
 
