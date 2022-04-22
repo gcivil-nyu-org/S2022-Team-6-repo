@@ -206,3 +206,8 @@
 .sign-up:hover {
   background-color: #ABC4FF !important;
 }
+
+.developer-tab{
+  width: 200px; 
+  height: 200px;
+}
