@@ -99,6 +99,10 @@ body, h1, h2, h3 {
   color: #660708;
 }
 
+.coviguard-text-maroon:hover {
+  color: #A4161A;
+}
+
 .coviguard-text-dark-red{
   color: #A4161A;
 }
@@ -204,13 +208,18 @@ body, h1, h2, h3 {
   border-radius: 8px;
 }
 
-.sign-up{
-  border: 2px solid #ABC4FF;
-  background-color: white;
+.coviguard-button{
+  border: 2px solid #660708;
+  background-color: #F5F3F4;
   color: black;
   transition-duration: 0.3s !important;
 }
 
-.sign-up:hover {
-  background-color: #ABC4FF !important;
+.coviguard-button:hover {
+  background-color: #660708 !important;
+}
+
+.bg-img{
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
 }
