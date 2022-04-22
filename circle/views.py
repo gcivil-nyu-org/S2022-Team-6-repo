@@ -7,6 +7,7 @@ from django.template.loader import render_to_string
 
 from .models import Circle, CirclePolicy, CircleUser, RequestCircle
 from login.models import UserData
+from monitor.driver import get_live, get_s3_client
 
 from .helper import (
     get_notifications,
@@ -42,6 +43,11 @@ def circle(request, username):
     try:
         userdata = UserData.objects.get(username=username)
         current_username = signing.loads(request.session["user_key"])
+        _, client_object = get_s3_client()
+        liveData = get_live(client_object)
+        liveData = (
+            liveData[liveData.state == "New York"][["county", "cases"]].values
+        ).tolist()
         if current_username != username:
             raise Exception()
     except Exception:
@@ -137,6 +143,7 @@ def circle(request, username):
         "circle_user_data": circle_user_data,
         "recent_circles": recent_circles,
         "circle": True,
+        "liveData": liveData,
         # "qs_json": json.dumps(list(circle_user_data.values())),
     }
 

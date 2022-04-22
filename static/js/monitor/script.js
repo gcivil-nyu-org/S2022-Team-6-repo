@@ -4,6 +4,8 @@ let homechartSelector = document.querySelector("#homechart_1");
 let workchartSelector = document.querySelector("#workchart_1");
 let dropdownMenuLinkSelector = document.querySelector("#dropdownMenuLink");
 let countyDropDownMain = document.querySelector("#countyDropDownMain");
+let datepickerSelector = document.querySelector("#datePicker");
+let searchButtonSelector = document.querySelector("#searchButton");
 let chart, homechart, workchart;
 const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 let mainChartConfig = {
@@ -242,6 +244,12 @@ function showMainChart() {
     if (countyDropDownMain.classList && countyDropDownMain.classList.contains('hideChart')) {
         countyDropDownMain.classList.remove('hideChart');
     }
+    if (datepickerSelector.classList && datepickerSelector.classList.contains('hideChart')) {
+        datepickerSelector.classList.remove('hideChart');
+    }
+    if (searchButtonSelector.classList && searchButtonSelector.classList.contains('hideChart')) {
+        searchButtonSelector.classList.remove('hideChart');
+    }
     chart.reflow();
 }
 
@@ -257,6 +265,12 @@ function showHomeChart() {
     }
     if (countyDropDownMain.classList && !countyDropDownMain.classList.contains('hideChart')) {
         countyDropDownMain.classList.add('hideChart');
+    }
+    if (datepickerSelector.classList && !datepickerSelector.classList.contains('hideChart')) {
+        datepickerSelector.classList.add('hideChart');
+    }
+    if (searchButtonSelector.classList && !searchButtonSelector.classList.contains('hideChart')) {
+        searchButtonSelector.classList.add('hideChart');
     }
     homechart.reflow();
 }
@@ -274,6 +288,13 @@ function showWorkChart() {
     if (countyDropDownMain.classList && !countyDropDownMain.classList.contains('hideChart')) {
         countyDropDownMain.classList.add('hideChart');
     }
+    if (datepickerSelector.classList && !datepickerSelector.classList.contains('hideChart')) {
+        datepickerSelector.classList.add('hideChart');
+    }
+    if (searchButtonSelector.classList && !searchButtonSelector.classList.contains('hideChart')) {
+        searchButtonSelector.classList.add('hideChart');
+    }
+    searchButtonSelector
     workchart.reflow();
 }
 
@@ -473,6 +494,7 @@ function showDatewiseChart() {
     let fromDateValue = new Date(fromDateValueStr.val());
     let toDateValue = new Date(toDateValueStr.val());
     let currentDate = new Date();
+    let countyName = document.querySelector('#dropdownCountyLink').innerText.trim();
     if (fromDateValue > toDateValue) {
         alert("From date should not be greater than To date");
     }
@@ -480,7 +502,6 @@ function showDatewiseChart() {
         alert("From Date or To Date cannot be greater than current date");
     }
     let res = [];
-    let countyName = document.querySelector('#dropdownCountyLink').innerText;
     for (index in historical) {
         let tempDate = new Date(historical[index][0]);
         if (tempDate >= fromDateValue && tempDate <= toDateValue && countyName == historical[index][2]) {
