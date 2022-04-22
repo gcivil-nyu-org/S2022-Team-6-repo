@@ -6,8 +6,8 @@ body{
 a{
   text-decoration:none !important;
 }
-h1,h2,h3{
-  font-family: 'Times New Roman', cursive;
+body,h1,h2,h3{
+  font-family: 'Open Sans', sans-serif;
 }
 .myform{
     position: relative;
@@ -31,7 +31,6 @@ h1,h2,h3{
      .mybtn{
      border-radius:50px;
      }
-    
      .login-or {
      position: relative;
      color: #aaa;
@@ -66,4 +65,7 @@ h1,h2,h3{
       form .error {
      color: #ff0000;
      }
-    
+
+    .container-sm{
+       font-family: 'Open Sans', sans-serif;
+    }

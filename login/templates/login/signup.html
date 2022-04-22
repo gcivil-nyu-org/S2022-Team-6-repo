@@ -1,5 +1,4 @@
 {% extends 'main-no-nav.html' %}
-
 {% block content %}
 <div class="container">
     <div class="row">
@@ -14,6 +13,7 @@
                     </div>
                     <form action="" method="post">
                      {% csrf_token %}
+                     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="login">
                        <div class="form-group">
                           <label for="firstname">First Name</label>
                           <input type="text"  name="firstname" class="form-control" id="firstname" required>
@@ -26,7 +26,6 @@
                           <label for="username">Username</label>
                           <input type="text"  name="username" class="form-control" id="username" required>
                        </div>
-                       
                        <div class="form-group">
                           <label for="email">Email Address</label>
                           <input type="email" name="email"  class="form-control" id="email" aria-describedby="emailHelp" required>
@@ -47,7 +46,7 @@
                                  </div>
                               {% endif %}
                            {% endfor %}
-                        {% endif %} 
+                        {% endif %}
                        <br>
                        <div class="form-group">
                            <p class="text-center">By signing up you accept our <a href="#">Terms Of Use</a></p>
