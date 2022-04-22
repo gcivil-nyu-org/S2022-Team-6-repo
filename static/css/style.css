@@ -215,6 +215,10 @@ body, h1, h2, h3 {
   transition-duration: 0.3s !important;
 }
 
+.developer-tab{
+  width: 200px; 
+  height: 200px;
+}
 .coviguard-button:hover {
   background-color: #660708 !important;
 }
