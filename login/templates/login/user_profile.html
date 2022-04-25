@@ -39,6 +39,21 @@
                     <div class="form-group p-2">
                         <label for="dob">Date Of Birth: </label>
                         <input type="date" name="dob" id="dob" class="form-control" {% if userdata.dob %} value={{ userdata.dob|stringformat:"s" }} {% endif %}>
+                        <script>
+                            var todayDate = new Date();
+                            var month = todayDate.getMonth()+1; //04 - current month
+                            var year = todayDate.getUTCFullYear(); //2021 - current year
+                            var tdate = todayDate.getDate(); // 27 - current date 
+                            if(month < 10){
+                              month = "0" + month //'0' + 4 = 04
+                            }
+                            if(tdate < 10){
+                              tdate = "0" + tdate;
+                            }
+                            var maxDate = year + "-" + month + "-" + tdate;
+                            document.getElementById("dob").setAttribute("max", maxDate);
+                            console.log(maxDate);
+                          </script>
                     </div>
                     <div class="form-group p-2">
                         <label for="phone">Phone Number: </label>
