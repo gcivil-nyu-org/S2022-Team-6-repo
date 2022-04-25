@@ -7,7 +7,7 @@ a{
   text-decoration:none !important;
 }
 body,h1,h2,h3{
-  font-family: 'Open Sans', sans-serif;
+  font-family: sans-serif;
 }
 .myform{
     position: relative;
@@ -67,5 +67,5 @@ body,h1,h2,h3{
      }
 
     .container-sm{
-       font-family: 'Open Sans', sans-serif;
+       font-family: sans-serif;
     }
