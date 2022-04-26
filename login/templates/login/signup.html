@@ -1,5 +1,10 @@
 {% extends 'main-no-nav.html' %}
 {%load static %}
+
+{% block style %}
+   <link rel="stylesheet" href="{%static 'css/login/login.css'%}" />
+{% endblock style %}
+
 {% block content %}
 <body class = 'bg-img'style="background-image: url('{%static 'img/login/login-bg.jpg'%}');background-size: cover">
 <div class="container">
@@ -67,5 +72,11 @@
               </div>
        </div>
   </div>
-  </body>
+  
+
+   {% block script %}
+      <script src="{% static 'js/login/login.js' %}"></script>
+   {% endblock script %}
+
+   </body>
 {% endblock content %}
