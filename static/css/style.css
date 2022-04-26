@@ -39,63 +39,66 @@
   animation-direction: alternate;
 }
 
-body, h1, h2, h3 {
+body,
+h1,
+h2,
+h3 {
   font-family: sans-serif;
 }
 
-.container{
+.container {
   font-family: sans-serif;
 }
 
-.coviguard-bg-dark{
+.coviguard-bg-dark {
   background-color: #0B090A;
 }
 
-.coviguard-bg-dark-light{
+.coviguard-bg-dark-light {
   background-color: #161A1D;
 }
 
-.coviguard-bg-maroon{
+.coviguard-bg-maroon {
   background-color: #660708;
 }
 
-.coviguard-bg-dark-red{
+.coviguard-bg-dark-red {
   background-color: #A4161A;
 }
 
-.coviguard-bg-red{
+.coviguard-bg-red {
   background-color: #BA181B;
 }
 
-.coviguard-bg-red-light{
+.coviguard-bg-red-light {
   background-color: #E5383B;
 }
 
-.coviguard-bg-grey{
+.coviguard-bg-grey {
   background-color: #B1A7A6;
 }
 
-.coviguard-bg-grey-light{
+.coviguard-bg-grey-light {
   background-color: #D3D3D3;
 }
 
-.coviguard-bg-plain-grey{
+.coviguard-bg-plain-grey {
   background-color: #F5F3F4;
 }
 
-.coviguard-bg-white{
+.coviguard-bg-white {
   background-color: #FFFFFF;
 }
 
-.coviguard-text-dark{
+.coviguard-text-dark {
   color: #0B090A;
 }
 
-.coviguard-text-dark-light{
+.coviguard-text-dark-light {
   color: #161A1D;
 }
 
-.coviguard-text-maroon{
+.coviguard-text-maroon {
   color: #660708;
 }
 
@@ -103,46 +106,45 @@ body, h1, h2, h3 {
   color: #A4161A;
 }
 
-.coviguard-text-dark-red{
+.coviguard-text-dark-red {
   color: #A4161A;
 }
 
-.coviguard-text-red{
+.coviguard-text-red {
   color: #BA181B;
 }
 
-.coviguard-text-red-light{
+.coviguard-text-red-light {
   color: #E5383B;
 }
 
-.coviguard-text-grey{
+.coviguard-text-grey {
   color: #B1A7A6;
 }
 
-.coviguard-text-grey-light{
+.coviguard-text-grey-light {
   color: #D3D3D3;
 }
 
-.coviguard-text-plain-grey{
+.coviguard-text-plain-grey {
   color: #F5F3F4;
 }
 
-.coviguard-text-white{
+.coviguard-text-white {
   color: #FFFFFF;
 }
 
-.palette-text{
+.palette-text {
   color: #ABC4FF;
 }
 
-.get-started{
+.get-started {
   background-color: #ABC4FF !important;
   transition: all 0.5s;
   cursor: pointer;
   transition-duration: 0.4s !important;
-  border-radius: 4px !important;}
-
-
+  border-radius: 4px !important;
+}
 
 .get-started span {
   display: inline-block;
@@ -170,17 +172,17 @@ body, h1, h2, h3 {
   right: 0;
 }
 
-.intro-cards{
+.intro-cards {
   background-color: #ABC4FF !important;
   transition-duration: 0.1s !important;
   border-radius: 4px !important;
 }
 
-.intro-cards:hover{
+.intro-cards:hover {
   background-color: #C1D3FE !important;
 }
 
-.dark-card{
+.dark-card {
   background-color: #ABC4FF;
   transition-duration: 0.4s;
 }
@@ -189,7 +191,7 @@ body, h1, h2, h3 {
   background-color: #C1D3FE !important;
 }
 
-.mid-card{
+.mid-card {
   background-color: #C1D3FE;
   transition-duration: 0.4s;
 }
@@ -198,32 +200,28 @@ body, h1, h2, h3 {
   background-color: #ABC4FF !important;
 }
 
-.dev-bg{
+.dev-bg {
   background-color: #ABC4FF !important;
   border-radius: 8px;
 }
 
-.dev-contrast-card{
+.dev-contrast-card {
   background-color: #CCDBFD !important;
   border-radius: 8px;
 }
 
-.coviguard-button{
+.coviguard-button {
   border: 2px solid #660708;
   background-color: #F5F3F4;
   color: black;
   transition-duration: 0.3s !important;
 }
 
-.developer-tab{
-  width: 200px; 
-  height: 200px;
-}
 .coviguard-button:hover {
   background-color: #660708 !important;
 }
 
-.bg-img{
+.bg-img {
   background-size: cover !important;
   background-repeat: no-repeat !important;
 }

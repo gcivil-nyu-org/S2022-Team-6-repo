@@ -12,6 +12,11 @@
     {% block stylesheetone %}
 
     {% endblock stylesheetone %}
+
+    {% block stylesheettwo %}
+
+    {% endblock stylesheettwo %}
+
     {% comment %} <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> {% endcomment %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
@@ -25,7 +30,7 @@
   <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 fixed-top">
     <div class="container-sm">
       <a class="navbar-brand" href="{% url 'login:index' %}">
-        <img src="{% static 'img/5.png' %}" width="50" height="45" alt="">
+        <img src="{% static 'img/login/jumbotron-image.png' %}" width="50" height="45" alt="">
         CoviGuard
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
