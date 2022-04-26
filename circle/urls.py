@@ -3,7 +3,7 @@ from . import views
 
 app_name = "circle"
 urlpatterns = [
-    path("<str:username>/", views.circle, name="dashboard"),
+    path("<str:username>/<str:query>/", views.circle, name="dashboard"),
     path(
         "current/<str:username>/<str:circle_id>/",
         views.current_circle,

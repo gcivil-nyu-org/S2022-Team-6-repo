@@ -39,7 +39,7 @@ from alert.helper import get_alert
 from django.core import signing
 
 
-def circle(request, username):
+def circle(request, username, query):
     try:
         userdata = UserData.objects.get(username=username)
         current_username = signing.loads(request.session["user_key"])
@@ -144,6 +144,7 @@ def circle(request, username):
         "recent_circles": recent_circles,
         "circle": True,
         "liveData": liveData,
+        "query": query,
         # "qs_json": json.dumps(list(circle_user_data.values())),
     }
 
@@ -231,6 +232,7 @@ def current_circle(request, username, circle_id):
     total_notify = requests + non_compliance
     streak_today = check_upload_today(username)
     alert = get_alert(username=username)
+    print(circle_compliance)
     context = {
         "page_name": circle_data.circle_id.circle_name,
         "username": username,
@@ -406,7 +408,7 @@ def delete_circle(request, username, circle_id):
 
     remove_circle(circle_id)
 
-    url = reverse("circle:dashboard", kwargs={"username": username})
+    url = reverse("circle:dashboard", kwargs={"username": username, "query": "all_circle"})
     return HttpResponseRedirect(url)
 
 

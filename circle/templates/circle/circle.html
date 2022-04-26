@@ -1,59 +1,52 @@
 {% extends 'main.html' %}
 {% load static %}
-{% block content %}
-    <!-- Add Circle -->
-    <section id="add-circle" class="p-5 bg-primary">
-        <h2>Welcome {{username}}!!</h2>
-        <br><br>
-        <div id="heatMap"></div>
-        <h2 class="text-left text-white">Recent Circles</h2>
-        <hr>
-        <div class="container my-5 mx-5">
-            <div class="row">
-                {% for data in recent_circles %}
-                    <div class="card col-lg-3 col-md-5 mx-2 my-2">
-                        <div class="dropdown">
-                            <button type="button" class="btn" data-bs-toggle="dropdown" aria-expanded="false" style="float: right; background-color: white; margin: 0%;padding: 0%;">
-                                <img src="{% static 'img/circle/circle_options.jpeg'%}"></img>
-                            </button>
-                            <ul class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton1" style="min-width: auto;">
-                                {% if data.is_admin %}
-                                <li>
-                                    <a href="{% url 'circle:deletecircle' username data.circle_id.circle_id %}">
-                                        <button type="button" class="btn btn-outline-primary" style="width: 137.47px;">Delete Circle</button>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'circle:editpermission' username data.circle_id.circle_id %}">
-                                        <button type="button" class="btn btn-outline-primary">Edit</button>
-                                    </a>
-                                </li>
-                                {% else %}
-                                <li>
-                                    <a href="{% url 'circle:exitcircle' username data.circle_id.circle_id%}">
-                                        <button type="button" class="btn btn-outline-primary">Exit Circle</button>
-                                    </a>
-                                </li>
-                                {% endif %}
-                            </ul>
-                        </div>
-                        <img class="rounded mx-auto d-block card-img-top my-3" height="250" width="250" src="{{ data.circle_id.group_image.url }}" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title text-center">{{data.circle_id.circle_name}}</h5>
-                        </div>
-                        <a href="{% url 'circle:user_circle' data.username.username data.circle_id.circle_id %}">
-                            <button type="button" class="btn btn-outline-primary btn-lg col-12 my-3">Enter Circle</button>
-                        </a>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    </section>
 
-    <!-- your circle -->
-    <section id="your-circle" class="p-5 bg-light">
-        <h2 class="text-left text-primary">Your Circles</h2>
-        <hr>
+{% block stylesheettwo %}
+    <link rel="stylesheet" href="{% static 'css/circle/circle-page.css' %}" />
+{% endblock stylesheettwo %}
+{% block content %}
+
+
+<div class="container my-5 p-0 rounded-3">
+    <nav class="navbar coviguard-bg-red-light p-0 rounded-3">
+        <div class="container-fluid text-center p-0 rounded-3">
+                
+            <div class="col-lg-4 col-md-4 circle-options rounded-3 {% if query == 'map' %} selected {% endif %}">
+                <a href="{% url 'circle:dashboard' username 'map' %}">
+                    <div class="">
+                        Map
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 circle-options rounded-3 {% if query == 'recent' %} selected {% endif %}">
+                <a href="{% url 'circle:dashboard' username 'recent' %}" >
+                    <div class="">
+                    Recent Circle
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 circle-options rounded-3 {% if query == 'all_circle' %} selected {% endif %}">
+                <a href="{% url 'circle:dashboard' username 'all_circle' %}">
+                    <div class="">
+                    All Circle
+                    </div>
+                </a>
+            </div>
+
+        </div>
+    </nav>
+</div>
+    <!-- Add Circle -->
+    {% if query == 'map' %}
+        {% include 'circle-heatmap.html' %}
+    {% endif %}
+
+    {% if query == 'recent' %}
+        {% include 'circle-recent.html' %}
+    {% endif %}
+
+    {% if query == 'all_circle' %}
+        <section id="your-circle" class="p-5">
         <div class="container-fluid my-5">
             <div class="row">
                 <div class="m-auto col-lg-10">
@@ -66,11 +59,9 @@
                 </div>
             </div>
         </div>
-
-        <div class="container my-5 mx-5" id="replaceable-content">
-            {% include 'circle-search.html' %}
-        </div>
-    </section>
+        {% include 'circle-search.html' %}
+        </section>
+    {% endif %}
 
 
 
@@ -99,7 +90,7 @@
         const artists_div = $('#replaceable-content')
         
         
-        const endpoint = '/circle/{{username}}/'
+        const endpoint = '/circle/{{username}}/all_circle/'
         console.log(endpoint)
         const delay_by_in_ms = 200
         let scheduled_function = false
