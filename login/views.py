@@ -27,6 +27,7 @@ def profile_view(request, username):
             raise Exception()
     except Exception:
 
+        circle_data = CircleUser.objects.filter(username=username)
         context = {
             "page_name": username,
             "session_valid": False,
@@ -34,7 +35,10 @@ def profile_view(request, username):
             "FirstName": userdata.firstname,
             "LastName": userdata.lastname,
             "Email": userdata.email,
+            "userdata": userdata,
+            "circle_data": circle_data,
         }
+
         return render(request, "login/profile.html", context)
 
     context = {

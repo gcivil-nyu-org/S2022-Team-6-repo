@@ -39,6 +39,11 @@ class TestView(TestCase):
             args=["EashanKaushik"],
         )
 
+        self.markAllAsRead_url = reverse(
+            "alert:markAllRead",
+            args=["EashanKaushik"],
+        )
+
     def test_user2_circle(self):
         response = self.client2.get(self.alert_url)
         # print(response.status_code)
@@ -49,4 +54,19 @@ class TestView(TestCase):
     def test_alerts(self):
         response = self.client2.get(self.alert)
         self.assertEqual(response.status_code, 404)
-        print(response)
+
+    def test_alert_user(self):
+        response = self.client.get(self.alert_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "alert/alert.html")
+
+    def test_markAllRead(self):
+        response = self.client.get(self.markAllAsRead_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "alert/alert.html")
+
+    def test_markAllRead_error(self):
+        self.session["user_key"] = ""
+        self.session.save()
+        response = self.client.get(self.markAllAsRead_url)
+        self.assertEqual(response.status_code, 302)
