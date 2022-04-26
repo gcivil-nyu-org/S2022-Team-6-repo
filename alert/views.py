@@ -78,7 +78,5 @@ def markAllAsRead(request, username):
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
-    AlertNotification.objects.filter(username=username).update(
-        read=True
-    )
+    AlertNotification.objects.filter(username=username).update(read=True)
     return alert_user(request, username)
