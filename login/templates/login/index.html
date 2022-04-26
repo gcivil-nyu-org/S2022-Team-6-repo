@@ -10,7 +10,7 @@
 
 {% block content %}
   <!-- Showcase -->
-<section class="bg-light text-dark p-5 p-lg-0 pt-lg-5 text-center text-sm-start">
+<section class="bg-light text-dark p-5 p-lg-0 pt-lg-5 text-center text-sm-start" id="home">
   <div class="container">
     <div class="d-sm-flex align-items-center justify-content-between">
       <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&display=swap" rel="style">
@@ -29,8 +29,9 @@
             <a href="{% url 'login:signin' %}" class="coviguard-text-maroon">Sign in here</a>
             </small>
           </p>
+
         {% endif %}
-      </div><img class="img-fluid d-none d-sm-block" src="{% static 'img/login/jumbotron-image.png' %}" alt="" />
+      </div><img class="img-fluid d-none d-sm-block" src="{% static 'img/coviguard/favicon.png' %}" alt="" />
     </div>
   </div>
 </section>
@@ -91,151 +92,152 @@
 
 <!-- Developers -->
 
-<div class="container">
-  <h1 ><span class="coviguard-text-maroon">Our Developer Team</span></h1>
-  <div class="row">
-    <div class="col-md-3 col-sm-6">
-      <div class="our-team">
-        <div class="our-team-border">
-          <div class="pic">
-            <img src="{% static 'img/login/eashan.jpeg' %}">
+<section id="developers">
+  <div class="container">
+    <h1 ><span class="coviguard-text-maroon">Our Developer Team</span></h1>
+    <div class="row">
+      <div class="col-md-3 col-sm-6">
+        <div class="our-team">
+          <div class="our-team-border">
+            <div class="pic">
+              <img src="{% static 'img/login/eashan.jpeg' %}">
+            </div>
+            <h3 class="title">Eashan Kaushik</h3>
+            <span class="post">NYU Student</span>
+            <ul class="social">
+              <li>
+                <a href="#">
+                  <i class="bi bi-facebook"></i>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.linkedin.com/in/eashan-kaushik/">
+                  <i class="bi bi-linkedin"></i>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/EashanKaushik">
+                  <i class="bi bi-github"></i>
+                </a>
+              </li>
+            </ul>
           </div>
-          <h3 class="title">Eashan Kaushik</h3>
-          <span class="post">NYU Student</span>
-          <ul class="social">
-            <li>
-              <a href="#">
-                <i class="bi bi-facebook"></i>
-              </a>
-            </li>
-            <li>
-              <a href="https://www.linkedin.com/in/eashan-kaushik/">
-                <i class="bi bi-linkedin"></i>
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/EashanKaushik">
-                <i class="bi bi-github"></i>
-              </a>
-            </li>
-          </ul>
         </div>
       </div>
-    </div>
-    <div class="col-md-3 col-sm-6">
-      <div class="our-team">
-        <div class="our-team-border">
-          <div class="pic">
-            <img class="developer-tab rounded-circle" src="{% static 'img/login/srijan.JPEG' %}">
+      <div class="col-md-3 col-sm-6">
+        <div class="our-team">
+          <div class="our-team-border">
+            <div class="pic">
+              <img class="developer-tab rounded-circle" src="{% static 'img/login/srijan.JPEG' %}">
+            </div>
+            <h3 class="title">Srijan Malhotra</h3>
+            <span class="post">NYU Student</span>
+            <ul class="social">
+              <li>
+                <a href="#">
+                  <i class="bi bi-facebook"></i>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.linkedin.com/in/srijan-malhotra-286950154/">
+                  <i class="bi bi-linkedin"></i>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/srijanmalhotra2711">
+                  <i class="bi bi-github"></i>
+                </a>
+              </li>
+            </ul>
           </div>
-          <h3 class="title">Srijan Malhotra</h3>
-          <span class="post">NYU Student</span>
-          <ul class="social">
-            <li>
-              <a href="#">
-                <i class="bi bi-facebook"></i>
-              </a>
-            </li>
-            <li>
-              <a href="https://www.linkedin.com/in/srijan-malhotra-286950154/">
-                <i class="bi bi-linkedin"></i>
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/srijanmalhotra2711">
-                <i class="bi bi-github"></i>
-              </a>
-            </li>
-          </ul>
         </div>
       </div>
-    </div>
-    <div class="col-md-3 col-sm-6">
-      <div class="our-team">
-        <div class="our-team-border">
-          <div class="pic">
-            <img src="{% static 'img/login/chinmay.jpeg' %}">
+      <div class="col-md-3 col-sm-6">
+        <div class="our-team">
+          <div class="our-team-border">
+            <div class="pic">
+              <img src="{% static 'img/login/chinmay.jpeg' %}">
+            </div>
+            <h3 class="title">Chinmay Kulkarni</h3>
+            <span class="post">NYU Student</span>
+            <ul class="social">
+              <li>
+                <a href="#">
+                  <i class="bi bi-facebook"></i>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.linkedin.com/in/chinmaymrunalkulkarni/">
+                  <i class="bi bi-linkedin"></i>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/chinmaykulkarni95">
+                  <i class="bi bi-github"></i>
+                </a>
+              </li>
+            </ul>
           </div>
-          <h3 class="title">Chinmay Kulkarni</h3>
-          <span class="post">NYU Student</span>
-          <ul class="social">
-            <li>
-              <a href="#">
-                <i class="bi bi-facebook"></i>
-              </a>
-            </li>
-            <li>
-              <a href="https://www.linkedin.com/in/chinmaymrunalkulkarni/">
-                <i class="bi bi-linkedin"></i>
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/chinmaykulkarni95">
-                <i class="bi bi-github"></i>
-              </a>
-            </li>
-          </ul>
         </div>
       </div>
-    </div>
-    <div class="col-md-3 col-sm-6">
-      <div class="our-team">
-        <div class="our-team-border">
-          <div class="pic">
-            <img src="{% static 'img/login/pranav.jpeg' %}">
+      <div class="col-md-3 col-sm-6">
+        <div class="our-team">
+          <div class="our-team-border">
+            <div class="pic">
+              <img src="{% static 'img/login/pranav.jpeg' %}">
+            </div>
+            <h3 class="title">Pranav Singh</h3>
+            <span class="post">NYU Student</span>
+            <ul class="social">
+              <li>
+                <a href="#">
+                  <i class="bi bi-facebook"></i>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.linkedin.com/in/pranavsinghps1/">
+                  <i class="bi bi-linkedin"></i>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/pranavsinghps1">
+                  <i class="bi bi-github"></i>
+                </a>
+              </li>
+            </ul>
           </div>
-          <h3 class="title">Pranav Singh</h3>
-          <span class="post">NYU Student</span>
-          <ul class="social">
-            <li>
-              <a href="#">
-                <i class="bi bi-facebook"></i>
-              </a>
-            </li>
-            <li>
-              <a href="https://www.linkedin.com/in/pranavsinghps1/">
-                <i class="bi bi-linkedin"></i>
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/pranavsinghps1">
-                <i class="bi bi-github"></i>
-              </a>
-            </li>
-          </ul>
         </div>
       </div>
-    </div>
-    <div class="col-md-3 col-sm-6 mx-auto">
-      <div class="our-team">
-        <div class="our-team-border">
-          <div class="pic">
-            <img src="{% static 'img/login/shardha.jpg' %}">
+      <div class="col-md-3 col-sm-6 mx-auto">
+        <div class="our-team">
+          <div class="our-team-border">
+            <div class="pic">
+              <img src="{% static 'img/login/shardha.jpg' %}">
+            </div>
+            <h3 class="title">Shardha Koul</h3>
+            <span class="post">NYU Student</span>
+            <ul class="social">
+              <li>
+                <a href="#">
+                  <i class="bi bi-facebook"></i>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.linkedin.com/in/shardhakoul/">
+                  <i class="bi bi-linkedin"></i>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/Shardhakoul/">
+                  <i class="bi bi-github"></i>
+                </a>
+              </li>
+            </ul>
           </div>
-          <h3 class="title">Shardha Koul</h3>
-          <span class="post">NYU Student</span>
-          <ul class="social">
-            <li>
-              <a href="#">
-                <i class="bi bi-facebook"></i>
-              </a>
-            </li>
-            <li>
-              <a href="https://www.linkedin.com/in/shardhakoul/">
-                <i class="bi bi-linkedin"></i>
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/Shardhakoul/">
-                <i class="bi bi-github"></i>
-              </a>
-            </li>
-          </ul>
         </div>
       </div>
     </div>
   </div>
-</div>
-
+</section>
 
 {% endblock content %}

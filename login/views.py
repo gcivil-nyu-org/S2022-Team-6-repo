@@ -250,12 +250,14 @@ def index(request):
     if "user_key" in request.session.keys():
         current_session_valid = True
         username = signing.loads(request.session["user_key"])
+        userdata = UserData.objects.get(username=username)
     if current_session_valid:
         context = {
             "page_name": "CoviGuard",
             "css_name": "login",
             "session_valid": current_session_valid,
             "username": username,
+            "userdata": userdata,
         }
     else:
         context = {
