@@ -69,3 +69,14 @@ def alert_user(request, username):
     }
 
     return render(request, "alert/alert.html", context)
+
+
+def markAllAsRead(request, username):
+    print("Mark All As Read")
+    try:
+        username = signing.loads(request.session["user_key"])
+    except Exception:
+        url = reverse("login:error")
+        return HttpResponseRedirect(url)
+    AlertNotification.objects.filter(username=username).update(read=True)
+    return alert_user(request, username)
