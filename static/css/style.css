@@ -39,17 +39,6 @@
   animation-direction: alternate;
 }
 
-body,
-h1,
-h2,
-h3 {
-  font-family: sans-serif;
-}
-
-.container {
-  font-family: sans-serif;
-}
-
 .coviguard-bg-dark {
   background-color: #0B090A;
 }

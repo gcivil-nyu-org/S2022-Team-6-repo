@@ -6,7 +6,7 @@
 {% endblock style %}
 
 {% block content %}
-<body class = 'bg-img'style="background-image: url('{%static 'img/login/login-bg.jpg'%}');background-size: cover">
+<body class = 'bg-img'style="background-image: url('{%static 'img/login/covid-image.png'%}');background-size: cover">
 <div class="container">
     <div class="row">
         <div class="col-md-5 mx-auto">
@@ -15,12 +15,11 @@
                     <div class="logo mb-3">
                        <div class="col-md-12 text-center">
                           <h1>CoviGuard</h1>
-                                 <h2>SignUp</h2>
+                          <h2>SignUp</h2>
                        </div>
                     </div>
                     <form action="" method="post">
                      {% csrf_token %}
-                     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="login">
                        <div class="form-group">
                           <label for="firstname">First Name</label>
                           <input type="text"  name="firstname" class="form-control" id="firstname" required>
@@ -55,11 +54,9 @@
                            {% endfor %}
                         {% endif %}
                        <br>
-                       <div class="form-group">
-                           <p class="text-center">By signing up you accept our <a href="#">Terms Of Use</a></p>
-                        </div>
+
                        <div class="col-md-12 text-center mb-3">
-                          <button type="submit" name= "signup-button" class=" btn btn-block mybtn btn-primary tx-tfm">Register</button>
+                          <button type="submit" name= "signup-button" class=" btn btn-block mybtn btn-outline-danger tx-tfm">Register</button>
                        </div>
                        <div class="col-md-12 ">
                           <div class="form-group">
