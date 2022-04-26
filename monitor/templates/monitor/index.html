@@ -1,6 +1,19 @@
 {% extends 'main.html' %}
 {% load static %}
 
+{% block stylesheettwo %}
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <link rel="stylesheet" href="{% static 'css/monitor/style.css' %}" />
+
+{% endblock stylesheettwo %}
+
 {% block content %}
 
 <div id="mySidebar" class="sidebar" style="top: 92px; position: absolute;">
@@ -100,7 +113,27 @@
     
   </div>
     
-        
-
-
 {% endblock content %}
+
+{% block script %}
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <script>
+        _df_2021 = {{ df_2021 | safe }};
+        _df_2021_home = {{ df_2021_home | safe }};
+        _df_2021_work = {{ df_2021_work | safe }};
+        //_categories_2021 = {{categories_2021 | safe }};
+        _locations = {{ locations | safe }}
+        _df_2021_all = {{ df_2021_all | safe }} 
+        historical = {{ historical | safe }};
+    </script>
+    <script src="{% static 'js/monitor/script.js' %}"></script>
+
+{% endblock script %}
