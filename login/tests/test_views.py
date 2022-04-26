@@ -19,30 +19,13 @@ class TestViews(TestCase, TransactionTestCase):
 
         self.hasher = PBKDF2WrappedSHA1PasswordHasher()
 
-        self.sigin_url = reverse(
-            "login:signin",
-        )
-        self.sigup_url = reverse(
-            "login:signup",
-        )
-        self.error_url = reverse(
-            "login:error",
-        )
-        self.logout_url = reverse(
-            "login:logout",
-        )
-        self.profile_url = reverse(
-            "login:profile",
-            args=["EashanKaushik"],
-        )
-        self.profile_url_error = reverse(
-            "login:profile",
-            args=["WrongUser"],
-        )
-        self.profile_url_error_1 = reverse(
-            "login:profile",
-            args=["ChinmayKulkarni"],
-        )
+        self.sigin_url = reverse("login:signin",)
+        self.sigup_url = reverse("login:signup",)
+        self.error_url = reverse("login:error",)
+        self.logout_url = reverse("login:logout",)
+        self.profile_url = reverse("login:profile", args=["EashanKaushik"],)
+        self.profile_url_error = reverse("login:profile", args=["WrongUser"],)
+        self.profile_url_error_1 = reverse("login:profile", args=["ChinmayKulkarni"],)
         self.index_url = reverse("login:index")
 
         self.user_profile_url = reverse("login:user_profile", args=["EashanKaushik"])
@@ -109,10 +92,7 @@ class TestViews(TestCase, TransactionTestCase):
             show_location_visited=False,
         )
 
-        self.profile_url_fake = reverse(
-            "login:profile",
-            args=[None],
-        )
+        self.profile_url_fake = reverse("login:profile", args=[None],)
 
     def test_check_profile(self):
         response = self.client.get(self.profile_url)
@@ -287,9 +267,7 @@ class AtomicTests(TransactionTestCase):
             "login:change_password", args=["EashanKaushik"]
         )
 
-        self.sigup_url = reverse(
-            "login:signup",
-        )
+        self.sigup_url = reverse("login:signup",)
 
         self.userdata = UserData.objects.create(
             firstname="Chinmay",
@@ -332,8 +310,7 @@ class AtomicTests(TransactionTestCase):
 
     def test_user_profile_post(self):
         with open(
-            os.path.join(Path(__file__).parent.absolute(), "famliy.jpg"),
-            "rb",
+            os.path.join(Path(__file__).parent.absolute(), "famliy.jpg"), "rb",
         ) as imgData:
             response = self.client.post(
                 self.user_profile_url,

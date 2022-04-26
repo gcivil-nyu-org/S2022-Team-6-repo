@@ -18,12 +18,16 @@
 
     {% endblock stylesheettwo %}
 
+    {% block navbar-style %}
+    
+    {% endblock navbar-style %}
+
     <title>{{ page_name }}</title>
     <link rel="icon" type="image/png" href="{% static 'img/coviguard/favicon.png' %}">
 
 </head>
 
-<body class="bg-primary">
+<body>
     {% include 'navbar.html' %}
 
     {% block content %}

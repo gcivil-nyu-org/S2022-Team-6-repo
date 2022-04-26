@@ -31,9 +31,7 @@ class TestViews(TestCase):
             home_adress="1122",
         )
 
-        self.alert = Alert.objects.create(
-            username=self.userdata,
-        )
+        self.alert = Alert.objects.create(username=self.userdata,)
 
         self.selftrack_data = SelfTrack.objects.create(
             date_uploaded=datetime.datetime.now(),
@@ -53,14 +51,10 @@ class TestViews(TestCase):
             largest_streak=10,
         )
 
-        self.selftrack_url = reverse(
-            "selftracking:selftrack",
-            args=["cs55"],
-        )
+        self.selftrack_url = reverse("selftracking:selftrack", args=["cs55"],)
 
         self.selftrack_url_real = reverse(
-            "selftracking:selftrack",
-            args=["EashanKaushik"],
+            "selftracking:selftrack", args=["EashanKaushik"],
         )
 
         self.client2 = Client()
@@ -71,10 +65,7 @@ class TestViews(TestCase):
 
         self.session2.save()
 
-        self.selftrack_url_real2 = reverse(
-            "selftracking:selftrack",
-            args=[None],
-        )
+        self.selftrack_url_real2 = reverse("selftracking:selftrack", args=[None],)
 
     def test_add_self_track(self):
         response = self.client.get(self.selftrack_url)

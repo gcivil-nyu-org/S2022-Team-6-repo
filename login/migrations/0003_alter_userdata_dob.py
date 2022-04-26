@@ -11,8 +11,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name="userdata",
-            name="dob",
-            field=models.DateField(),
+            model_name="userdata", name="dob", field=models.DateField(),
         ),
     ]

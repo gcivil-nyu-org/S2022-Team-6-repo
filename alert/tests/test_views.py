@@ -25,24 +25,16 @@ class TestView(TestCase):
             work_address="1122",
             home_adress="1122",
         )
-        self.alert = Alert.objects.create(
-            username=self.userdata,
-        )
+        self.alert = Alert.objects.create(username=self.userdata,)
 
         self.client2 = Client()
         self.session2 = self.client2.session
         self.session2["user_key"] = None
         self.session2.save()
 
-        self.alert_url = reverse(
-            "alert:alert_user",
-            args=["EashanKaushik"],
-        )
+        self.alert_url = reverse("alert:alert_user", args=["EashanKaushik"],)
 
-        self.markAllAsRead_url = reverse(
-            "alert:markAllRead",
-            args=["EashanKaushik"],
-        )
+        self.markAllAsRead_url = reverse("alert:markAllRead", args=["EashanKaushik"],)
 
     def test_user2_circle(self):
         response = self.client2.get(self.alert_url)

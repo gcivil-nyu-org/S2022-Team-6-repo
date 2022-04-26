@@ -46,9 +46,7 @@ class Migration(migrations.Migration):
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name="alert",
-            name="people_data",
-            field=models.TextField(null=True),
+            model_name="alert", name="people_data", field=models.TextField(null=True),
         ),
         migrations.AddField(
             model_name="alert",

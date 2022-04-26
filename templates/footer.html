@@ -14,28 +14,28 @@
                     <div class="col-lg-4 col-md-4 m-auto">
                         <div class="row">
                             <div class="col-lg-4 p-0">
-                                <h4>
+                                <h5>
                                     <a class="coviguard-text-white" style="text-decoration: none;"href="{% url 'login:index'%}">
                                         Home
                                         <i class="bi bi-house-door"></i>
                                     </a>
-                                </h4>
+                                </h5>
                             </div>
                             <div class="col-lg-4 p-0">
-                                <h4>
-                                    <a class="coviguard-text-white" style="text-decoration: none;"href="{% url 'login:signin' %}">
-                                        Sign In
-                                        <i class="bi bi-box-arrow-in-left"></i>
+                                <h5>
+                                    <a class="coviguard-text-white" style="text-decoration: none;"href="{% url 'circle:dashboard' username %}">
+                                        Dashboard
+                                        <i class="bi bi-box2"></i>
                                     </a>
-                                </h4>
+                                </h5>
                             </div>
                             <div class="col-lg-4 p-0">
-                                <h4>
-                                    <a class="coviguard-text-white" style="text-decoration: none;"href="{% url 'login:signup' %}">
-                                        Sign Up
-                                        <i class="bi bi-person-plus"></i>
+                                <h5>
+                                    <a class="coviguard-text-white" style="text-decoration: none;"href="{% url 'login:settings' username 'profile' %}">
+                                        Profile
+                                        <i class="bi bi-file-person"></i>
                                     </a>
-                                </h4>
+                                </h5>
                             </div>
                         </div>
                     </div>
