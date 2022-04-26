@@ -1,4 +1,4 @@
-(async () => {
+heatmapFunction = (async () => {
 
     const topology = await fetch(
         'https://code.highcharts.com/mapdata/countries/us/us-ny-all.topo.json'
@@ -72,4 +72,8 @@
         }]
     });
 
-})();
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    heatmapFunction();
+});

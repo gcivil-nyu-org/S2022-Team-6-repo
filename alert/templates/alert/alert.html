@@ -34,6 +34,9 @@
 
                 <div class="text-end p-5"> 
                     <button type="submit" id= "read-button" name="read-button" class=" btn btn-block btn-outline-success">Mark as read</button>
+                    <a href="{% url 'alert:markAllRead' username %}">
+                        <button type="button" id= "read-all-button" name="read-all-button" class=" btn btn-block btn-outline-success">Mark all as read</button>
+                    </a>
                 </div>
             </form>
             <nav>
