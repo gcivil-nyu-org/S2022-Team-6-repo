@@ -72,7 +72,6 @@ def alert_user(request, username):
 
 
 def markAllAsRead(request, username):
-    print("Mark All As Read")
     try:
         username = signing.loads(request.session["user_key"])
     except Exception:
