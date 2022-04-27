@@ -491,7 +491,9 @@ def request_url(request, display_code):
         return HttpResponseRedirect(url)
 
     try:
-        Circle.objects.get(display_code=display_code)
+        CircleUser.objects.get(
+            username=current_username, circle_id=circle_check_code.circle_id
+        )
         already_member = True
         messages.info(request, "Already a member!!")
     except Exception:
