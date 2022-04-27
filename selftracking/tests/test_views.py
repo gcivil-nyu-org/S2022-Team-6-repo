@@ -128,10 +128,10 @@ class TestExceptionViews(TestCase):
         self.session.save()
 
         self.userdata = UserData.objects.create(
-            firstname="Chinmay",
-            lastname="Kulkarni",
+            firstname="new",
+            lastname="user",
             password="coviguard",
-            username="Eashan",
+            username="exceptionuser",
             email="test@gmail.com",
             dob=datetime.datetime.now(),
             work_address="1122",
@@ -144,7 +144,7 @@ class TestExceptionViews(TestCase):
 
         self.selftrack_url_exp = reverse(
             "selftracking:selftrack",
-            args=["Eashan"],
+            args=["exceptionuser"],
         )
 
     def test_add_self_track_exception(self):
