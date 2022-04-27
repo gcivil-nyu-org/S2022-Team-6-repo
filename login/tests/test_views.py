@@ -117,7 +117,7 @@ class TestViews(TestCase, TransactionTestCase):
     def test_check_profile(self):
         response = self.client.get(self.profile_url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "login/profile.html")
+        self.assertTemplateUsed(response, "login/user_profile.html")
 
     def test_signin(self):
         del self.session["user_key"]

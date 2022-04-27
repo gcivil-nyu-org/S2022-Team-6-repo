@@ -16,6 +16,7 @@ class Circle(models.Model):
     no_of_users = models.IntegerField(default=1)
     created = models.DateTimeField(auto_now_add=True)
     group_image = models.ImageField(default=random_img, upload_to="media/circle/")
+    display_code = models.CharField(max_length=8, null=True)
 
 
 class CircleUser(models.Model):

@@ -75,24 +75,33 @@
     <!-- Left links -->
 
     <!-- Right links -->
+    
     <ul class="navbar-nav mx-3 d-flex flex-row mt-3 mt-lg-0">
         <li class="nav-item text-center mx-2 mx-lg-1">
-        <a class="nav-link active" href="{% url 'circle:notify' username %}">
-            <div>
-                <i class="bi bi-bell"></i>
-            </div>
-            <span class="badge rounded-pill badge-notification bg-light text-dark">{{ total_notify }}</span>
-        </a>
+            <a class="nav-link active" href="{% url 'circle:create' %}">
+                <div>
+                    <i class="bi bi-plus-circle-fill"></i>
+                </div>
+                Create
+            </a>
+        </li>
+        <li class="nav-item text-center mx-2 mx-lg-1">
+            <a class="nav-link active" href="{% url 'circle:notify' username %}">
+                <div>
+                    <i class="bi bi-bell"></i>
+                </div>
+                <span class="badge rounded-pill badge-notification bg-light text-dark">{{ total_notify }}</span>
+            </a>
         </li>
         <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <img src="{{ userdata.user_image.url }}" class="rounded-circle" style="width:50px; height:50px" alt="">
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <li><a class="dropdown-item" href="{% url 'login:settings' username 'profile' %}">Settings</a></li>
-        <li><a class="dropdown-item" href="{% url 'login:logout' %}">Logout</a></li>
-        </ul>
-    </li>
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="{{ userdata.user_image.url }}" class="rounded-circle" style="width:50px; height:50px;" alt="">
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="min-width: 100px;">
+                <li><a class="dropdown-item" href="{% url 'login:settings' username 'profile' %}">Settings</a></li>
+                <li><a class="dropdown-item" href="{% url 'login:logout' %}">Logout</a></li>
+            </ul>
+        </li>
     </ul>
 
     </div>
