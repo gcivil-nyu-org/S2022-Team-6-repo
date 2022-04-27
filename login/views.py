@@ -12,11 +12,9 @@ from .hashes import PBKDF2WrappedSHA1PasswordHasher
 from .models import UserData, Privacy
 from circle.models import CircleUser
 from .helper import update_compliance
-from circle.models import CircleUser, RequestCircle
 from alert.models import Alert
 
 # helper
-from .helper import update_compliance
 from selftracking.helper import check_upload_today
 from alert.helper import get_alert
 from circle.helper import get_notifications, get_all_non_compliance
@@ -33,7 +31,8 @@ def profile_view(request, username):
         url = reverse("login:error")
         return HttpResponseRedirect(url)
 
-    circles = CircleUser.objects.filter(username=view_userdata.username)
+    view_circles = CircleUser.objects.filter(username=view_userdata.username)
+
     try:
         # check user logged in
         current_username = signing.loads(request.session["user_key"])
@@ -50,10 +49,21 @@ def profile_view(request, username):
             # other
             "view_userdata": view_userdata,
             "session_valid": False,
-            "circles": circles,
+            "circles": view_circles,
         }
 
         return render(request, "login/profile-general.html", context)
+
+    logged_circles = CircleUser.objects.filter(username=userdata.username)
+
+    print(logged_circles.values("circle_id"))
+    # common_circles = list()
+    # other_circles = list()
+
+    # for circle_views in view_circles:
+    #     for circle_logged in logged_circles:
+    #         if circle_views.circle_id.circle_id == circle_logged.circle_id.circle_id:
+    #             common_circles.append()
 
     request_user_data, requests = get_notifications(username=userdata.username)
     three_non_compliance, non_compliance = get_all_non_compliance(
@@ -76,7 +86,7 @@ def profile_view(request, username):
         # other
         "view_userdata": view_userdata,
         "session_valid": True,
-        "circles": circles,
+        "circles": view_circles,
     }
     # valid username
     return render(request, "login/profile-login.html", context)
