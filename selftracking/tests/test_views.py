@@ -113,3 +113,48 @@ class TestViews(TestCase):
         # print(response.url)
         # print(url)
         self.assertEqual(url, response.url)
+
+class TestExceptionViews(TestCase):
+    def setUp(self):
+        self.client = Client()
+
+        self.session = self.client.session
+
+        self.session[
+            "user_key"
+        ] = "IkVhc2hhbkthdXNoaWsi:1nYapk:h76qaIXuhZkcmoL0DPN_lCrB_88Cs2ezsLn1vMXe0cY"
+
+        self.session.save()
+
+        self.userdata = UserData.objects.create(
+            firstname="Chinmay",
+            lastname="Kulkarni",
+            password="coviguard",
+            username=None,
+            email="test@gmail.com",
+            dob=datetime.datetime.now(),
+            work_address="1122",
+            home_adress="1122",
+        )
+
+        self.alert = Alert.objects.create(
+            username=self.userdata,
+        )
+
+        self.selftrack_data = SelfTrack.objects.create(
+            date_uploaded=datetime.datetime.now(),
+            username=self.userdata,
+            user_met=json.dumps(["met1"]),
+            location_visited=json.dumps(["11225"]),
+            streak=9,
+            largest_streak=10,
+        )
+        self.selftrack_url_exp = reverse(
+            "selftracking:selftrack",
+            args=["EashanKaushik"],
+        )
+
+    def test_add_self_track_exception(self):
+        response = self.client.get(self.selftrack_url_exp)
+        self.assertNotEqual(response.status_code, 200)
+        #self.assertTemplateUsed(response, "selftracking/self_track.html")
