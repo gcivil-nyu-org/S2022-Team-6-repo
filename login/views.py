@@ -56,7 +56,22 @@ def profile_view(request, username):
 
     logged_circles = CircleUser.objects.filter(username=userdata.username)
 
-    print(logged_circles.values("circle_id"))
+    common_circles = logged_circles.values("circle_id").intersection(
+        view_circles.values("circle_id")
+    )
+    other_circles = view_circles.values("circle_id").difference(common_circles)
+
+    common_circles = CircleUser.objects.filter(
+        username=view_userdata.username, circle_id__in=common_circles
+    )
+    other_circles = CircleUser.objects.filter(
+        username=view_userdata.username, circle_id__in=other_circles
+    )
+
+    # print(view_circles.values("circle_id"))
+    # print(logged_circles.values("circle_id"))
+    # print(CircleUser.objects.filter(username=view_userdata.username, circle_id__in=common_circles))
+    # print(other_circles)
     # common_circles = list()
     # other_circles = list()
 
@@ -86,7 +101,8 @@ def profile_view(request, username):
         # other
         "view_userdata": view_userdata,
         "session_valid": True,
-        "circles": view_circles,
+        "common_circles": common_circles,
+        "other_circles": other_circles,
     }
     # valid username
     return render(request, "login/profile-login.html", context)

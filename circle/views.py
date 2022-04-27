@@ -478,3 +478,56 @@ def edit_permission(request, username, circle_id):
     }
 
     return render(request, "circle/edit_permission.html", context)
+
+
+def request_url(request, display_code):
+
+    try:
+        current_username = signing.loads(request.session["user_key"])
+        userdata = UserData.objects.get(username=current_username)
+        circle_check_code = Circle.objects.get(display_code=display_code)
+    except Exception:
+        url = reverse("login:error")
+        return HttpResponseRedirect(url)
+
+    try:
+        Circle.objects.get(display_code=display_code)
+        already_member = True
+        messages.info(request, "Already a member!!")
+    except Exception:
+        already_member = False
+
+    if request.method == "POST" and "send_request" in request.POST:
+        try:
+            RequestCircle.objects.get(
+                circle_id=circle_check_code.circle_id, username=current_username
+            )
+            messages.error(request, "Request Pending!")
+        except Exception:
+            create_request(current_username, circle_check_code.circle_id)
+            messages.success(request, "Request sent to Circle Admin")
+
+    circle_data = Circle.objects.get(display_code=display_code)
+    request_user_data, requests = get_notifications(username=current_username)
+    three_non_compliance, non_compliance = get_all_non_compliance(
+        current_username, True
+    )
+
+    total_notify = requests + non_compliance
+    streak_today = check_upload_today(current_username)
+    alert = get_alert(username=current_username)
+
+    context = {
+        "page_name": current_username,
+        "username": current_username,
+        "userdata": userdata,
+        "request_user_data": request_user_data,
+        "total_notify": total_notify,
+        "three_non_compliance": three_non_compliance,
+        "streak_today": streak_today,
+        "alert": alert,
+        # other
+        "circle_data": circle_data,
+        "already_member": already_member,
+    }
+    return render(request, "circle/request_url.html", context)
