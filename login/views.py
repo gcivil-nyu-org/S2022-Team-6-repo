@@ -11,6 +11,8 @@ from .hashes import PBKDF2WrappedSHA1PasswordHasher
 # models
 from .models import UserData, Privacy
 from circle.models import CircleUser
+from .helper import update_compliance
+from circle.models import CircleUser, RequestCircle
 from alert.models import Alert
 
 # helper
