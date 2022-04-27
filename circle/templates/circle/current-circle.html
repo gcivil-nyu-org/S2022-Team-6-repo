@@ -4,6 +4,7 @@
 
 {% block stylesheettwo %}
     <link rel="stylesheet" href="{% static 'css/circle/style_members.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/circle/copy.css' %}" />
 {% endblock stylesheettwo %}
 
 
@@ -31,6 +32,9 @@
                         <spam class="text-muted fw-bold">{{circle_request}}</spam>
                     </p>
                 {% endif %}
+                <p class="text-muted d-block">
+                    <button class="copy-btn" value="{% url 'circle:request_url' circle_data.circle_id.display_code %}">Copy link</button>
+                </p>
             </div>
         </div>
     </div>
@@ -69,3 +73,7 @@
 </section>
 
 {% endblock content %}
+
+{% block script %}
+    <script src="{% static 'js/circle/copy.js' %}"></script>
+{% endblock script %}

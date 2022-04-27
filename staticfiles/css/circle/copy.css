@@ -1,0 +1,16 @@
+.copy-btn {
+    cursor: pointer;
+    background: #222;
+    color: #fff;
+    font-size: 16px;
+    border: 1px solid #222;
+    border-radius: 4px;
+    padding: 12px 20px;
+    width: 160px;
+    transition: 0.2s all ease;
+}
+
+.copy-btn:hover {
+    background: none;
+    color: #222;
+}
