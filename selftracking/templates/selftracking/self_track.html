@@ -1,4 +1,12 @@
 {% extends 'main.html' %}
+{% load static %}
+
+{% block stylesheetone %}
+         <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.css">
+        <link rel="stylesheet" href="{% static 'css/selftrack/style.css' %}">
+{% endblock stylesheetone %}
 
 {% block content %}
 
@@ -100,8 +108,14 @@
 
 <section>
    <div class="container">
+      <div class="streak">
+         <div class="particles"></div>
+         <div class="streak__text">
+            Gold streak 20 days
+         </div>
+      </div>
       <div class="row">
-         <div class="col-md-5 mx-auto my-5 p-4 bg-success border">
+         <div class="col-md-5 mx-auto my-5 p-4 border">
             <div class="col-md-12 text-center">
                {% if streak_yesterday or streak_today %}
                   <h2>Your Current Streak: {{current_streak}}</h2>
@@ -117,3 +131,9 @@
    </div>
 </section>
 {% endblock content %}
+
+{% block script %}
+   <script src="{% static 'js/selftrack/jquery.min.js' %}"></script>
+   <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.js"></script>
+   <script src="{% static 'js/selftrack/main.js' %}"></script>
+{% endblock script %}

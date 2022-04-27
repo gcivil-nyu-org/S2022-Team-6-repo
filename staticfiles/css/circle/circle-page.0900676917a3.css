@@ -1,0 +1,98 @@
+.circle-options {
+    background-color: #E5383B;
+    color: #F5F3F4;
+}
+
+.circle-options:hover {
+    background-color: #F5F3F4;
+    color: #E5383B;
+}
+
+.circle-options a {
+    text-decoration: None;
+    color: #F5F3F4;
+    font-size: 35px;
+}
+
+.circle-options h1 {
+    text-decoration: None;
+    color: #F5F3F4;
+}
+
+.circle-options a:hover {
+    text-decoration: None;
+    color: #E5383B;
+    font-size: 35px;
+}
+
+.circle-options h1:hover {
+    text-decoration: None;
+    color: #E5383B;
+}
+
+.selected {
+    background-color: #F5F3F4;
+}
+
+.selected a {
+    color: #E5383B;
+}
+
+.card {
+    border: none;
+    border-radius: 10px
+}
+
+.c-details span {
+    font-weight: 300;
+    font-size: 13px
+}
+
+.icon {
+    width: 5rem;
+    height: 5rem;
+    background-color: #eee;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 39px
+}
+
+.icon img {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    border: 1px solid #D3D3D3;
+    padding: 0;
+}
+
+.badge span {
+    background-color: #ffffff;
+    width: 60px;
+    height: 25px;
+    padding-bottom: 3px;
+    border-radius: 5px;
+    display: flex;
+    color: #ffffff;
+    justify-content: center;
+    align-items: center
+}
+
+.progress {
+    height: 10px;
+    border-radius: 10px
+}
+
+.progress div {
+    background-color: red
+}
+
+.text1 {
+    font-size: 14px;
+    font-weight: 600
+}
+
+.text2 {
+    color: #a5aec0
+}

@@ -115,16 +115,18 @@
 
                         <div class="row">
                             <div class="col pt-3">
-                                {% if circle_compliance|hash:data.username.username|hash:1 %}
-                                    {% if check_vacinated_policy %}
-                                        {% if data.username.is_vacinated %}
-                                            <p class="text-success fw-bold">Vaccinated</p>
-                                        {% else %}
-                                            <p class="text-danger fw-bold">Not Vaccinated</p>
+                                {% if circle_compliance|hash:data.username.username|hash_try:1 != 100 %}
+                                    {% if circle_compliance|hash:data.username.username|hash:1 %}
+                                        {% if check_vacinated_policy %}
+                                            {% if data.username.is_vacinated %}
+                                                <p class="text-success fw-bold">Vaccinated</p>
+                                            {% else %}
+                                                <p class="text-danger fw-bold">Not Vaccinated</p>
+                                            {% endif %}
                                         {% endif %}
+                                    {% else %}
+                                        <p class="text-danger fw-bold">No Vaccination Data</p>
                                     {% endif %}
-                                {% else %}
-                                    <p class="text-danger fw-bold">No Vaccination Data</p>
                                 {% endif %}
                             </div>
                         </div>

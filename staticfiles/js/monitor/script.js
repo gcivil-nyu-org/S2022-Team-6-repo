@@ -4,7 +4,10 @@ let homechartSelector = document.querySelector("#homechart_1");
 let workchartSelector = document.querySelector("#workchart_1");
 let dropdownMenuLinkSelector = document.querySelector("#dropdownMenuLink");
 let countyDropDownMain = document.querySelector("#countyDropDownMain");
+let datepickerSelector = document.querySelector("#datePicker");
+let searchButtonSelector = document.querySelector("#searchButton");
 let chart, homechart, workchart;
+const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 let mainChartConfig = {
     chart: {
         type: 'spline'
@@ -215,11 +218,17 @@ function toggleNav() {
 function openNav() {
     document.getElementById("mySidebar").style.width = "250px";
     document.getElementById("main").style.marginLeft = "250px";
+    $('#mainchart').css("width", "940px");
+    $('#homechart').css("width", "940px");
+    $('#workchart').css("width", "940px");
 }
 
 function closeNav() {
     document.getElementById("mySidebar").style.width = "0";
     document.getElementById("main").style.marginLeft = "0";
+    $('#mainchart').css("width", "1210px");
+    $('#homechart').css("width", "1210px");
+    $('#workchart').css("width", "1210px");
 }
 
 function showMainChart() {
@@ -235,6 +244,13 @@ function showMainChart() {
     if (countyDropDownMain.classList && countyDropDownMain.classList.contains('hideChart')) {
         countyDropDownMain.classList.remove('hideChart');
     }
+    if (datepickerSelector.classList && datepickerSelector.classList.contains('hideChart')) {
+        datepickerSelector.classList.remove('hideChart');
+    }
+    if (searchButtonSelector.classList && searchButtonSelector.classList.contains('hideChart')) {
+        searchButtonSelector.classList.remove('hideChart');
+    }
+    chart.reflow();
 }
 
 function showHomeChart() {
@@ -250,6 +266,13 @@ function showHomeChart() {
     if (countyDropDownMain.classList && !countyDropDownMain.classList.contains('hideChart')) {
         countyDropDownMain.classList.add('hideChart');
     }
+    if (datepickerSelector.classList && !datepickerSelector.classList.contains('hideChart')) {
+        datepickerSelector.classList.add('hideChart');
+    }
+    if (searchButtonSelector.classList && !searchButtonSelector.classList.contains('hideChart')) {
+        searchButtonSelector.classList.add('hideChart');
+    }
+    homechart.reflow();
 }
 
 function showWorkChart() {
@@ -265,6 +288,14 @@ function showWorkChart() {
     if (countyDropDownMain.classList && !countyDropDownMain.classList.contains('hideChart')) {
         countyDropDownMain.classList.add('hideChart');
     }
+    if (datepickerSelector.classList && !datepickerSelector.classList.contains('hideChart')) {
+        datepickerSelector.classList.add('hideChart');
+    }
+    if (searchButtonSelector.classList && !searchButtonSelector.classList.contains('hideChart')) {
+        searchButtonSelector.classList.add('hideChart');
+    }
+    searchButtonSelector
+    workchart.reflow();
 }
 
 function generateLineGraph() {
@@ -373,15 +404,28 @@ function generatePie() {
 }
 
 function generateseriesData(data) {
-    monthToCasesMap = {
-        "January": 0, "February": 0, "March": 0, "April": 0, "May": 0, "June": 0, "July": 0, "August": 0, "September": 0,
-        "October": 0, "November": 0, "December": 0
-    };
+    //monthToCasesMap = {
+    //    "December": 0, "January": 0, "February": 0, "March": 0, "April": 0, "May": 0, "June": 0, "July": 0, "August": 0, "September": 0,
+    //    "October": 0, "November": 0
+    //};
+    monthToCasesMap = {};
+    currentMonthName = new Date().getMonth();
+    if ($('#dateFrom').val() != "" && $('#dateTo').val() != "") {
+        currentMonthName = (new Date($('#dateFrom').val())).getMonth() - 1;
+    }
+    let i = 0;
+    for (i = currentMonthName + 1; i <= 11; i++) {
+        monthToCasesMap[months[i]] = 0;
+    }
+    for (i = 0; i <= currentMonthName; i++) {
+        monthToCasesMap[months[i]] = 0;
+    }
     monthNumberToNameMap = {
         "01": "January", "02": "February", "03": "March", "04": "April", "05": "May", "06": "June",
         "07": "July", "08": "August", "09": "September", "10": "October", "11": "November", "12": "December"
     };
     seriesDataMap = [];
+    let finalSeriesDataMap = [];
     for (temp in data) {
         monthToCasesMap[monthNumberToNameMap[data[temp][0].split("-")[1]]] += data[temp][1];
     }
@@ -389,7 +433,12 @@ function generateseriesData(data) {
         let temp1 = { "name": temp, "y": monthToCasesMap[temp], "drilldown": temp };
         seriesDataMap.push(temp1);
     }
-    return seriesDataMap;
+    for (temp in seriesDataMap) {
+        if (seriesDataMap[temp].y != 0) {
+            finalSeriesDataMap.push(seriesDataMap[temp]);
+        }
+    }
+    return finalSeriesDataMap;
 }
 
 function generateDrillDownData(data) {
@@ -407,29 +456,109 @@ function generateDrillDownData(data) {
             }
         }
     }
-    finalData = { "series": drilldownData };
+    let finalDrillDownData = [];
+    for (temp in drilldownData) {
+        if (drilldownData[temp].data.length != 0) {
+            finalDrillDownData.push(drilldownData[temp])
+        }
+    }
+    finalData = { "series": finalDrillDownData };
     return finalData;
 }
 
 function generateCountySpecificGraph(value) {
     document.querySelector('#dropdownCountyLink').innerText = value;
-    let countyData = [];
-    for (i in _df_2021_all) {
-        if (_df_2021_all[i][2] == value) {
-            dateToCasesArray = [];
-            dateToCasesArray.push(_df_2021_all[i][0]);
-            dateToCasesArray.push(_df_2021_all[i][1]);
-            countyData.push(dateToCasesArray);
+    if ($('#dateFrom').val() != "" && $('#dateTo').val() != "") {
+        showDatewiseChart();
+    }
+    else {
+        let countyData = [];
+        for (i in _df_2021_all) {
+            if (_df_2021_all[i][2] == value) {
+                dateToCasesArray = [];
+                dateToCasesArray.push(_df_2021_all[i][0]);
+                dateToCasesArray.push(_df_2021_all[i][1]);
+                countyData.push(dateToCasesArray);
+            }
+        }
+        mainChartConfig.series[0]['data'] = generateseriesData(countyData);
+        mainChartConfig.drilldown = generateDrillDownData(countyData);
+        mainChartConfig.title.text = value + ' Covid Cases';
+        chart = Highcharts.chart('mainchart', mainChartConfig);
+    }
+}
+
+function showDatewiseChart() {
+    let fromDateValueStr = $('#dateFrom');
+    let toDateValueStr = $('#dateTo');
+    let fromDateValue = new Date(fromDateValueStr.val());
+    let toDateValue = new Date(toDateValueStr.val());
+    let currentDate = new Date();
+    let countyName = document.querySelector('#dropdownCountyLink').innerText.trim();
+
+    if (fromDateValue > toDateValue) {
+        if (!alert('From Date cannot be greater than To Date')) { window.location.reload(); }
+    }
+
+    if (fromDateValue.getDate() > currentDate.getDate() || toDateValue.getDate() > currentDate.getDate()) {
+        if (!alert("From Date or To Date cannot be greater to current date")) { window.location.reload(); }
+    }
+
+    if (fromDateValue.getDate() == currentDate.getDate() || toDateValue.getDate() == currentDate.getDate()) {
+        if (!alert("From Date or To Date cannot be equal to current date")) { window.location.reload(); }
+    }
+
+
+    if (fromDateValue.getDate() == toDateValue.getDate()) {
+        if (!alert("From and To Date cannot be today")) { window.location.reload(); }
+    }
+
+    let Difference_In_Time = toDateValue - fromDateValue;
+    let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+    if (Difference_In_Days > 365) {
+        if (!alert('From Date and To Date must be 1 year apart')) { window.location.reload(); }
+    }
+
+    console.log(currentDate);
+    let res = [];
+    for (index in historical) {
+        let tempDate = new Date(historical[index][0]);
+        if (tempDate >= fromDateValue && tempDate <= toDateValue && countyName == historical[index][2]) {
+            let tempArr = [];
+            tempArr.push(historical[index][0]);
+            tempArr.push(historical[index][1]);
+            res.push(tempArr);
         }
     }
-    mainChartConfig.series[0]['data'] = generateseriesData(countyData);
-    mainChartConfig.drilldown = generateDrillDownData(countyData);
-    mainChartConfig.title.text = value + ' Covid Cases';
+    mainChartConfig.series[0].data = generateseriesData(res);
+    mainChartConfig.drilldown = generateDrillDownData(res);
     chart = Highcharts.chart('mainchart', mainChartConfig);
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    let leastDate = new Date("January 22, 2020");
+    const today = new Date()
+    const yesterday = new Date(today)
+
+    yesterday.setDate(yesterday.getDate() - 1)
+
     chart = Highcharts.chart('mainchart', mainChartConfig);
+    $("#dateFrom").datepicker({ maxDate: yesterday, minDate: leastDate });
+    $("#dateTo").datepicker({ maxDate: yesterday, minDate: leastDate });
+});
+
+$("#dateFrom").on("change", function () {
+    let datetemp = new Date();
+    let fromDate = new Date($(this).val());
+    let year = fromDate.getFullYear();
+    let month = fromDate.getMonth();
+    let day = fromDate.getDate();
+    let dateToBeSet = new Date(year + 1, month - 1, day);
+    if (dateToBeSet > datetemp) {
+        dateToBeSet = datetemp;
+    }
+    $('#dateTo').datepicker('destroy');
+    $("#dateTo").datepicker({ maxDate: dateToBeSet });
 });
 
 homechart = Highcharts.chart('homechart', homeChartConfig);

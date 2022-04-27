@@ -12,7 +12,7 @@ from circle.views import (
 
 class TestUrls(SimpleTestCase):
     def test_dashboard_url(self):
-        url = reverse("circle:dashboard", args=["username"])
+        url = reverse("circle:dashboard", args=["username", "query"])
         self.assertEquals(resolve(url).func, circle)
 
     def test_user_circle_url(self):
@@ -24,7 +24,7 @@ class TestUrls(SimpleTestCase):
         self.assertEquals(resolve(url).func, create)
 
     def test_notify_url(self):
-        url = reverse("circle:notify")
+        url = reverse("circle:notify", args=["username"])
         self.assertEquals(resolve(url).func, notify)
 
     def test_exit_circle_url(self):

@@ -1,25 +1,18 @@
+# django
 from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponseRedirect, JsonResponse
-
+from django.core.paginator import Paginator
 from django.urls import reverse
 from django.template.loader import render_to_string
+from django.core import signing
 
+# models
 from .models import Circle, CirclePolicy, CircleUser, RequestCircle
 from login.models import UserData
-from monitor.driver import get_live, get_s3_client
 
-from .helper import (
-    get_notifications,
-    get_circle_requests,
-    get_all_non_compliance,
-    get_circle_compliance,
-    get_recent_circles,
-    check_recent_circle,
-    get_user_alert,
-    check_vacination_policy,
-    streak_uploaded,
-)
+# driver
+from monitor.driver import get_live, get_s3_client
 from .driver import (
     create_request,
     create_circle,
@@ -31,15 +24,24 @@ from .driver import (
     add_recent_circle,
 )
 
-from selftracking.helper import check_upload_today
+# helper
+from .helper import (
+    get_notifications,
+    get_circle_requests,
+    get_all_non_compliance,
+    get_circle_compliance,
+    get_recent_circles,
+    check_recent_circle,
+    get_user_alert,
+    check_vacination_policy,
+    streak_uploaded,
+)
 
+from selftracking.helper import check_upload_today
 from alert.helper import get_alert
 
 
-from django.core import signing
-
-
-def circle(request, username):
+def circle(request, username, query):
     try:
         userdata = UserData.objects.get(username=username)
         current_username = signing.loads(request.session["user_key"])
@@ -144,6 +146,7 @@ def circle(request, username):
         "recent_circles": recent_circles,
         "circle": True,
         "liveData": liveData,
+        "query": query,
         # "qs_json": json.dumps(list(circle_user_data.values())),
     }
 
@@ -328,15 +331,15 @@ def create(request):
     return render(request, "circle/add.html", context)
 
 
-def notify(request):
-
+def notify(request, username):
     try:
-        username = signing.loads(request.session["user_key"])
         userdata = UserData.objects.get(username=username)
+        current_username = signing.loads(request.session["user_key"])
+        if current_username != username:
+            raise Exception()
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
-
     if request.method == "POST" and "accept_circle" in request.POST:
         accept_request(request.POST.get("accept_circle"))
 
@@ -348,6 +351,11 @@ def notify(request):
 
     three_non_compliance, non_compliance = get_all_non_compliance(username, True)
     all_non_compliance, _ = get_all_non_compliance(username, False)
+
+    if all_non_compliance:
+        paginator = Paginator(all_non_compliance, 5)
+        page = request.GET.get("page")
+        all_non_compliance = paginator.get_page(page)
 
     total_notify = requests + non_compliance
 
@@ -386,7 +394,9 @@ def exit_circle(request, username, circle_id):
     admin_user = CircleUser.objects.filter(circle_id=circle_id, is_admin=True)
     remove_user(admin_user[0].username.username, username, circle_id)
 
-    url = reverse("circle:dashboard", kwargs={"username": username})
+    url = reverse(
+        "circle:dashboard", kwargs={"username": username, "query": "all_circle"}
+    )
     return HttpResponseRedirect(url)
 
 
@@ -406,7 +416,9 @@ def delete_circle(request, username, circle_id):
 
     remove_circle(circle_id)
 
-    url = reverse("circle:dashboard", kwargs={"username": username})
+    url = reverse(
+        "circle:dashboard", kwargs={"username": username, "query": "all_circle"}
+    )
     return HttpResponseRedirect(url)
 
 
@@ -430,16 +442,11 @@ def edit_permission(request, username, circle_id):
 
         circle_data.circle_name = request.POST.get("circle_name")
 
-        print(request.FILES)
-
         if request.FILES:
-            print("hello")
             circle_image = request.FILES["circle_image"]
-            print(type(circle_image))
             circle_image.name = (
                 str(circle_data.circle_id) + "." + circle_image.name.split(".")[-1]
             )
-            print(circle_image.name)
             circle_data.group_image = circle_image
 
         circle_data.save()

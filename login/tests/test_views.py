@@ -120,6 +120,8 @@ class TestViews(TestCase, TransactionTestCase):
         self.assertTemplateUsed(response, "login/profile.html")
 
     def test_signin(self):
+        del self.session["user_key"]
+        self.session.save()
         response = self.client.post(
             self.sigin_url,
             data={"sign-in": "", "username": "EashanKaushik", "password": "coviguard"},
@@ -127,6 +129,8 @@ class TestViews(TestCase, TransactionTestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_signup(self):
+        del self.session["user_key"]
+        self.session.save()
         response = self.client.get(self.sigup_url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "login/signup.html")
@@ -172,6 +176,8 @@ class TestViews(TestCase, TransactionTestCase):
         self.assertTemplateUsed(response, "login/index.html")
 
     def test_signin_withWorngPassword(self):
+        del self.session["user_key"]
+        self.session.save()
         response = self.client.post(
             self.sigin_url,
             data={
@@ -415,6 +421,8 @@ class AtomicTests(TransactionTestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_signup_post_error(self):
+        del self.session["user_key"]
+        self.session.save()
         response = self.client.post(
             self.sigup_url,
             data={
@@ -431,12 +439,14 @@ class AtomicTests(TransactionTestCase):
         self.assertTemplateUsed(response, "login/signup.html")
 
     def test_signup_post_error_2(self):
+        del self.session["user_key"]
+        self.session.save()
         response = self.client.post(
             self.sigup_url,
             data={
                 "signup-button": "",
-                "password": "coviguard",
-                "confirmpassword": "coviguard",
+                "password": "Coviguard@123",
+                "confirmpassword": "Coviguard@123",
                 "firstname": "Eashan",
                 "lastname": "TestLastName",
                 "email": "test@gmail.com",

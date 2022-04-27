@@ -1,0 +1,84 @@
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #BA68C8
+}
+
+.profile-button {
+    background: rgb(99, 39, 120);
+    box-shadow: none;
+    border: none
+}
+
+.profile-button:hover {
+    background: #682773
+}
+
+.profile-button:focus {
+    background: #682773;
+    box-shadow: none
+}
+
+.profile-button:active {
+    background: #682773;
+    box-shadow: none
+}
+
+.back:hover {
+    color: #682773;
+    cursor: pointer
+}
+
+.labels {
+    font-size: 11px
+}
+
+.add-experience:hover {
+    background: #BA68C8;
+    color: #fff;
+    cursor: pointer;
+    border: solid 1px #BA68C8
+}
+
+.card {
+    --card-gradient: rgba(0, 0, 0, 0.8);
+    --card-gradient: #5e9ad9, #e271ad;
+    --card-blend-mode: overlay;
+  
+    background-color: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0.05rem 0.1rem 0.3rem -0.03rem rgba(0, 0, 0, 0.45);
+    padding-bottom: 1rem;
+    background-image: linear-gradient(
+      var(--card-gradient),
+      white max(9.5rem, 27vh)
+    );
+    overflow: hidden;
+}
+
+.card-wrapper {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(30ch, 1fr));
+    grid-gap: 1.5rem;
+    max-width: 20vw;
+    width: 120ch;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .profile-member-list {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: 20px;
+    margin-bottom: 7px;
+    background: #fff;
+    -webkit-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+}

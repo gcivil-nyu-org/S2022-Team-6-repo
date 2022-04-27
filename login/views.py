@@ -267,12 +267,14 @@ def index(request):
     if "user_key" in request.session.keys():
         current_session_valid = True
         username = signing.loads(request.session["user_key"])
+        userdata = UserData.objects.get(username=username)
     if current_session_valid:
         context = {
             "page_name": "CoviGuard",
             "css_name": "login",
             "session_valid": current_session_valid,
             "username": username,
+            "userdata": userdata,
         }
     else:
         context = {
@@ -285,6 +287,10 @@ def index(request):
 
 def signin(request):
 
+    if "user_key" in request.session.keys():
+        url = reverse("login:index")
+        return HttpResponseRedirect(url)
+
     if request.method == "POST" and "sign-in" in request.POST:
         try:
             username = request.POST.get("username")
@@ -295,7 +301,8 @@ def signin(request):
             if user.password == password:
                 user_enc = signing.dumps(username)
                 request.session["user_key"] = user_enc
-                url = reverse("circle:dashboard", kwargs={"username": username})
+                # url = reverse("circle:dashboard", kwargs={"username": username})
+                url = reverse("login:index")
                 return HttpResponseRedirect(url)
             else:
                 raise Exception("Invalid Password")
@@ -307,6 +314,10 @@ def signin(request):
 
 
 def signup(request):
+
+    if "user_key" in request.session.keys():
+        url = reverse("login:index")
+        return HttpResponseRedirect(url)
 
     context = {"page_name": "SignUp"}
 

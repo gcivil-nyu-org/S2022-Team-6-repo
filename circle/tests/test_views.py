@@ -26,7 +26,7 @@ class TestView(TestCase):
 
         self.dashboard_url = reverse(
             "circle:dashboard",
-            args=["EashanKaushik"],
+            args=["EashanKaushik", "all_circle"],
         )
 
         self.user_circle_url = reverse(
@@ -38,7 +38,7 @@ class TestView(TestCase):
             "circle:create",
         )
 
-        self.notify_url = reverse("circle:notify")
+        self.notify_url = reverse("circle:notify", args=["EashanKaushik"])
 
         self.exitcircle = reverse("circle:exitcircle", args=["EashanKaushik", "1"])
 
@@ -166,11 +166,9 @@ class TestView(TestCase):
 
         response = self.client.get(self.exitcircle)
         self.assertEquals(response.status_code, 302)
-        # self.assertTemplateUsed(response, "circle/circle.html")
 
         response = self.client.get(self.deletecircle)
         self.assertEquals(response.status_code, 302)
-        # self.assertTemplateUsed(response, "circle/circle.html")
 
     def test_current_circle(self):
         response = self.client.post(
@@ -212,7 +210,6 @@ class TestView(TestCase):
 
     def test_user2_circle(self):
         response = self.client2.get(self.dashboard_url)
-        # print(response)
         self.assertEqual(response.status_code, 302)
         url = reverse("login:error")
         self.assertEqual(url, response.url)
