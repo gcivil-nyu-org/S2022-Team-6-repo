@@ -25,44 +25,59 @@ from monitor.driver import get_s3_client, get_data
 
 def profile_view(request, username):
     try:
-        userdata = UserData.objects.get(username=username)
+        view_userdata = UserData.objects.get(username=username)
     except Exception:
         # invlaid user url #
         url = reverse("login:error")
         return HttpResponseRedirect(url)
 
+    circles = CircleUser.objects.filter(username=view_userdata.username)
     try:
         # check user logged in
         current_username = signing.loads(request.session["user_key"])
-        if current_username != username:
-            raise Exception()
+        userdata = UserData.objects.get(username=current_username)
+
+        if current_username == username:
+            return user_profile(request, username)
+
     except Exception:
 
-        circle_data = CircleUser.objects.filter(username=username)
         context = {
             "page_name": username,
-            "session_valid": False,
             "username": username,
-            "FirstName": userdata.firstname,
-            "LastName": userdata.lastname,
-            "Email": userdata.email,
-            "userdata": userdata,
-            "circle_data": circle_data,
+            # other
+            "view_userdata": view_userdata,
+            "session_valid": False,
+            "circles": circles,
         }
 
-        return render(request, "login/profile.html", context)
+        return render(request, "login/profile-general.html", context)
+
+    request_user_data, requests = get_notifications(username=userdata.username)
+    three_non_compliance, non_compliance = get_all_non_compliance(
+        userdata.username, True
+    )
+
+    total_notify = requests + non_compliance
+    streak_today = check_upload_today(userdata.username)
+    alert = get_alert(username=userdata.username)
 
     context = {
         "page_name": username,
-        "session_valid": True,
         "username": username,
-        "FirstName": userdata.firstname,
-        "LastName": userdata.lastname,
-        "Email": userdata.email,
         "userdata": userdata,
+        "request_user_data": request_user_data,
+        "total_notify": total_notify,
+        "three_non_compliance": three_non_compliance,
+        "streak_today": streak_today,
+        "alert": alert,
+        # other
+        "view_userdata": view_userdata,
+        "session_valid": True,
+        "circles": circles,
     }
     # valid username
-    return render(request, "login/profile.html", context)
+    return render(request, "login/profile-login.html", context)
 
 
 def user_profile(request, username):
@@ -206,12 +221,24 @@ def user_privacy(request, username):
 
     privacy = Privacy.objects.get(username=username)
 
+    request_user_data, requests = get_notifications(username=username)
+    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
+
+    total_notify = requests + non_compliance
+    streak_today = check_upload_today(username)
+    alert = get_alert(username=username)
+
     context = {
         "page_name": username,
-        "session_valid": True,
         "username": current_username,
         "userdata": userdata,
+        "request_user_data": request_user_data,
+        "total_notify": total_notify,
+        "three_non_compliance": three_non_compliance,
+        "streak_today": streak_today,
+        "alert": alert,
         # other
+        "session_valid": True,
         "privacy": privacy,
         "page": "privacy",
     }
@@ -254,11 +281,24 @@ def user_change_password(request, username):
         except Exception:
             messages.error(request, "Invalid Old Password")
 
+    request_user_data, requests = get_notifications(username=username)
+    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
+
+    total_notify = requests + non_compliance
+    streak_today = check_upload_today(username)
+    alert = get_alert(username=username)
+
     context = {
         "page_name": username,
-        "session_valid": True,
         "username": current_username,
         "userdata": userdata,
+        "request_user_data": request_user_data,
+        "total_notify": total_notify,
+        "three_non_compliance": three_non_compliance,
+        "streak_today": streak_today,
+        "alert": alert,
+        # other
+        "session_valid": True,
         "page": "password",
     }
 
@@ -290,12 +330,14 @@ def index(request):
             "session_valid": current_session_valid,
             "username": username,
             "userdata": userdata,
+            "index": True,
         }
     else:
         context = {
             "page_name": "CoviGuard",
             "css_name": "login",
             "session_valid": current_session_valid,
+            "index": True,
         }
     return render(request, "login/index.html", context)
 
