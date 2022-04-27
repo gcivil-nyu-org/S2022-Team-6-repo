@@ -146,6 +146,7 @@ class TestExceptionViews(TestCase):
             "selftracking:selftrack",
             args=["exceptionuser"],
         )
+        self.selftrack = SelfTrack()
 
     def test_add_self_track_exception(self):
         response = self.client.get(self.selftrack_url_exp)
