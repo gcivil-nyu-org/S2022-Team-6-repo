@@ -10,7 +10,7 @@ urlpatterns = [
         name="user_circle",
     ),
     path("create", views.create, name="create"),
-    path("create/notifications/", views.notify, name="notify"),
+    path("create/notifications/<str:username>/", views.notify, name="notify"),
     path("exit/<str:username>/<str:circle_id>/", views.exit_circle, name="exitcircle",),
     path(
         "deletecircle/<str:username>/<str:circle_id>/",

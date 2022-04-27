@@ -1,25 +1,18 @@
+# django
 from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponseRedirect, JsonResponse
-
+from django.core.paginator import Paginator
 from django.urls import reverse
 from django.template.loader import render_to_string
+from django.core import signing
 
+# models
 from .models import Circle, CirclePolicy, CircleUser, RequestCircle
 from login.models import UserData
-from monitor.driver import get_live, get_s3_client
 
-from .helper import (
-    get_notifications,
-    get_circle_requests,
-    get_all_non_compliance,
-    get_circle_compliance,
-    get_recent_circles,
-    check_recent_circle,
-    get_user_alert,
-    check_vacination_policy,
-    streak_uploaded,
-)
+# driver
+from monitor.driver import get_live, get_s3_client
 from .driver import (
     create_request,
     create_circle,
@@ -31,28 +24,37 @@ from .driver import (
     add_recent_circle,
 )
 
-from selftracking.helper import check_upload_today
+# helper
+from .helper import (
+    get_notifications,
+    get_circle_requests,
+    get_all_non_compliance,
+    get_circle_compliance,
+    get_recent_circles,
+    check_recent_circle,
+    get_user_alert,
+    check_vacination_policy,
+    streak_uploaded,
+)
 
+from selftracking.helper import check_upload_today
 from alert.helper import get_alert
 
 
-from django.core import signing
-
-
 def circle(request, username, query):
-    try:
-        userdata = UserData.objects.get(username=username)
-        current_username = signing.loads(request.session["user_key"])
-        _, client_object = get_s3_client()
-        liveData = get_live(client_object)
-        liveData = (
-            liveData[liveData.state == "New York"][["county", "cases"]].values
-        ).tolist()
-        if current_username != username:
-            raise Exception()
-    except Exception:
-        url = reverse("login:error")
-        return HttpResponseRedirect(url)
+    # try:
+    userdata = UserData.objects.get(username=username)
+    current_username = signing.loads(request.session["user_key"])
+    _, client_object = get_s3_client()
+    liveData = get_live(client_object)
+    liveData = (
+        liveData[liveData.state == "New York"][["county", "cases"]].values
+    ).tolist()
+    if current_username != username:
+        raise Exception()
+    # except Exception:
+    #     url = reverse("login:error")
+    #     return HttpResponseRedirect(url)
 
     circle_user_data = CircleUser.objects.filter(username=username)
 
@@ -330,11 +332,12 @@ def create(request):
     return render(request, "circle/add.html", context)
 
 
-def notify(request):
-
+def notify(request, username):
     try:
-        username = signing.loads(request.session["user_key"])
         userdata = UserData.objects.get(username=username)
+        current_username = signing.loads(request.session["user_key"])
+        if current_username != username:
+            raise Exception()
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
@@ -350,6 +353,10 @@ def notify(request):
 
     three_non_compliance, non_compliance = get_all_non_compliance(username, True)
     all_non_compliance, _ = get_all_non_compliance(username, False)
+    
+    paginator = Paginator(all_non_compliance, 5)
+    page = request.GET.get("page")
+    all_non_compliance = paginator.get_page(page)
 
     total_notify = requests + non_compliance
 
