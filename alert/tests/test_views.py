@@ -3,6 +3,8 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from login.models import UserData
 from alert.models import Alert
+from alert.driver import home_alert
+from monitor.driver import get_s3_client, get_data
 import datetime
 
 
@@ -78,3 +80,14 @@ class CustomTestCases(TestCase):
         args = []
         opts = {}
         call_command("updatealerts", *args, **opts)
+
+    def test_driver_homelocation(self):
+        try:
+            _, client_object = get_s3_client()
+            historical, _, _ = get_data(client_object)
+        except Exception:
+            self.assertEqual("True", "Flase")
+        yesterday = (datetime.date.today() + datetime.timedelta(days=-1)).strftime(
+            "%Y-%m-%d"
+        )
+        home_alert("New York City", historical, yesterday)
