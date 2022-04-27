@@ -1,16 +1,24 @@
+# Django
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib import messages
 from django.core import signing
+# other
 from .hashes import PBKDF2WrappedSHA1PasswordHasher
 
+# models
 from .models import UserData, Privacy
-from .helper import update_compliance
 from circle.models import CircleUser
 from alert.models import Alert
-from monitor.driver import get_s3_client, get_data
 
+# helper
+from .helper import update_compliance
+from selftracking.helper import check_upload_today
+from alert.helper import get_alert
+from circle.helper import get_notifications, get_all_non_compliance
+# driver
+from monitor.driver import get_s3_client, get_data
 
 def profile_view(request, username):
     try:
@@ -120,13 +128,25 @@ def user_profile(request, username):
     historical = historical[historical.state == "New York"]
     counties = historical.county.dropna().unique()
     counties = counties[counties != "Unknown"]
+    
+    request_user_data, requests = get_notifications(username=username)
+    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
+
+    total_notify = requests + non_compliance
+    streak_today = check_upload_today(username)
+    alert = get_alert(username=username)
 
     context = {
         "page_name": username,
-        "session_valid": True,
         "username": current_username,
         "userdata": userdata,
+        "request_user_data": request_user_data,
+        "total_notify": total_notify,
+        "three_non_compliance": three_non_compliance,
+        "streak_today": streak_today,
+        "alert": alert,
         # other
+        "session_valid": True,
         "counties": counties,
     }
     # user is logged in & user is looking for his own profile #
@@ -197,6 +217,7 @@ def user_privacy(request, username):
 def user_change_password(request, username):
     try:
         current_username = signing.loads(request.session["user_key"])
+        userdata = UserData.objects.get(username=username)
         if current_username != username:
             raise Exception()
     except Exception:
@@ -232,6 +253,7 @@ def user_change_password(request, username):
         "page_name": username,
         "session_valid": True,
         "username": current_username,
+        "userdata": userdata,
     }
 
     return render(request, "login/user_password.html", context)
