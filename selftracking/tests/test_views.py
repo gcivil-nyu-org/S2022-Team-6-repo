@@ -114,6 +114,7 @@ class TestViews(TestCase):
         # print(url)
         self.assertEqual(url, response.url)
 
+
 class TestExceptionViews(TestCase):
     def setUp(self):
         self.client = Client()
@@ -130,7 +131,7 @@ class TestExceptionViews(TestCase):
             firstname="Chinmay",
             lastname="Kulkarni",
             password="coviguard",
-            username=None,
+            username="",
             email="test@gmail.com",
             dob=datetime.datetime.now(),
             work_address="1122",
@@ -141,14 +142,6 @@ class TestExceptionViews(TestCase):
             username=self.userdata,
         )
 
-        self.selftrack_data = SelfTrack.objects.create(
-            date_uploaded=datetime.datetime.now(),
-            username=self.userdata,
-            user_met=json.dumps(["met1"]),
-            location_visited=json.dumps(["11225"]),
-            streak=9,
-            largest_streak=10,
-        )
         self.selftrack_url_exp = reverse(
             "selftracking:selftrack",
             args=["EashanKaushik"],
@@ -157,4 +150,4 @@ class TestExceptionViews(TestCase):
     def test_add_self_track_exception(self):
         response = self.client.get(self.selftrack_url_exp)
         self.assertNotEqual(response.status_code, 200)
-        #self.assertTemplateUsed(response, "selftracking/self_track.html")
+        # self.assertTemplateUsed(response, "selftracking/self_track.html")
