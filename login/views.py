@@ -7,7 +7,7 @@ from .hashes import PBKDF2WrappedSHA1PasswordHasher
 
 from .models import UserData, Privacy
 from .helper import update_compliance
-from circle.models import CircleUser
+from circle.models import CircleUser, RequestCircle
 from alert.models import Alert
 from monitor.driver import get_s3_client, get_data
 
@@ -28,15 +28,28 @@ def profile_view(request, username):
     except Exception:
 
         circle_data = CircleUser.objects.filter(username=username)
+        circles = [x.circle_id.circle_id for x in circle_data]
+        current_user_circle_data = CircleUser.objects.filter(username=current_username)
+        requested_circle = [
+            x.circle_id.circle_id
+            for x in RequestCircle.objects.filter(username=current_username)
+        ]
+        common_circles = []
+        for i in range(len(current_user_circle_data)):
+            if current_user_circle_data[i].circle_id.circle_id in circles:
+                common_circles.append(current_user_circle_data[i].circle_id.circle_id)
         context = {
             "page_name": username,
             "session_valid": False,
             "username": username,
+            "current_username": current_username,
             "FirstName": userdata.firstname,
             "LastName": userdata.lastname,
             "Email": userdata.email,
             "userdata": userdata,
             "circle_data": circle_data,
+            "common_circles": common_circles,
+            "requested_circle": requested_circle,
         }
 
         return render(request, "login/profile.html", context)

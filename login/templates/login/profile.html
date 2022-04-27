@@ -24,11 +24,27 @@
                         <label name="last_name" id="last_name" class="form-control"value={{LastName}}>{{LastName}}</label>
                     </div>
                     <br><br>
+                    <label>
+                        <h4>Circles</h4>
+                    </label>
+                    <br>
                     <ul class="card-wrapper">
                     {% for circle in circle_data %}
                         <li class="card">
                             <img class="profile-member-list" src='{{circle.circle_id.group_image.url}}' alt=''>
-                            <a href="">{{circle.circle_id.circle_name}}</a>
+                            <label>{{circle.circle_id.circle_name}}</label>
+                            <label name="circle_id" value="{{circle.circle_id.circle_id}}"></label>
+                            {% if circle.circle_id.circle_id in common_circles %}
+                            <a href="{% url 'circle:user_circle' current_username circle.circle_id.circle_id %}">
+                                <button type="button" class="btn btn-outline-primary btn-lg col-12 my-3">Enter Circle</button>
+                            </a>
+                            {% elif circle.circle_id.circle_id in requested_circle %}
+                            <label>Requested</label>
+                            {% else %}
+                                <a href="{% url 'circle:create' %}">
+                                    <button type="submit" name=request_circle class="btn btn-outline-primary btn-lg col-12 my-3">Send Request to Join</button>
+                                </a>
+                            {% endif %}
                         </li>
                     {% endfor %} 
                     </ul>
