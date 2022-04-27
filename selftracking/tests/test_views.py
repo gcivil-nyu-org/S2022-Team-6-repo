@@ -131,7 +131,7 @@ class TestExceptionViews(TestCase):
             firstname="Chinmay",
             lastname="Kulkarni",
             password="coviguard",
-            username="",
+            username="Eashan",
             email="test@gmail.com",
             dob=datetime.datetime.now(),
             work_address="1122",
@@ -144,7 +144,7 @@ class TestExceptionViews(TestCase):
 
         self.selftrack_url_exp = reverse(
             "selftracking:selftrack",
-            args=["EashanKaushik"],
+            args=["Eashan"],
         )
 
     def test_add_self_track_exception(self):
