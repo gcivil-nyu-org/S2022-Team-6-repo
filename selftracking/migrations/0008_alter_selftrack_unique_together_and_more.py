@@ -12,14 +12,19 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterUniqueTogether(name="selftrack", unique_together=set(),),
+        migrations.AlterUniqueTogether(
+            name="selftrack",
+            unique_together=set(),
+        ),
         migrations.AlterField(
             model_name="selftrack",
             name="location_visited",
             field=models.TextField(null=True),
         ),
         migrations.AlterField(
-            model_name="selftrack", name="user_met", field=models.TextField(null=True),
+            model_name="selftrack",
+            name="user_met",
+            field=models.TextField(null=True),
         ),
         migrations.AlterField(
             model_name="selftrack",
@@ -28,5 +33,7 @@ class Migration(migrations.Migration):
                 on_delete=django.db.models.deletion.CASCADE, to="login.userdata"
             ),
         ),
-        migrations.DeleteModel(name="Location",),
+        migrations.DeleteModel(
+            name="Location",
+        ),
     ]

@@ -24,15 +24,21 @@ class TestView(TestCase):
         ] = "IkVhc2hhbkthdXNoaWsi:1nYapk:h76qaIXuhZkcmoL0DPN_lCrB_88Cs2ezsLn1vMXe0cY"
         self.session.save()
 
-        self.dashboard_url = reverse("circle:dashboard", args=["EashanKaushik"],)
-
-        self.user_circle_url = reverse(
-            "circle:user_circle", args=["EashanKaushik", "1"],
+        self.dashboard_url = reverse(
+            "circle:dashboard",
+            args=["EashanKaushik", "all_circle"],
         )
 
-        self.create_url = reverse("circle:create",)
+        self.user_circle_url = reverse(
+            "circle:user_circle",
+            args=["EashanKaushik", "1"],
+        )
 
-        self.notify_url = reverse("circle:notify")
+        self.create_url = reverse(
+            "circle:create",
+        )
+
+        self.notify_url = reverse("circle:notify", args=["EashanKaushik"])
 
         self.exitcircle = reverse("circle:exitcircle", args=["EashanKaushik", "1"])
 
@@ -71,11 +77,17 @@ class TestView(TestCase):
             home_adress="1122",
         )
 
-        self.alert = Alert.objects.create(username=self.userdata,)
+        self.alert = Alert.objects.create(
+            username=self.userdata,
+        )
 
-        self.alert_2 = Alert.objects.create(username=self.userdata_2,)
+        self.alert_2 = Alert.objects.create(
+            username=self.userdata_2,
+        )
 
-        self.alert_3 = Alert.objects.create(username=self.userdata_3,)
+        self.alert_3 = Alert.objects.create(
+            username=self.userdata_3,
+        )
 
         self.privacy = Privacy.objects.create(username=self.userdata)
 
@@ -112,7 +124,8 @@ class TestView(TestCase):
         )
 
         self.circle_policy = CirclePolicy.objects.create(
-            circle_id=self.circle, policy_id=self.policy,
+            circle_id=self.circle,
+            policy_id=self.policy,
         )
 
         self.cirlce_compliance = CirclePolicyCompliance.objects.create(
@@ -153,11 +166,9 @@ class TestView(TestCase):
 
         response = self.client.get(self.exitcircle)
         self.assertEquals(response.status_code, 302)
-        # self.assertTemplateUsed(response, "circle/circle.html")
 
         response = self.client.get(self.deletecircle)
         self.assertEquals(response.status_code, 302)
-        # self.assertTemplateUsed(response, "circle/circle.html")
 
     def test_current_circle(self):
         response = self.client.post(
@@ -199,7 +210,6 @@ class TestView(TestCase):
 
     def test_user2_circle(self):
         response = self.client2.get(self.dashboard_url)
-        # print(response)
         self.assertEqual(response.status_code, 302)
         url = reverse("login:error")
         self.assertEqual(url, response.url)

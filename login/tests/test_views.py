@@ -19,13 +19,30 @@ class TestViews(TestCase, TransactionTestCase):
 
         self.hasher = PBKDF2WrappedSHA1PasswordHasher()
 
-        self.sigin_url = reverse("login:signin",)
-        self.sigup_url = reverse("login:signup",)
-        self.error_url = reverse("login:error",)
-        self.logout_url = reverse("login:logout",)
-        self.profile_url = reverse("login:profile", args=["EashanKaushik"],)
-        self.profile_url_error = reverse("login:profile", args=["WrongUser"],)
-        self.profile_url_error_1 = reverse("login:profile", args=["ChinmayKulkarni"],)
+        self.sigin_url = reverse(
+            "login:signin",
+        )
+        self.sigup_url = reverse(
+            "login:signup",
+        )
+        self.error_url = reverse(
+            "login:error",
+        )
+        self.logout_url = reverse(
+            "login:logout",
+        )
+        self.profile_url = reverse(
+            "login:profile",
+            args=["EashanKaushik"],
+        )
+        self.profile_url_error = reverse(
+            "login:profile",
+            args=["WrongUser"],
+        )
+        self.profile_url_error_1 = reverse(
+            "login:profile",
+            args=["ChinmayKulkarni"],
+        )
         self.index_url = reverse("login:index")
 
         self.user_profile_url = reverse("login:user_profile", args=["EashanKaushik"])
@@ -92,7 +109,10 @@ class TestViews(TestCase, TransactionTestCase):
             show_location_visited=False,
         )
 
-        self.profile_url_fake = reverse("login:profile", args=[None],)
+        self.profile_url_fake = reverse(
+            "login:profile",
+            args=[None],
+        )
 
     def test_check_profile(self):
         response = self.client.get(self.profile_url)
@@ -100,6 +120,8 @@ class TestViews(TestCase, TransactionTestCase):
         self.assertTemplateUsed(response, "login/profile.html")
 
     def test_signin(self):
+        del self.session["user_key"]
+        self.session.save()
         response = self.client.post(
             self.sigin_url,
             data={"sign-in": "", "username": "EashanKaushik", "password": "coviguard"},
@@ -107,6 +129,8 @@ class TestViews(TestCase, TransactionTestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_signup(self):
+        del self.session["user_key"]
+        self.session.save()
         response = self.client.get(self.sigup_url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "login/signup.html")
@@ -152,6 +176,8 @@ class TestViews(TestCase, TransactionTestCase):
         self.assertTemplateUsed(response, "login/index.html")
 
     def test_signin_withWorngPassword(self):
+        del self.session["user_key"]
+        self.session.save()
         response = self.client.post(
             self.sigin_url,
             data={
@@ -267,7 +293,9 @@ class AtomicTests(TransactionTestCase):
             "login:change_password", args=["EashanKaushik"]
         )
 
-        self.sigup_url = reverse("login:signup",)
+        self.sigup_url = reverse(
+            "login:signup",
+        )
 
         self.userdata = UserData.objects.create(
             firstname="Chinmay",
@@ -310,7 +338,8 @@ class AtomicTests(TransactionTestCase):
 
     def test_user_profile_post(self):
         with open(
-            os.path.join(Path(__file__).parent.absolute(), "famliy.jpg"), "rb",
+            os.path.join(Path(__file__).parent.absolute(), "famliy.jpg"),
+            "rb",
         ) as imgData:
             response = self.client.post(
                 self.user_profile_url,
@@ -392,6 +421,8 @@ class AtomicTests(TransactionTestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_signup_post_error(self):
+        del self.session["user_key"]
+        self.session.save()
         response = self.client.post(
             self.sigup_url,
             data={
@@ -408,12 +439,14 @@ class AtomicTests(TransactionTestCase):
         self.assertTemplateUsed(response, "login/signup.html")
 
     def test_signup_post_error_2(self):
+        del self.session["user_key"]
+        self.session.save()
         response = self.client.post(
             self.sigup_url,
             data={
                 "signup-button": "",
-                "password": "coviguard",
-                "confirmpassword": "coviguard",
+                "password": "Coviguard@123",
+                "confirmpassword": "Coviguard@123",
                 "firstname": "Eashan",
                 "lastname": "TestLastName",
                 "email": "test@gmail.com",

@@ -16,7 +16,7 @@
                     <div class="notification-list notification-list--unread">
                         <div class="notification-list_content">
                             <div class="notification-list_detail">
-                                <p class="text-muted">{{ request_data.username.username }} requested to join {{request_data.circle_id.circle_name }}</p>
+                                <p class="text-muted"><span class="fw-bold">{{ request_data.username.username }}</span> requested to join <span class="fw-bold">{{request_data.circle_id.circle_name }}</span></p>
                                 <form action="" method="post">
                                     {% csrf_token %}
                                     <button name="accept_circle" value="{{request_data.request_id}}" type="submit" class="btn btn-outline-success">Accept</button>
@@ -58,8 +58,9 @@
                         <div class="notification-list_feature-img"> 
                             
                             <img src="{{ non_compliance.circle_id.group_image.url }}"  class="rounded-circle border" style="margin: 0 0 0 0;" alt="">
-                            <i class="bi bi-x-lg text-danger p-0 m-0"></i>
-                            <img src="{% static '' %}img/circle/{{non_compliance.policy_id.policy_id}}.jpg"  class="rounded-circle border" style="margin: 0 0 0 0;" alt="">
+                            {% comment %} <i class="bi bi-x-lg text-danger p-0 m-0"></i>
+                            {% static '' %}img/circle/{{non_compliance.policy_id.policy_id}}.jpg
+                            <img src="{% static '' %}img/circle/{{non_compliance.policy_id.policy_id}}.jpg"  class="rounded-circle border" style="margin: 0 0 0 0;" alt=""> {% endcomment %}
                         </div>
                     </div>
                 </div>

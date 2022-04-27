@@ -11,6 +11,8 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name="selftrack", name="streak", field=models.IntegerField(default=0),
+            model_name="selftrack",
+            name="streak",
+            field=models.IntegerField(default=0),
         ),
     ]

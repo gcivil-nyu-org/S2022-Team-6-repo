@@ -7,7 +7,7 @@ let countyDropDownMain = document.querySelector("#countyDropDownMain");
 let datepickerSelector = document.querySelector("#datePicker");
 let searchButtonSelector = document.querySelector("#searchButton");
 let chart, homechart, workchart;
-const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 let mainChartConfig = {
     chart: {
         type: 'spline'
@@ -218,17 +218,17 @@ function toggleNav() {
 function openNav() {
     document.getElementById("mySidebar").style.width = "250px";
     document.getElementById("main").style.marginLeft = "250px";
-    $('#mainchart').css("width","940px");
-    $('#homechart').css("width","940px");
-    $('#workchart').css("width","940px");
+    $('#mainchart').css("width", "940px");
+    $('#homechart').css("width", "940px");
+    $('#workchart').css("width", "940px");
 }
 
 function closeNav() {
     document.getElementById("mySidebar").style.width = "0";
     document.getElementById("main").style.marginLeft = "0";
-    $('#mainchart').css("width","1210px");
-    $('#homechart').css("width","1210px");
-    $('#workchart').css("width","1210px");
+    $('#mainchart').css("width", "1210px");
+    $('#homechart').css("width", "1210px");
+    $('#workchart').css("width", "1210px");
 }
 
 function showMainChart() {
@@ -414,10 +414,10 @@ function generateseriesData(data) {
         currentMonthName = (new Date($('#dateFrom').val())).getMonth() - 1;
     }
     let i = 0;
-    for (i=currentMonthName+1;i<=11;i++) {
+    for (i = currentMonthName + 1; i <= 11; i++) {
         monthToCasesMap[months[i]] = 0;
     }
-    for (i=0;i<=currentMonthName;i++) {
+    for (i = 0; i <= currentMonthName; i++) {
         monthToCasesMap[months[i]] = 0;
     }
     monthNumberToNameMap = {
@@ -495,12 +495,31 @@ function showDatewiseChart() {
     let toDateValue = new Date(toDateValueStr.val());
     let currentDate = new Date();
     let countyName = document.querySelector('#dropdownCountyLink').innerText.trim();
+
     if (fromDateValue > toDateValue) {
-        alert("From date should not be greater than To date");
+        if (!alert('From Date cannot be greater than To Date')) { window.location.reload(); }
     }
-    if (fromDateValue > currentDate || toDateValue > currentDate) {
-        alert("From Date or To Date cannot be greater than current date");
+
+    if (fromDateValue.getDate() > currentDate.getDate() || toDateValue.getDate() > currentDate.getDate()) {
+        if (!alert("From Date or To Date cannot be greater to current date")) { window.location.reload(); }
     }
+
+    if (fromDateValue.getDate() == currentDate.getDate() || toDateValue.getDate() == currentDate.getDate()) {
+        if (!alert("From Date or To Date cannot be equal to current date")) { window.location.reload(); }
+    }
+
+
+    if (fromDateValue.getDate() == toDateValue.getDate()) {
+        if (!alert("From and To Date cannot be today")) { window.location.reload(); }
+    }
+
+    let Difference_In_Time = toDateValue - fromDateValue;
+    let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+    if (Difference_In_Days > 365) {
+        if (!alert('From Date and To Date must be 1 year apart')) { window.location.reload(); }
+    }
+
+    console.log(currentDate);
     let res = [];
     for (index in historical) {
         let tempDate = new Date(historical[index][0]);
@@ -517,12 +536,18 @@ function showDatewiseChart() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    let leastDate = new Date("January 22, 2020");
+    const today = new Date()
+    const yesterday = new Date(today)
+
+    yesterday.setDate(yesterday.getDate() - 1)
+
     chart = Highcharts.chart('mainchart', mainChartConfig);
-    $( "#dateFrom" ).datepicker();
-    $( "#dateTo" ).datepicker({maxDate: new Date()});
+    $("#dateFrom").datepicker({ maxDate: yesterday, minDate: leastDate });
+    $("#dateTo").datepicker({ maxDate: yesterday, minDate: leastDate });
 });
 
-$("#dateFrom").on("change",function(){
+$("#dateFrom").on("change", function () {
     let datetemp = new Date();
     let fromDate = new Date($(this).val());
     let year = fromDate.getFullYear();
@@ -533,7 +558,7 @@ $("#dateFrom").on("change",function(){
         dateToBeSet = datetemp;
     }
     $('#dateTo').datepicker('destroy');
-    $("#dateTo").datepicker({maxDate: dateToBeSet});
+    $("#dateTo").datepicker({ maxDate: dateToBeSet });
 });
 
 homechart = Highcharts.chart('homechart', homeChartConfig);

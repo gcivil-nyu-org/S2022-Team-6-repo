@@ -22,7 +22,9 @@ class TestViews(TestCase):
             dob=datetime.datetime.now(),
         )
 
-        self.alert = Alert.objects.create(username=self.userdata,)
+        self.alert = Alert.objects.create(
+            username=self.userdata,
+        )
 
         self.user_monitor_url = reverse("monitor:user_monitor")
         self.client2 = Client()

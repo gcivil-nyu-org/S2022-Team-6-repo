@@ -42,19 +42,19 @@ from alert.helper import get_alert
 
 
 def circle(request, username, query):
-    # try:
-    userdata = UserData.objects.get(username=username)
-    current_username = signing.loads(request.session["user_key"])
-    _, client_object = get_s3_client()
-    liveData = get_live(client_object)
-    liveData = (
-        liveData[liveData.state == "New York"][["county", "cases"]].values
-    ).tolist()
-    if current_username != username:
-        raise Exception()
-    # except Exception:
-    #     url = reverse("login:error")
-    #     return HttpResponseRedirect(url)
+    try:
+        userdata = UserData.objects.get(username=username)
+        current_username = signing.loads(request.session["user_key"])
+        _, client_object = get_s3_client()
+        liveData = get_live(client_object)
+        liveData = (
+            liveData[liveData.state == "New York"][["county", "cases"]].values
+        ).tolist()
+        if current_username != username:
+            raise Exception()
+    except Exception:
+        url = reverse("login:error")
+        return HttpResponseRedirect(url)
 
     circle_user_data = CircleUser.objects.filter(username=username)
 
@@ -234,7 +234,6 @@ def current_circle(request, username, circle_id):
     total_notify = requests + non_compliance
     streak_today = check_upload_today(username)
     alert = get_alert(username=username)
-    print(circle_compliance)
     context = {
         "page_name": circle_data.circle_id.circle_name,
         "username": username,
@@ -341,7 +340,6 @@ def notify(request, username):
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
-
     if request.method == "POST" and "accept_circle" in request.POST:
         accept_request(request.POST.get("accept_circle"))
 
@@ -353,10 +351,11 @@ def notify(request, username):
 
     three_non_compliance, non_compliance = get_all_non_compliance(username, True)
     all_non_compliance, _ = get_all_non_compliance(username, False)
-    
-    paginator = Paginator(all_non_compliance, 5)
-    page = request.GET.get("page")
-    all_non_compliance = paginator.get_page(page)
+
+    if all_non_compliance:
+        paginator = Paginator(all_non_compliance, 5)
+        page = request.GET.get("page")
+        all_non_compliance = paginator.get_page(page)
 
     total_notify = requests + non_compliance
 
@@ -395,7 +394,9 @@ def exit_circle(request, username, circle_id):
     admin_user = CircleUser.objects.filter(circle_id=circle_id, is_admin=True)
     remove_user(admin_user[0].username.username, username, circle_id)
 
-    url = reverse("circle:dashboard", kwargs={"username": username})
+    url = reverse(
+        "circle:dashboard", kwargs={"username": username, "query": "all_circle"}
+    )
     return HttpResponseRedirect(url)
 
 
@@ -415,7 +416,9 @@ def delete_circle(request, username, circle_id):
 
     remove_circle(circle_id)
 
-    url = reverse("circle:dashboard", kwargs={"username": username, "query": "all_circle"})
+    url = reverse(
+        "circle:dashboard", kwargs={"username": username, "query": "all_circle"}
+    )
     return HttpResponseRedirect(url)
 
 
@@ -439,16 +442,11 @@ def edit_permission(request, username, circle_id):
 
         circle_data.circle_name = request.POST.get("circle_name")
 
-        print(request.FILES)
-
         if request.FILES:
-            print("hello")
             circle_image = request.FILES["circle_image"]
-            print(type(circle_image))
             circle_image.name = (
                 str(circle_data.circle_id) + "." + circle_image.name.split(".")[-1]
             )
-            print(circle_image.name)
             circle_data.group_image = circle_image
 
         circle_data.save()
