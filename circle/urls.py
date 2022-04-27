@@ -26,4 +26,9 @@ urlpatterns = [
         views.edit_permission,
         name="editpermission",
     ),
+    path(
+        "request_url/<str:username>/<str:display_code>/",
+        views.request_url,
+        name="request_url",
+    ),
 ]

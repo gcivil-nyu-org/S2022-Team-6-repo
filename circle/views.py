@@ -478,3 +478,38 @@ def edit_permission(request, username, circle_id):
     }
 
     return render(request, "circle/edit_permission.html", context)
+
+
+def request_url(request, username, display_code):
+    # url = reverse("circle:dashboard", kwargs={"username": username})
+    # url = reverse("circle:create", data={"username": username})
+    # print(url)
+    # return HttpResponseRedirect(url)
+
+    try:
+        current_username = signing.loads(request.session["user_key"])
+        userdata = UserData.objects.get(username=username)
+        if current_username != username:
+            raise Exception()
+    except Exception:
+        url = reverse("login:error")
+        return HttpResponseRedirect(url)
+
+    request_user_data, requests = get_notifications(username=username)
+    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
+
+    total_notify = requests + non_compliance
+    streak_today = check_upload_today(username)
+    alert = get_alert(username=username)
+
+    context = {
+        "page_name": username,
+        "username": current_username,
+        "userdata": userdata,
+        "request_user_data": request_user_data,
+        "total_notify": total_notify,
+        "three_non_compliance": three_non_compliance,
+        "streak_today": streak_today,
+        "alert": alert,
+    }
+    return render(request, "circle/request_url.html", context)
