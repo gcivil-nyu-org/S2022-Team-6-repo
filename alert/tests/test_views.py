@@ -1,3 +1,4 @@
+from django.core.management import call_command
 from django.test import TestCase, Client
 from django.urls import reverse
 from login.models import UserData
@@ -70,3 +71,10 @@ class TestView(TestCase):
         self.session.save()
         response = self.client.get(self.markAllAsRead_url)
         self.assertEqual(response.status_code, 302)
+
+
+class CustomTestCases(TestCase):
+    def test_mycommand(self):
+        args = []
+        opts = {}
+        call_command("updatealerts", *args, **opts)
