@@ -19,14 +19,14 @@
                 </a>
             </div>
             <div class="col-lg-4 col-md-4 circle-options rounded-3 {% if query == 'recent' %} selected {% endif %}">
-                <a href="{% url 'circle:dashboard' username 'recent' %}" >
+                <a class="{% if not recent_circles %} btn disabled {% endif %}" href="{% url 'circle:dashboard' username 'recent' %}" >
                     <div class="">
                     Recent Circle
                     </div>
                 </a>
             </div>
             <div class="col-lg-4 col-md-4 circle-options rounded-3 {% if query == 'all_circle' %} selected {% endif %}">
-                <a href="{% url 'circle:dashboard' username 'all_circle' %}">
+                <a class="{% if not circle_user_data %} btn disabled {% endif %}" href="{% url 'circle:dashboard' username 'all_circle' %}">
                     <div class="">
                     All Circle
                     </div>

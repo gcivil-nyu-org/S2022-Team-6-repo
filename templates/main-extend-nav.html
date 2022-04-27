@@ -94,7 +94,7 @@
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="{{ userdata.user_image.url }}" class="rounded-circle" style="width:50px; height:50px" alt="">
           </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="min-width: 100px;">
             <li><a class="dropdown-item" href="{% url 'login:settings' username 'profile' %}">Settings</a></li>
             <li><a class="dropdown-item" href="{% url 'login:logout' %}">Logout</a></li>
           </ul>

@@ -305,6 +305,8 @@ def create(request):
                 username, circle_name, request.POST.getlist("policy_id"), None
             )
 
+        messages.info(request, "Circle Successfully Created!!")
+
     circle_user_data = CircleUser.objects.filter(username=username)
 
     request_user_data, requests = get_notifications(username=username)

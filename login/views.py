@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib import messages
 from django.core import signing
+
 # other
 from .hashes import PBKDF2WrappedSHA1PasswordHasher
 
@@ -17,8 +18,10 @@ from .helper import update_compliance
 from selftracking.helper import check_upload_today
 from alert.helper import get_alert
 from circle.helper import get_notifications, get_all_non_compliance
+
 # driver
 from monitor.driver import get_s3_client, get_data
+
 
 def profile_view(request, username):
     try:
@@ -56,6 +59,7 @@ def profile_view(request, username):
         "FirstName": userdata.firstname,
         "LastName": userdata.lastname,
         "Email": userdata.email,
+        "userdata": userdata,
     }
     # valid username
     return render(request, "login/profile.html", context)
@@ -128,7 +132,7 @@ def user_profile(request, username):
     historical = historical[historical.state == "New York"]
     counties = historical.county.dropna().unique()
     counties = counties[counties != "Unknown"]
-    
+
     request_user_data, requests = get_notifications(username=username)
     three_non_compliance, non_compliance = get_all_non_compliance(username, True)
 
@@ -146,8 +150,8 @@ def user_profile(request, username):
         "streak_today": streak_today,
         "alert": alert,
         # other
-        "session_valid": True,
         "counties": counties,
+        "page": "profile",
     }
     # user is logged in & user is looking for his own profile #
     return render(request, "login/user_profile.html", context)
@@ -209,6 +213,7 @@ def user_privacy(request, username):
         "userdata": userdata,
         # other
         "privacy": privacy,
+        "page": "privacy",
     }
 
     return render(request, "login/user_privacy.html", context)
@@ -254,6 +259,7 @@ def user_change_password(request, username):
         "session_valid": True,
         "username": current_username,
         "userdata": userdata,
+        "page": "password",
     }
 
     return render(request, "login/user_password.html", context)
