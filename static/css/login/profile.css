@@ -63,7 +63,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(30ch, 1fr));
     grid-gap: 1.5rem;
-    max-width: 20vw;
+    max-width: 50vw;
     width: 120ch;
     padding-left: 1rem;
     padding-right: 1rem;
@@ -81,4 +81,6 @@
     background: #fff;
     -webkit-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+    height: 330px;
+    width: 330px;
 }
