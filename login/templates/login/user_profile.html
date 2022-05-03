@@ -57,11 +57,11 @@
                     <div class="row mt-2">
                         <div class="col-md-6">
                             <label for="first_name">First Name: </label>
-                            <input type="text" name="first_name" id="first_name" class="form-control" {% if userdata.firstname %} value={{userdata.firstname}} {% endif %}>
+                            <input type="text" name="first_name" id="first_name" pattern= "^[a-zA-Z0-9]+$" title="Cannot contain spaces and special characters" class="form-control" {% if userdata.firstname %} value={{userdata.firstname}} {% endif %}>
                         </div>
                         <div class="col-md-6">
                             <label for="last_name">Last Name: </label>
-                            <input type="text" name="last_name" id="last_name" class="form-control" {% if userdata.lastname %} value={{userdata.lastname}} {% endif %}>
+                            <input type="text" name="last_name" id="last_name" pattern= "^[a-zA-Z0-9]+$" title="Cannot contain spaces and special characters" class="form-control" {% if userdata.lastname %} value={{userdata.lastname}} {% endif %}>
                         </div>
                     </div>
                     <div class="row mt-3">
