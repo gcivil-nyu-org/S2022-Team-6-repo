@@ -91,7 +91,7 @@ def profile_view(request, username):
 
     context = {
         "page_name": username,
-        "username": username,
+        "username": current_username,
         "userdata": userdata,
         "request_user_data": request_user_data,
         "total_notify": total_notify,
