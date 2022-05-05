@@ -93,7 +93,7 @@
                             <label for="home">Home County: </label>
                             <select class="form-select" name="home" id="home">
                                 <option value=""></option>
-                                <option selected>{% if userdata.home_adress %} {{userdata.home_adress}} {% endif %}</option>
+                                {% if userdata.home_adress %}<option selected> {{userdata.home_adress}} </option>{% endif %}
                                 {% for county in counties %}
                                     <option value="{{county}}">{{county}}</option>
                                 {% endfor %}
@@ -103,7 +103,7 @@
                             <label for="work">Work County: </label>
                             <select class="form-select" name="work" id="work">
                                 <option value=""></option>
-                                <option selected>{% if userdata.work_address %} {{userdata.work_address}} {% endif %}</option>
+                                {% if userdata.work_address %}<option selected> {{userdata.work_address}} </option>{% endif %}
                                 {% for county in counties %}
                                     <option value="{{county}}">{{county}}</option>
                                 {% endfor %}

@@ -26,3 +26,6 @@ class Privacy(models.Model):
     show_vacination = models.BooleanField(default=False)
     show_people_met = models.BooleanField(default=False)
     show_location_visited = models.BooleanField(default=False)
+
+class Counties(models.Model):
+    county = models.CharField(max_length=100)

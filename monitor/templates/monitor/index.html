@@ -77,7 +77,7 @@
 
 <!--Graph-->
 <div id="main">
-    <div class="container-fluid">
+    <div class="container-fluid my-4">
         <div id="mainchart_1" class="container">
             <div class="row">
                 <div class="col-11 mx-auto p-0 my-5 border-dark">
@@ -94,10 +94,10 @@
                 </div>
             {% else %}
                 <div class="row">
-                    <div class="col-lg-4 mx-auto p-3 my-5 border-dark bg-light text-center">
+                    <div class="col-lg-4 mx-auto p-3 m-5 border-dark bg-light text-center">
                         <p class="text-muted">Oops! No data to display</p>
                         <a href="{% url 'login:settings' username 'profile' %}">
-                            <button type="button" class="btn btn-outline-primary">
+                            <button type="button" class="btn btn-outline-danger">
                                 Update Home Location
                             </button>
                         </a>
@@ -114,10 +114,10 @@
                 </div>
             {% else %}
                 <div class="row">
-                    <div class="col-lg-4 mx-auto p-3 my-5 border-dark bg-light text-center">
+                    <div class="col-lg-4 mx-auto p-3 m-5 border-dark bg-light text-center">
                         <p class="text-muted">Oops! No data to display</p>
                         <a href="{% url 'login:settings' username 'profile' %}">
-                            <button type="button" class="btn btn-outline-primary">
+                            <button type="button" class="btn btn-outline-danger">
                                 Update Work Location
                             </button>
                         </a>
