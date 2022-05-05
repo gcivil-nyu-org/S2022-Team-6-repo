@@ -123,8 +123,8 @@ def selftrack(request, username):
     alert = get_alert(username=username)
 
     connections = get_all_connections(username)
-    
-    counties = Counties.objects.all().values_list('county', flat=True)
+
+    counties = Counties.objects.all().values_list("county", flat=True)
 
     context = {
         "page_name": "SelfTrack",

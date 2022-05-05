@@ -22,6 +22,7 @@ from login.models import UserData
 from datetime import date, timedelta
 from dateutil.relativedelta import relativedelta
 
+
 def base(request):
 
     try:
@@ -69,7 +70,7 @@ def base(request):
     counties = historical
     counties = counties.county.dropna().unique()
     counties = counties[counties != "Unknown"]
-    
+
     historical = (historical[["date", "cases", "county"]].values).tolist()
 
     context = {

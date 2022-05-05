@@ -343,10 +343,13 @@ def notify(request, username):
         url = reverse("login:error")
         return HttpResponseRedirect(url)
     if request.method == "POST" and "accept_circle" in request.POST:
-        accept_request(request.POST.get("accept_circle"))
+        if not accept_request(request.POST.get("accept_circle")):
+            messages.error(request, "Circle already has 15 users!")
+        messages.success(request, "User Added to Circle")
 
     if request.method == "POST" and "reject_circle" in request.POST:
         reject_request(request.POST.get("reject_circle"))
+        messages.info(request, "Request Rejected!")
 
     request_user_data, requests = get_notifications(username=username, get_three=True)
     all_requests, _ = get_notifications(username=username, get_three=False)

@@ -125,6 +125,12 @@ def accept_request(request_id):
 
     current_request = RequestCircle.objects.get(request_id=request_id)
 
+    if (
+        Circle.objects.get(circle_id=current_request.circle_id.circle_id).no_of_users
+        == 15
+    ):
+        return False
+
     circleusers = CircleUser()
 
     circleusers.circle_id = Circle.objects.get(
@@ -161,6 +167,8 @@ def accept_request(request_id):
             policy, current_request.username.username
         )
         policycomplicance.save()
+
+    return True
 
 
 def reject_request(request_id):

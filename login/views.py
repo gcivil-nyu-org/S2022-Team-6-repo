@@ -172,8 +172,8 @@ def user_profile(request, username):
     # user logged in
     userdata = UserData.objects.get(username=username)
 
-    counties = Counties.objects.all().values_list('county', flat=True)
-    
+    counties = Counties.objects.all().values_list("county", flat=True)
+
     request_user_data, requests = get_notifications(username=username)
     three_non_compliance, non_compliance = get_all_non_compliance(username, True)
 

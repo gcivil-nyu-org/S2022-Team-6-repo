@@ -6,7 +6,7 @@ import random
 
 
 def random_img():
-    return "media/default/circle/" + str(random.randint(1, 5)) + ".jpg"
+    return "media/default/circle/" + str(random.randint(1, 25)) + ".jpg"
 
 
 class Circle(models.Model):

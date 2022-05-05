@@ -26,7 +26,7 @@ def alert_user(request, username):
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
-    
+
     if request.method == "POST" and "read-button" in request.POST:
         for id in request.POST.getlist("id"):
             read_alert = AlertNotification.objects.get(id=id)
@@ -47,7 +47,6 @@ def alert_user(request, username):
     paginator = Paginator(alert_notifications, ALERT_PER_PAGE)
     page = request.GET.get("page")
     alert_notification = paginator.get_page(page)
-
 
     request_user_data, requests = get_notifications(username=username)
     three_non_compliance, non_compliance = get_all_non_compliance(username, True)
