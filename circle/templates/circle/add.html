@@ -30,7 +30,7 @@
                     {% csrf_token %}
 
                     <div class="mb-3">
-                        <label for="circle_id" class="form-label">Circle ID</label>
+                        <label for="circle_id" class="form-label text-secondary" >Circle ID</label>
                         <input type="text" class="form-control" name="circle_id" id="circle_id" required>
                     </div>
 
@@ -64,12 +64,12 @@
                     <div class="mb-3">
 
                         <div class="my-3">
-                            <label for="circle_name" class="form-label">Circle Name</label>
+                            <label for="circle_name" class="form-label text-secondary">Circle Name</label>
                             <input type="text" class="form-control" name="circle_name" id="circle_name" required pattern="^[A-Za-z]*$" title="Circle name cannot contain spaces" maxlength="10" required>
                         </div>
                         
                         <div class="my-3">
-                            <label for="policy_id" class="form-label">Select Policy</label>
+                            <label for="policy_id" class="form-label text-secondary">Select Policy</label>
                             <select multiple="" class="label ui selection fluid dropdown" name="policy_id" id="policy_id" multiple>
                                     <option value="">Select Policies</option>
                                     <option value="1">Vaccination Status</option>
@@ -78,7 +78,7 @@
                             </select>
                         </div>
                         <div class="my-3">
-                            <label for="circle_image" class="form-label">Circle Image</label>
+                            <label for="circle_image" class="form-label text-secondary">Circle Image</label>
                             <input class="form-control" type="file" id="circle_image" name="circle_image" accept="image/png, image/jpeg">
                         </div>
                         
