@@ -9,18 +9,22 @@ from django.core import signing
 from .hashes import PBKDF2WrappedSHA1PasswordHasher
 
 # models
-from .models import UserData, Privacy
+from .models import UserData, Privacy, Counties
 from circle.models import CircleUser
 from .helper import update_compliance
 from alert.models import Alert
 
 # helper
-from selftracking.helper import check_upload_today
+from selftracking.helper import (
+    check_upload_today,
+    get_current_streak,
+    check_uploaded_yesterday,
+)
 from alert.helper import get_alert
 from circle.helper import get_notifications, get_all_non_compliance
 
-# driver
-from monitor.driver import get_s3_client, get_data
+# # driver
+# from monitor.driver import get_s3_client, get_data
 
 
 def profile_view(request, username):
@@ -89,15 +93,20 @@ def profile_view(request, username):
     streak_today = check_upload_today(userdata.username)
     alert = get_alert(username=userdata.username)
 
+    current_streak = get_current_streak(userdata.username)
+    streak_yesterday = check_uploaded_yesterday(userdata.username)
+
     context = {
         "page_name": username,
-        "username": username,
+        "username": current_username,
         "userdata": userdata,
         "request_user_data": request_user_data,
         "total_notify": total_notify,
         "three_non_compliance": three_non_compliance,
         "streak_today": streak_today,
         "alert": alert,
+        "current_streak": current_streak,
+        "streak_yesterday": streak_yesterday,
         # other
         "view_userdata": view_userdata,
         "session_valid": True,
@@ -112,8 +121,8 @@ def user_profile(request, username):
     try:
         # check valid username
         userdata = UserData.objects.get(username=username)
-        _, client_object = get_s3_client()
-        historical, _, _ = get_data(client_object)
+        # _, client_object = get_s3_client()
+        # historical, _, _ = get_data(client_object)
     except Exception:
         # not a valid username
         url = reverse("login:error")
@@ -172,9 +181,7 @@ def user_profile(request, username):
     # user logged in
     userdata = UserData.objects.get(username=username)
 
-    historical = historical[historical.state == "New York"]
-    counties = historical.county.dropna().unique()
-    counties = counties[counties != "Unknown"]
+    counties = Counties.objects.all().values_list("county", flat=True)
 
     request_user_data, requests = get_notifications(username=username)
     three_non_compliance, non_compliance = get_all_non_compliance(username, True)
@@ -182,6 +189,8 @@ def user_profile(request, username):
     total_notify = requests + non_compliance
     streak_today = check_upload_today(username)
     alert = get_alert(username=username)
+    current_streak = get_current_streak(userdata.username)
+    streak_yesterday = check_uploaded_yesterday(username)
 
     context = {
         "page_name": username,
@@ -192,6 +201,8 @@ def user_profile(request, username):
         "three_non_compliance": three_non_compliance,
         "streak_today": streak_today,
         "alert": alert,
+        "current_streak": current_streak,
+        "streak_yesterday": streak_yesterday,
         # other
         "counties": counties,
         "page": "profile",
@@ -255,6 +266,8 @@ def user_privacy(request, username):
     total_notify = requests + non_compliance
     streak_today = check_upload_today(username)
     alert = get_alert(username=username)
+    current_streak = get_current_streak(userdata.username)
+    streak_yesterday = check_uploaded_yesterday(username)
 
     context = {
         "page_name": username,
@@ -265,6 +278,8 @@ def user_privacy(request, username):
         "three_non_compliance": three_non_compliance,
         "streak_today": streak_today,
         "alert": alert,
+        "current_streak": current_streak,
+        "streak_yesterday": streak_yesterday,
         # other
         "session_valid": True,
         "privacy": privacy,
@@ -315,6 +330,8 @@ def user_change_password(request, username):
     total_notify = requests + non_compliance
     streak_today = check_upload_today(username)
     alert = get_alert(username=username)
+    current_streak = get_current_streak(userdata.username)
+    streak_yesterday = check_uploaded_yesterday(username)
 
     context = {
         "page_name": username,
@@ -325,6 +342,8 @@ def user_change_password(request, username):
         "three_non_compliance": three_non_compliance,
         "streak_today": streak_today,
         "alert": alert,
+        "current_streak": current_streak,
+        "streak_yesterday": streak_yesterday,
         # other
         "session_valid": True,
         "page": "password",

@@ -14,7 +14,11 @@ from django.core import signing
 
 # import pandas as pdcondaavtivate
 from .helper import convert_datetime
-from selftracking.helper import check_upload_today
+from selftracking.helper import (
+    check_upload_today,
+    get_current_streak,
+    check_uploaded_yesterday,
+)
 
 from alert.helper import get_alert
 
@@ -66,12 +70,11 @@ def base(request):
     total_notify = requests + non_compliance
     streak_today = check_upload_today(username)
     alert = get_alert(username=username)
-
+    current_streak = get_current_streak(username)
+    streak_yesterday = check_uploaded_yesterday(username)
     counties = historical
     counties = counties.county.dropna().unique()
     counties = counties[counties != "Unknown"]
-    # df_2021_all = df.dropna()
-    # df_2021_all = (df_2021_all[["date", "cases", "county"]].values).tolist()
 
     historical = (historical[["date", "cases", "county"]].values).tolist()
 
@@ -83,6 +86,7 @@ def base(request):
         "total_notify": total_notify,
         "three_non_compliance": three_non_compliance,
         "streak_today": streak_today,
+        "current_streak": current_streak,
         "monitor": True,
         "alert": alert,
         "df_2021": df_2021,
@@ -95,5 +99,6 @@ def base(request):
         "historical": historical,
         "home_location": home_location,
         "work_location": work_location,
+        "streak_yesterday": streak_yesterday,
     }
     return render(request, "monitor/index.html", context)

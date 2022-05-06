@@ -21,9 +21,9 @@
 
 {% block content %}
 
-<div class="container rounded bg-white mt-5 {% if not common_circles or not other_circles %} p-5 mb-5 {% endif %}">
+<div class="container rounded bg-white {% if not common_circles and not other_circles %} pb-5 mb-5{% endif %}">
     <div class="row">
-        <div class="col-md-12" style="{% if not common_circles or not other_circles %} margin-bottom: 120px {% endif %}">
+        <div class="col-md-12" style="{% if not common_circles and not other_circles %} margin-bottom: 120px {% endif %}">
             <div class="d-flex flex-column align-items-center text-center p-3 py-5">
                 <img class="rounded-circle mt-5" width="130px" height="130px" src="{{ view_userdata.user_image.url }}">
                 <span class="font-weight-bold">{{view_userdata.username}}</span>
@@ -100,10 +100,10 @@
             </div>
         {% endif %}
     </div>
-{% else %}
+{% comment %} {% else %}
 <div class="container mt-5 mb-3" id="replaceable-content">
     <p class='text-secondary'>No Circles to display</p>
-</div>
+</div> {% endcomment %}
 {% endif %}
 
 {% endblock %}

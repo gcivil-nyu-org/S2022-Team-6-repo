@@ -12,12 +12,13 @@ def home_alert(home_address, historical, yesterday):
 
         case_average = np.mean(historical.cases)  # pragma: no cover
         death_average = np.mean(historical.deaths)  # pragma: no cover
-
-        if case_average < int(historical[historical.date == yesterday].cases):
-            alert_case = True
-        if death_average < int(historical[historical.date == yesterday].deaths):
-            alert_death = True
-
+        try:
+            if case_average < int(historical[historical.date == yesterday].cases):
+                alert_case = True
+            if death_average < int(historical[historical.date == yesterday].deaths):
+                alert_death = True
+        except Exception:
+            return False, False
     # print(alert_case, alert_death)
     return alert_case, alert_death
 
@@ -32,10 +33,13 @@ def work_alert(work_address, historical, yesterday):
         case_average = np.mean(historical.cases)
         death_average = np.mean(historical.deaths)
 
-        if case_average < int(historical[historical.date == yesterday].cases):
-            alert_case = True
-        if death_average < int(historical[historical.date == yesterday].deaths):
-            alert_death = True
+        try:
+            if case_average < int(historical[historical.date == yesterday].cases):
+                alert_case = True
+            if death_average < int(historical[historical.date == yesterday].deaths):
+                alert_death = True
+        except Exception:
+            return False, False
 
     # print(alert_case, alert_death)
     return alert_case, alert_death
@@ -85,21 +89,24 @@ def location_visited_alert(location_visted, historical, yesterday):
             case_average = np.mean(location_historical.cases)
             death_average = np.mean(location_historical.deaths)
 
-            if case_average < int(
-                location_historical[location_historical.date == yesterday].cases
-            ):
-                location_alert_case.append(True)
-                data_alert_case.append(location)
-            else:
-                location_alert_case.append(False)
+            try:
+                if case_average < int(
+                    location_historical[location_historical.date == yesterday].cases
+                ):
+                    location_alert_case.append(True)
+                    data_alert_case.append(location)
+                else:
+                    location_alert_case.append(False)
 
-            if death_average < int(
-                location_historical[location_historical.date == yesterday].deaths
-            ):
-                location_alert_death.append(True)
-                data_alert_death.append(location)
-            else:
-                location_alert_death.append(False)
+                if death_average < int(
+                    location_historical[location_historical.date == yesterday].deaths
+                ):
+                    location_alert_death.append(True)
+                    data_alert_death.append(location)
+                else:
+                    location_alert_death.append(False)
+            except Exception:
+                return list(), list(), False, False
     else:
         return data_alert_case, data_alert_death, False, False
 

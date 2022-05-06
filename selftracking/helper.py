@@ -38,19 +38,28 @@ def check_uploaded_yesterday(username):
 
     yesterday_date = datetime.date.today() + datetime.timedelta(days=-1)
 
-    return (
-        SelfTrack.objects.filter(username=username)
-        .latest("date_uploaded")
-        .date_uploaded.date()
-        == yesterday_date
-        and SelfTrack.objects.filter(username=username).latest("date_uploaded").user_met
-        != "42a7b2626eae970122e01f65af2f5092"
-    )
+    if len(SelfTrack.objects.filter(username=username)) > 0:
+
+        return (
+            SelfTrack.objects.filter(username=username)
+            .latest("date_uploaded")
+            .date_uploaded.date()
+            == yesterday_date
+            and SelfTrack.objects.filter(username=username)
+            .latest("date_uploaded")
+            .user_met
+            != "42a7b2626eae970122e01f65af2f5092"
+        )
+    else:
+        return False
 
 
 def get_current_streak(username):
-
-    return SelfTrack.objects.filter(username=username).latest("date_uploaded").streak
+    selftrack = SelfTrack.objects.filter(username=username)
+    if len(selftrack) > 0:
+        return selftrack.latest("date_uploaded").streak
+    else:
+        return 0
 
 
 def get_longest_streak(username):

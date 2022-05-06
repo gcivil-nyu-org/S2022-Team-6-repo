@@ -3,6 +3,7 @@
 
 {% block navbar-style %}
     <link rel="stylesheet" href="{% static 'css/navbar/navbar.css' %}" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 {% endblock navbar-style %}
 
 <nav class="navbar navbar-expand-lg navbar-dark gradient-custom">
@@ -42,7 +43,11 @@
         <li class="nav-item text-center mx-2 mx-lg-1">
         <a class="nav-link active" href="{% url 'selftracking:selftrack' username %}">
             <div>
-                <i class="bi bi-person-bounding-box"></i>
+                {% if streak_yesterday or streak_today %}
+                    <span class="badge rounded-pill badge-notification"><mark class="fw-bold p-0 bg-transparent text-light">{{current_streak}} </mark><i class="fa-solid fa-fire fa-1x"></i></span>
+                {% else %}
+                    <i class="bi bi-person-bounding-box"></i>
+                {% endif %}
             </div>
             Self-Track
             {% if not streak_today %}
@@ -63,7 +68,7 @@
         <li class="nav-item text-center mx-2 mx-lg-1">
         <a class="nav-link active" href="{% url 'alert:alert_user' username %}">
             <div>
-                <i class="bi bi-person-bounding-box"></i>
+                <i class="bi bi-exclamation-triangle"></i>
             </div>
             Alert
             {% if alert %}
@@ -107,3 +112,6 @@
     </div>
 </div>
 </nav>
+{% block script %}
+<script src="https://kit.fontawesome.com/4ea6e3ab0b.js" crossorigin="anonymous"></script>
+{% endblock script %}

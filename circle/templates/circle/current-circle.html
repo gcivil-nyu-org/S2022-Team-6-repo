@@ -18,12 +18,14 @@
             </div>
             <div class="col-sm-9">
                 <div class = "row">
-                    <h1 class="fw-bold text-uppercase text-secondary align-self-start">
-                        {{circle_data.circle_id.circle_name}}
-                    </h1>
-                    <p class="text-muted d-block">
-                        <button class="copy-btn" value="{% url 'circle:request_url' circle_data.circle_id.display_code %}">Copy Link</button>
-                    </p>
+                    <div>
+                        <h1 class="fw-bold text-uppercase text-secondary align-self-start">
+                            {{circle_data.circle_id.circle_name}}
+                        </h1>
+                        <p class="text-muted d-block">
+                            <button class="copy-btn" value="{% url 'circle:request_url' circle_data.circle_id.display_code %}">Copy Link</button>
+                        </p>
+                    </div>
                     <hr>
                 </div>
                 <p class="text-muted d-block">Admin:

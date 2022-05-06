@@ -11,7 +11,11 @@ from alert.models import AlertNotification
 
 # Helper imports
 from circle.helper import get_notifications, get_all_non_compliance
-from selftracking.helper import check_upload_today
+from selftracking.helper import (
+    check_upload_today,
+    get_current_streak,
+    check_uploaded_yesterday,
+)
 from .helper import get_alert
 
 # Global Variable
@@ -26,6 +30,12 @@ def alert_user(request, username):
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
+
+    if request.method == "POST" and "read-button" in request.POST:
+        for id in request.POST.getlist("id"):
+            read_alert = AlertNotification.objects.get(id=id)
+            read_alert.read = True
+            read_alert.save()
 
     alert_notifications = AlertNotification.objects.filter(
         username=username
@@ -42,17 +52,13 @@ def alert_user(request, username):
     page = request.GET.get("page")
     alert_notification = paginator.get_page(page)
 
-    if request.method == "POST" and "read-button" in request.POST:
-        for id in request.POST.getlist("id"):
-            read_alert = AlertNotification.objects.get(id=id)
-            read_alert.read = True
-            read_alert.save()
-
     request_user_data, requests = get_notifications(username=username)
     three_non_compliance, non_compliance = get_all_non_compliance(username, True)
     total_notify = requests + non_compliance
     streak_today = check_upload_today(username)
+    streak_yesterday = check_uploaded_yesterday(username)
     alert = get_alert(username=username)
+    current_streak = get_current_streak(username)
 
     context = {
         "page_name": "Alert",
@@ -63,6 +69,8 @@ def alert_user(request, username):
         "three_non_compliance": three_non_compliance,
         "streak_today": streak_today,
         "alert": alert,
+        "current_streak": current_streak,
+        "streak_yesterday": streak_yesterday,
         # other
         "alert_notification": alert_notification,
         "alerts_available": alerts_available,
