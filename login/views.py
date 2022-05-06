@@ -94,7 +94,7 @@ def profile_view(request, username):
     alert = get_alert(username=userdata.username)
 
     current_streak = get_current_streak(userdata.username)
-    streak_yesterday = check_uploaded_yesterday(username)
+    streak_yesterday = check_uploaded_yesterday(userdata.username)
 
     context = {
         "page_name": username,

@@ -551,8 +551,8 @@ def request_url(request, display_code):
     total_notify = requests + non_compliance
     streak_today = check_upload_today(current_username)
     alert = get_alert(username=current_username)
-    current_streak = get_current_streak(username)
-    streak_yesterday = check_uploaded_yesterday(username)
+    current_streak = get_current_streak(current_username)
+    streak_yesterday = check_uploaded_yesterday(current_username)
 
     context = {
         "page_name": current_username,
