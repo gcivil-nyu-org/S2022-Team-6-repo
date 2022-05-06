@@ -8,6 +8,10 @@ a {
   color: #E5383B;
 }
 
+a:hover {
+  color: #9e0000;
+}
+
 body,
 h1,
 h2,

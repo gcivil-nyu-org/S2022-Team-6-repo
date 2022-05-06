@@ -37,7 +37,11 @@ from .helper import (
     streak_uploaded,
 )
 
-from selftracking.helper import check_upload_today
+from selftracking.helper import (
+    check_upload_today,
+    get_current_streak,
+    check_uploaded_yesterday,
+)
 from alert.helper import get_alert
 
 
@@ -68,6 +72,8 @@ def circle(request, username, query):
 
     total_notify = requests + non_compliance
     streak_today = check_upload_today(username)
+    streak_yesterday = check_uploaded_yesterday(username)
+    current_streak = get_current_streak(username)
     alert = get_alert(username=username)
 
     # AJAX
@@ -105,6 +111,8 @@ def circle(request, username, query):
                     "three_non_compliance": three_non_compliance,
                     "streak_today": streak_today,
                     "alert": alert,
+                    "current_streak": current_streak,
+                    "streak_yesterday": streak_yesterday,
                     # other
                     "circles": circles,
                     "recent_circles": recent_circles,
@@ -122,6 +130,8 @@ def circle(request, username, query):
                     "three_non_compliance": three_non_compliance,
                     "streak_today": streak_today,
                     "alert": alert,
+                    "current_streak": current_streak,
+                    "streak_yesterday": streak_yesterday,
                     # other
                     "circle_user_data": circle_user_data,
                     "recent_circles": recent_circles,
@@ -141,6 +151,8 @@ def circle(request, username, query):
         "three_non_compliance": three_non_compliance,
         "streak_today": streak_today,
         "alert": alert,
+        "current_streak": current_streak,
+        "streak_yesterday": streak_yesterday,
         # Other
         "circle_user_data": circle_user_data,
         "recent_circles": recent_circles,
@@ -234,6 +246,9 @@ def current_circle(request, username, circle_id):
     total_notify = requests + non_compliance
     streak_today = check_upload_today(username)
     alert = get_alert(username=username)
+    current_streak = get_current_streak(username)
+    streak_yesterday = check_uploaded_yesterday(username)
+
     context = {
         "page_name": circle_data.circle_id.circle_name,
         "username": username,
@@ -243,6 +258,8 @@ def current_circle(request, username, circle_id):
         "three_non_compliance": three_non_compliance,
         "streak_today": streak_today,
         "alert": alert,
+        "current_streak": current_streak,
+        "streak_yesterday": streak_yesterday,
         # Other
         "search_user_found": search_user_found,
         "searched_user": searched_user,
@@ -317,6 +334,9 @@ def create(request):
 
     streak_today = check_upload_today(username)
     alert = get_alert(username=username)
+    current_streak = get_current_streak(username)
+    streak_yesterday = check_uploaded_yesterday(username)
+
     context = {
         "page_name": "Add Circle",
         "username": username,
@@ -326,6 +346,8 @@ def create(request):
         "three_non_compliance": three_non_compliance,
         "streak_today": streak_today,
         "alert": alert,
+        "current_streak": current_streak,
+        "streak_yesterday": streak_yesterday,
         # Other
         "circle_user_data": circle_user_data,
     }
@@ -366,6 +388,8 @@ def notify(request, username):
 
     streak_today = check_upload_today(username)
     alert = get_alert(username=username)
+    current_streak = get_current_streak(username)
+    streak_yesterday = check_uploaded_yesterday(username)
 
     context = {
         "page_name": "Notifications",
@@ -376,6 +400,8 @@ def notify(request, username):
         "three_non_compliance": three_non_compliance,
         "streak_today": streak_today,
         "alert": alert,
+        "current_streak": current_streak,
+        "streak_yesterday": streak_yesterday,
         # Other
         "all_requests": all_requests,
         "all_non_compliance": all_non_compliance,
@@ -466,6 +492,8 @@ def edit_permission(request, username, circle_id):
 
     streak_today = check_upload_today(username)
     alert = get_alert(username=username)
+    current_streak = get_current_streak(username)
+    streak_yesterday = check_uploaded_yesterday(username)
 
     context = {
         "page_name": "Edit Permission",
@@ -476,6 +504,8 @@ def edit_permission(request, username, circle_id):
         "three_non_compliance": three_non_compliance,
         "streak_today": streak_today,
         "alert": alert,
+        "current_streak": current_streak,
+        "streak_yesterday": streak_yesterday,
         # other
         "circle_data": circle_data,
     }
@@ -521,6 +551,8 @@ def request_url(request, display_code):
     total_notify = requests + non_compliance
     streak_today = check_upload_today(current_username)
     alert = get_alert(username=current_username)
+    current_streak = get_current_streak(username)
+    streak_yesterday = check_uploaded_yesterday(username)
 
     context = {
         "page_name": current_username,
@@ -531,6 +563,8 @@ def request_url(request, display_code):
         "three_non_compliance": three_non_compliance,
         "streak_today": streak_today,
         "alert": alert,
+        "current_streak": current_streak,
+        "streak_yesterday": streak_yesterday,
         # other
         "circle_data": circle_data,
         "already_member": already_member,

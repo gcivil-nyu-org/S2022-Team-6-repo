@@ -9,7 +9,7 @@
 
 <section>
     <div class="container bg-light my-5 p-3">
-        <h3 class="m-b-50 heading-line">Pending Requests</h3>
+        <h3 class="m-b-50 heading-line text-secondary">Pending Requests</h3>
         {% if all_requests %}
             {% for request_data in all_requests %}
                 <div class="notification-ui_dd-content">
@@ -57,7 +57,7 @@
 
 <section>
     <div class="container bg-light my-5 p-3">
-        <h3 class="m-b-50 heading-line">Non-Compliance</h3>
+        <h3 class="m-b-50 heading-line text-secondary">Non-Compliance</h3>
         {% if all_non_compliance %}
             <a style="text-decoration: none" href="{% url 'login:privacy' username %}">
                 <div class="d-grid gap-2 col-6 mx-auto p-2">
