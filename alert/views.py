@@ -40,7 +40,7 @@ def alert_user(request, username):
     )
 
     if len(alert_notifications) > 0:
-        alerts_available = True
+        alerts_available = True  # pragma: no cover
     else:
         alerts_available = False
 

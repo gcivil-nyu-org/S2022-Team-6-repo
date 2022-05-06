@@ -17,10 +17,15 @@
                 <img height="250" width="250" src="{{ circle_data.circle_id.group_image.url }}" class="img-fluid rounded-circle" alt="...">
             </div>
             <div class="col-sm-9">
-                <h1 class="fw-bold text-uppercase text-secondary align-self-start">
-                    {{circle_data.circle_id.circle_name}}
-                </h1>
-                <hr>
+                <div class = "row">
+                    <h1 class="fw-bold text-uppercase text-secondary align-self-start">
+                        {{circle_data.circle_id.circle_name}}
+                    </h1>
+                    <p class="text-muted d-block">
+                        <button class="copy-btn" value="{% url 'circle:request_url' circle_data.circle_id.display_code %}">Copy Link</button>
+                    </p>
+                    <hr>
+                </div>
                 <p class="text-muted d-block">Admin:
                     <spam class="text-dark fw-bold">{{circle_data.circle_id.admin_username.username}}</spam>
                 </p>
@@ -32,9 +37,6 @@
                         <spam class="text-muted fw-bold">{{circle_request}}</spam>
                     </p>
                 {% endif %}
-                <p class="text-muted d-block">
-                    <button class="copy-btn" value="{% url 'circle:request_url' circle_data.circle_id.display_code %}">Copy link</button>
-                </p>
             </div>
         </div>
     </div>
@@ -52,10 +54,10 @@
                     <div class="input-group form-outline mx-auto">
                         
                             <input type="search" id="search-users" name="search-users" class="form-control" placeholder="Search"/>
-                            <button id="search-users-submit" name="search-users-submit" type="submit" class="btn btn-primary">
+                            <button id="search-users-submit" name="search-users-submit" type="submit" class="btn btn-danger">
                                 <i class="bi bi-search"></i>
                             </button>
-                        
+
                     </div>
                 </div>
             </div>

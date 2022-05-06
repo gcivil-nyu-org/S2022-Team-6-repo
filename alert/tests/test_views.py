@@ -90,6 +90,12 @@ class TestView(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "alert/alert.html")
 
+    def test_alert_user_error(self):
+        del self.session["user_key"]
+        self.session.save()
+        response = self.client.get(self.alert_url)
+        self.assertEqual(response.status_code, 302)
+
     def test_markAllRead(self):
         response = self.client.get(self.markAllAsRead_url)
         self.assertEqual(response.status_code, 200)
@@ -105,8 +111,8 @@ class TestView(TestCase):
         try:
             _, client_object = get_s3_client()
             historical, _, _ = get_data(client_object)
-        except Exception:
-            self.assertEqual("True", "Flase")
+        except Exception:  # pragma: no cover
+            self.assertEqual("True", "Flase")  # pragma: no cover
         yesterday = (datetime.date.today() + datetime.timedelta(days=-1)).strftime(
             "%Y-%m-%d"
         )
@@ -116,8 +122,8 @@ class TestView(TestCase):
         try:
             _, client_object = get_s3_client()
             historical, _, _ = get_data(client_object)
-        except Exception:
-            self.assertEqual("True", "Flase")
+        except Exception:  # pragma: no cover
+            self.assertEqual("True", "Flase")  # pragma: no cover
         yesterday = (datetime.date.today() + datetime.timedelta(days=-1)).strftime(
             "%Y-%m-%d"
         )
@@ -127,8 +133,8 @@ class TestView(TestCase):
         try:
             _, client_object = get_s3_client()
             historical, _, _ = get_data(client_object)
-        except Exception:
-            self.assertEqual("True", "Flase")
+        except Exception:  # pragma: no cover
+            self.assertEqual("True", "Flase")  # pragma: no cover
         yesterday = (datetime.date.today() + datetime.timedelta(days=-1)).strftime(
             "%Y-%m-%d"
         )
@@ -138,8 +144,8 @@ class TestView(TestCase):
         try:
             _, client_object = get_s3_client()
             historical, _, _ = get_data(client_object)
-        except Exception:
-            self.assertEqual("True", "Flase")
+        except Exception:  # pragma: no cover
+            self.assertEqual("True", "Flase")  # pragma: no cover
         yesterday = (datetime.date.today() + datetime.timedelta(days=-1)).strftime(
             "%Y-%m-%d"
         )
@@ -149,8 +155,8 @@ class TestView(TestCase):
         try:
             _, client_object = get_s3_client()
             historical, _, _ = get_data(client_object)
-        except Exception:
-            self.assertEqual("True", "Flase")
+        except Exception:  # pragma: no cover
+            self.assertEqual("True", "Flase")  # pragma: no cover
         yesterday = (datetime.date.today() + datetime.timedelta(days=-1)).strftime(
             "%Y-%m-%d"
         )
@@ -160,8 +166,8 @@ class TestView(TestCase):
         try:
             _, client_object = get_s3_client()
             historical, _, _ = get_data(client_object)
-        except Exception:
-            self.assertEqual("True", "Flase")
+        except Exception:  # pragma: no cover
+            self.assertEqual("True", "Flase")  # pragma: no cover
         yesterday = (datetime.date.today() + datetime.timedelta(days=-1)).strftime(
             "%Y-%m-%d"
         )

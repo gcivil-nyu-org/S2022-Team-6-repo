@@ -119,6 +119,13 @@ class TestViews(TestCase, TransactionTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "login/user_profile.html")
 
+    def test_check_profile_2(self):
+        del self.session["user_key"]
+        self.session.save()
+        response = self.client.get(self.profile_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "login/profile-general.html")
+
     def test_signin(self):
         del self.session["user_key"]
         self.session.save()
@@ -144,6 +151,12 @@ class TestViews(TestCase, TransactionTestCase):
         response = self.client.get(self.logout_url)
         self.assertEqual(response.status_code, 302)
         # self.assertTemplateUsed(response, "login/error.html")
+
+    def test_logout_2(self):
+        del self.session["user_key"]
+        self.session.save()
+        response = self.client.get(self.logout_url)
+        self.assertEqual(response.status_code, 302)
 
     def test_index_url(self):
         response = self.client.get(self.index_url)
@@ -265,6 +278,13 @@ class TestViews(TestCase, TransactionTestCase):
 
     def test_user_settings_error(self):
         response = self.client.get(self.settings_error_url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_sigin_withUserLoggedIn(self):
+        response = self.client.post(
+            self.sigin_url,
+            data={"sign-in": "", "username": "EashanKaushik", "password": "coviguard"},
+        )
         self.assertEqual(response.status_code, 302)
 
 
@@ -454,3 +474,20 @@ class AtomicTests(TransactionTestCase):
             },
         )
         self.assertEqual(response.status_code, 200)
+
+    def test_signup_post_error_3(self):
+        del self.session["user_key"]
+        self.session.save()
+        response = self.client.post(
+            self.sigup_url,
+            data={
+                "signup-button": "",
+                "password": "Coviguard@123",
+                "confirmpassword": "Coviguard@123",
+                "firstname": "Eashan",
+                "lastname": "TestLastName",
+                "email": "test@gmail.com",
+                "username": "NewTestUser3",
+            },
+        )
+        self.assertEqual(response.status_code, 302)
