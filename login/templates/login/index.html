@@ -1,162 +1,243 @@
-  {% extends 'main-extend-nav.html' %}
-  {% load static %}
-  {% block content %}
-    <!-- Showcase -->
-  <section class="bg-light text-dark p-5 p-lg-0 pt-lg-5 text-center text-sm-start">
-    <div class="container">
-      <div class="d-sm-flex align-items-center justify-content-between">
-        <div>
-          <h1>{% if session_valid %} Welcome {% else %} Become a {% endif %}<span class="text-warning">#CoviGuardian </span></h1>
-          <p class="lead my-4">Lorem ipsum dolor sit amet,
-            consectetur adipisicing elit. Explicabo,
-            corporis quis ! Nostrum aperiam incidunt asperiores quis ratione porro libero illum.
+{% extends 'main-extend-nav.html' %}
+{% load static %}
+
+{% block stylesheettwo %}
+
+  <link href="{% static 'css/login/index.css' %}" rel="stylesheet">
+
+{% endblock stylesheettwo %}
+
+
+{% block content %}
+  <!-- Showcase -->
+<section class="bg-light text-dark p-5 p-lg-0 pt-lg-5 text-center text-sm-start" id="home">
+  <div class="container">
+    <div class="d-sm-flex align-items-center justify-content-between">
+      <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@500&display=swap" rel="style">
+      <div>
+        <h1>{% if session_valid %} Welcome {% else %} Become a {% endif %}<span class="coviguard-text-maroon">#CoviGuardian </span></h1>
+        <p class="lead my-4">Complete Covid tracking for you and your circle!
+        </p>
+        {% if not session_valid %}
+          <a href="{% url 'login:signup' %}">
+            <button class="coviguard-button btn-lg">Get started</button>
+          </a>
+          <br><br>
+          <p class="lead my-6">
+            <small>
+            Already a member?
+            <a href="{% url 'login:signin' %}" class="coviguard-text-maroon">Sign in here</a>
+            </small>
           </p>
-          {% if not session_valid %}
-            <a href="{% url 'login:signup' %}">
-              <button class="btn btn-primary btn-lg">Get started</button>
-            </a>
-            <br><br>
-            <p class="lead my-6">
-              <small>
-              Already a member? 
-              <a href="{% url 'login:signin' %}" class="link-warning">Sign in here</a>
-              </small>
-            </p>
-          {% endif %}
-        </div><img class="img-fluid d-none d-sm-block" src="{% static 'img/5.png' %}" alt="" />
-      </div>
+
+        {% endif %}
+      </div><img class="img-fluid d-none d-sm-block" src="{% static 'img/coviguard/favicon.png' %}" alt="" />
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Boxes -->
-  <section class="p-5" id="functionalities">
-    <div class="container">
-      <div class="row text-secondary g-4">
-        <div class="col-md">
-          <div class="card bg-primary text-light">
-            <div class="card-body text-center">
-              <div class="h1 mb-3"><i class="bi bi-pencil-square"></i></div>
-              <h3 class="card-title mb-3">Self-Tracking</h3>
-              <p class="card-text">Lorem ipsum dolor sit amet consectetur,
-                adipisicing elit. Impedit voluptatum quas repudiandae eaque ducimus neque deserunt,
-                illo quisquam ! In commodi perferendis unde,
-                fuga alias aperiam at iure mollitia laboriosam maxime nisi veritatis inventore rem cupiditate.
-                Quas laudantium suscipit hic ! Voluptatum ! </p>
-            </div>
+<!-- Boxes -->
+<section class="p-5" id="functionalities">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md">
+        <div class="card coviguard-bg-maroon coviguard-text-plain-grey">
+          <div class="card-body text-center">
+            <div class="h1 mb-3"><i class="bi bi-pencil-square"></i></div>
+            <h3 class="card-title mb-3">Self-Tracking</h3>
+            <p class="card-text">Self-Reporting platform for contract tracing. Share your location visited and people met to receive an alert if you have been in proximity to hotspots.</p>
           </div>
         </div>
+      </div>
 
-        <div class="col-md">
-          <div class="card bg-danger text-light">
-            <div class="card-body text-center">
-              <div class="h1 mb-3"><i class="bi bi-bell-fill"></i></div>
-              <h3 class=" card-title mb-3">Alerts</h3>
-              <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores reiciendis
-                mollitia error fugiat ab quia similique deserunt ad accusantium pariatur quaerat aperiam
-                praesentium consectetur modi omnis facere sint laboriosam magni molestiae,
-                itaque distinctio nobis expedita. Eius expedita quisquam aspernatur eum? </p>
-            </div>
+      <div class="col-md">
+        <div class="card coviguard-bg-plain-grey coviguard-text-maroon">
+          <div class="card-body text-center">
+            <div class="h1 mb-3"><i class="bi bi-bell-fill"></i></div>
+            <h3 class=" card-title mb-3">Alerts</h3>
+            <p class="card-text">Get notified about prognosis in all your 'Circles' when you make a first degree contact with an individual at risk within your circle.</p>
           </div>
         </div>
+      </div>
 
-        <div class="col-md">
-          <div class="card bg-primary text-light">
-            <div class="card-body text-center">
-              <div class="h1 mb-3"><i class="bi bi-people-fill"></i></div>
-              <h3 class="card-title mb-3">Circles</h3>
-              <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. A delectus tenetur
-                sint qui esse architecto,
-                consequatur neque alias officiis nisi iusto dolorum vero ullam possimus autem. Nostrum eligendi
-                architecto itaque rem? Porro quibusdam velit corrupti,
-                itaque dicta ratione sit fugit. </p>
-            </div>
+      <div class="col-md">
+        <div class="card coviguard-bg-maroon coviguard-text-plain-grey">
+          <div class="card-body text-center">
+            <div class="h1 mb-3"><i class="bi bi-people-fill"></i></div>
+            <h3 class="card-title mb-3">Circles</h3>
+            <p class="card-text">Family ? Friends ? Neighbours? Create a circle of trust or Join one to keep track of the people in your circle to break the transmission chain.</p>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Learn Sections -->
-  <section id="why" class="p-5">
-    <div class="container">
-      <div class="row align-items-center justify-content-between">
-        <div class="col-md"><img src="{% static 'img/covid.png' %}" class="img-fluid" alt="" /></div>
-        <div class="col-md p-5">
-          <h2>Take charge against Covid</h2>
-          <p class="lead">Lorem ipsum dolor,
-            sit amet consectetur adipisicing elit. Similique deleniti possimus magnam corporis ratione facere !
-          </p>
-          <p>Lorem ipsum dolor sit,
-            amet consectetur adipisicing elit. Cumque reiciendis eius autem eveniet mollitia,
-            at asperiores suscipit quae similique laboriosam iste minus placeat odit velit quos,
-            nulla architecto amet voluptates? </p>
-        </div>
+<!-- Learn Sections -->
+<section id="why" class="p-5">
+  <div class="container">
+    <div class="row align-items-center justify-content-between">
+      <div class="col-md"><img src="{% static 'img/login/covid-image.png' %}" class="img-fluid" alt="" /></div>
+      <div class="col-md p-5 coviguard-text-maroon">
+        <h2>Take charge against Covid</h2>
+        <p class="lead">Covid-19 has reshaped our world. 
+          We don’t know when this crisis will come to an end. 
+          Become a Coviguardian to keep yourself and your loved one’s safe and contribute your part to make the application more effective in chaining the pandemic. 
+          Be a warrior in yourself!
+        </p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Developers -->
-  <section id="developers" class="p-5 bg-primary">
-    <div class="container">
-      <h2 class="text-center text-white">Our Developers</h2><br>
-      <div class="row g-5">
-        <div class="col-md-6 col-lg-3">
-          <div class="card bg-light">
-            <div class="card-body text-center"><img src="{% static 'img/eashan.jpeg' %}" class="img-thumbnail rounded-circle mb-3"
-                alt="" />
-              <h3 class="card-title mb-3">Eashan Kaushik</h3>
-              <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
-                accusamus nobis sed cupiditate iusto? Quibusdam. </p><a href="#"><i
-                  class="bi bi-linkedin text-dark mx-1"></i></a>
+<!-- Developers -->
+
+<section id="developers">
+  <div class="container">
+    <h1 ><span class="coviguard-text-maroon">Our Developer Team</span></h1>
+    <div class="row">
+      <div class="col-md-3 col-sm-6">
+        <div class="our-team">
+          <div class="our-team-border">
+            <div class="pic">
+              <img src="{% static 'img/login/eashan.jpeg' %}">
             </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="card bg-light">
-            <div class="card-body text-center"><img src="{% static 'img/srijan.JPEG' %}"
-                class="img-thumbnail rounded-circle mb-3 develop" alt="" />
-              <h3 class="card-title mb-3">Srijan Malhotra</h3>
-              <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
-                accusamus nobis sed cupiditate iusto? Quibusdam. </p><a href="#"><i
-                  class="bi bi-linkedin text-dark mx-1"></i></a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="card bg-light">
-            <div class="card-body text-center"><img src="{% static 'img/chinmay.jpeg' %}"
-                class="img-thumbnail rounded-circle mb-3 develop" alt="" />
-              <h3 class="card-title mb-3">Chinmay Kulkarni</h3>
-              <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
-                accusamus nobis sed cupiditate iusto? Quibusdam. </p><a href="#"><i
-                  class="bi bi-linkedin text-dark mx-1"></i></a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="card bg-light">
-            <div class="card-body text-center"><img src="{% static 'img/pranav.jpeg' %}"
-                class="img-thumbnail rounded-circle mb-3 develop" alt="" />
-              <h3 class="card-title mb-3">Pranav Singh</h3>
-              <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
-                accusamus nobis sed cupiditate iusto? Quibusdam. </p><a href="#"><i
-                  class="bi bi-linkedin text-dark mx-1"></i></a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 mx-auto">
-          <div class="card bg-light">
-            <div class="card-body text-center"><img src="{% static 'img/shardha.jpg' %}"
-                class="img-thumbnail rounded-circle mb-3 develop" alt="" />
-              <h3 class="card-title mb-3">Shardha Koul</h3>
-              <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
-                accusamus nobis sed cupiditate iusto? Quibusdam. </p><a href="#"><i
-                  class="bi bi-linkedin text-dark mx-1"></i></a>
-            </div>
+            <h3 class="title">Eashan Kaushik</h3>
+            <span class="post">NYU Student</span>
+            <ul class="social">
+              <li>
+                <a href="#">
+                  <i class="bi bi-facebook"></i>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.linkedin.com/in/eashan-kaushik/">
+                  <i class="bi bi-linkedin"></i>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/EashanKaushik">
+                  <i class="bi bi-github"></i>
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="our-team">
+          <div class="our-team-border">
+            <div class="pic">
+              <img class="developer-tab rounded-circle" src="{% static 'img/login/srijan.JPG'%}">
+            </div>
+            <h3 class="title">Srijan Malhotra</h3>
+            <span class="post">NYU Student</span>
+            <ul class="social">
+              <li>
+                <a href="https://www.facebook.com/srijan.malhotra/">
+                  <i class="bi bi-facebook"></i>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.linkedin.com/in/srijan-malhotra-286950154/">
+                  <i class="bi bi-linkedin"></i>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/srijanmalhotra2711">
+                  <i class="bi bi-github"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="our-team">
+          <div class="our-team-border">
+            <div class="pic">
+              <img src="{% static 'img/login/chinmay.jpeg' %}">
+            </div>
+            <h3 class="title">Chinmay Kulkarni</h3>
+            <span class="post">NYU Student</span>
+            <ul class="social">
+              <li>
+                <a href="https://www.facebook.com/chinmay.kulkarni.9889">
+                  <i class="bi bi-facebook"></i>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.linkedin.com/in/chinmaymrunalkulkarni/">
+                  <i class="bi bi-linkedin"></i>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/chinmaykulkarni95">
+                  <i class="bi bi-github"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="our-team">
+          <div class="our-team-border">
+            <div class="pic">
+              <img src="{% static 'img/login/pranav.jpeg' %}">
+            </div>
+            <h3 class="title">Pranav Singh</h3>
+            <span class="post">NYU Student</span>
+            <ul class="social">
+              <li>
+                <a href="https://www.facebook.com/pranavsinghps1">
+                  <i class="bi bi-facebook"></i>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.linkedin.com/in/pranavsinghps1/">
+                  <i class="bi bi-linkedin"></i>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/pranavsinghps1">
+                  <i class="bi bi-github"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6 mx-auto">
+        <div class="our-team">
+          <div class="our-team-border">
+            <div class="pic">
+              <img src="{% static 'img/login/shardha.jpg' %}">
+            </div>
+            <h3 class="title">Shardha Koul</h3>
+            <span class="post">NYU Student</span>
+            <ul class="social">
+              <li>
+                <a href="https://www.facebook.com/profile.php?id=100006550279197">
+                  <i class="bi bi-facebook"></i>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.linkedin.com/in/shardhakoul/">
+                  <i class="bi bi-linkedin"></i>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/Shardhakoul/">
+                  <i class="bi bi-github"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
-    {% endblock content %}
+{% endblock content %}

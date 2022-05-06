@@ -1,51 +1,83 @@
 {% extends 'main.html' %}
 {% load static %}
 
+{% block stylesheettwo %}
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <link rel="stylesheet" href="{% static 'css/monitor/style.css' %}" />
+
+{% endblock stylesheettwo %}
+
 {% block content %}
 
-<div id="mySidebar" class="sidebar" style="top: 92px; position: absolute;">
-    <!-- a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a -->
-    <a href="#" onclick="showMainChart()">General</a>
-    <a href="#" onclick="showHomeChart()">Home</a>
-    <a href="#" onclick="showWorkChart()">Workplace</a>
-</div>
 
-<div id="datePicker" class="dropdown" style="float: right;">
-    <label class="btn btn-dark" for="from">From:</label>
-    <input class="btn btn-dark" type="date" id="dateFrom" name="from">
-    <label class="btn btn-dark" for="to">To:</label>
-    <input class="btn btn-dark" type="date" id="dateTo" name="dateTo">
+    
+<!--from date search-->
+<div class="container mx-auto pt-5">
+    <div class="row">
+        <div class="col-lg-3 mx-auto">
+            <div class="d-flex justify-content-center" id="datePicker" class="dropdown" >
+                <input class="btn" type="text" id="dateFrom" name="from" style="background-color: white; color:black; border-color:black" placeholder="From Date">
+                <input class="btn" type="text" id="dateTo" name="dateTo" style="background-color: white; color:black; border-color:black" placeholder="To Date">
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 mx-auto my-2">
+        <div id="searchButton" class="d-flex justify-content-center">
+            <button class="btn btn-block btn-outline-danger" onclick="showDatewiseChart()">Search</button>
+        </div>
+    </div>
 </div>
+<!--from date search-->
 
-<div id="countyDropDownMain" class="dropdown" style="float: right;">
-    <a class="btn btn-dark dropdown-toggle" role="button" id="dropdownCountyLink" data-bs-toggle="dropdown" aria-expanded="false">
-        New York City
-    </a>
-  
-    <ul class="dropdown-menu scrollable-menu" aria-labelledby="dropdownMenuLink">
-        {% for county in counties %}
-            <li style="cursor: pointer;"><a class="dropdown-item" value="{{county}}" onclick="generateCountySpecificGraph('{{county}}')">{{county}}</a></li>
-        {% endfor %}
-    </ul>
+<!--options-->
+<div class="container-fluid ps-5 pe-5">
+    <div class="row">
+        <div class="col-12" id="sticky-sidebar">
+            <a href="#" onclick="showMainChart()"><button type="button" class="btn btn-danger">Genral</button></a>
+            <a href="#" onclick="showHomeChart()"><button type="button" class="btn btn-danger">Home</button></a>
+            <a href="#" onclick="showWorkChart()"><button type="button" class="btn btn-danger">Workplace</button></a>
+    
+
+            <div id="countyDropDownMain" class="dropdown pe-1" style="float: right;">
+                <a class="btn btn-danger dropdown-toggle" role="button" id="dropdownCountyLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    New York City
+                </a>
+            
+                <ul class="dropdown-menu scrollable-menu" aria-labelledby="dropdownMenuLink">
+                    {% for county in counties %}
+                        <li style="cursor: pointer;"><a class="dropdown-item" value="{{county}}" onclick="generateCountySpecificGraph('{{county}}')">{{county}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="dropdown" style="float: right;">
+                <a class="btn btn-danger dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    Line Graph
+                </a>
+            
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <li><a class="dropdown-item" href="#" onclick="generateLineGraph()">Line Graph</a></li>
+                <li><a class="dropdown-item" href="#" onclick="generateBarGraph()"> Bar Graph </a></li>
+                <li><a class="dropdown-item" href="#" onclick="generateColumn()"> Column Chart </a></li>
+                <li><a class="dropdown-item" href="#" onclick="generateScatter()"> Scatter Plot </a></li>
+                <li><a class="dropdown-item" href="#" onclick="generatePie()"> Pie Chart </a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
+<!--options-->
 
-<div class="dropdown" style="float: right;">
-    <a class="btn btn-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-        Line Graph
-    </a>
-  
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-      <li><a class="dropdown-item" href="#" onclick="generateLineGraph()">Line Graph</a></li>
-      <li><a class="dropdown-item" href="#" onclick="generateBarGraph()"> Bar Graph </a></li>
-      <li><a class="dropdown-item" href="#" onclick="generateColumn()"> Column Chart </a></li>
-      <li><a class="dropdown-item" href="#" onclick="generateScatter()"> Scatter Plot </a></li>
-      <li><a class="dropdown-item" href="#" onclick="generatePie()"> Pie Chart </a></li>
-    </ul>
-</div>
-
+<!--Graph-->
 <div id="main">
-    <button id="toggleBtn" class="openbtn" onclick="toggleNav()">☰</button>
-    <div class="container-fluid">
+    <div class="container-fluid my-4">
         <div id="mainchart_1" class="container">
             <div class="row">
                 <div class="col-11 mx-auto p-0 my-5 border-dark">
@@ -54,25 +86,70 @@
             </div>
         </div>
         <div id="homechart_1" class="container hideChart">
-            <div class="row">
-                <div class="col-11 mx-auto p-0 my-5 border-dark">
-                    <div id="homechart"></div>
+            {% if home_location %}
+                <div class="row">
+                    <div class="col-11 mx-auto p-0 my-5 border-dark">
+                        <div id="homechart"></div>
+                    </div>
                 </div>
-            </div>
+            {% else %}
+                <div class="row">
+                    <div class="col-lg-4 mx-auto p-3 m-5 border-dark bg-light text-center">
+                        <p class="text-muted">Oops! No data to display</p>
+                        <a href="{% url 'login:settings' username 'profile' %}">
+                            <button type="button" class="btn btn-outline-danger">
+                                Update Home Location
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
         </div>
         <div id="workchart_1" class="container hideChart">
-            <div class="row">
-                <div class="col-11 mx-auto p-0 my-5 border-dark">
-                    <div id="workchart"></div>
+            {% if work_location %}
+                <div class="row">
+                    <div class="col-11 mx-auto p-0 my-5 border-dark">
+                        <div id="workchart"></div>
+                    </div>
                 </div>
-            </div>
+            {% else %}
+                <div class="row">
+                    <div class="col-lg-4 mx-auto p-3 m-5 border-dark bg-light text-center">
+                        <p class="text-muted">Oops! No data to display</p>
+                        <a href="{% url 'login:settings' username 'profile' %}">
+                            <button type="button" class="btn btn-outline-danger">
+                                Update Work Location
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div> 
-    
-  </div>
-    
-        
-
+<!--Graph-->
 
 {% endblock content %}
+
+{% block script %}
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <script>
+        _df_2021 = {{ df_2021 | safe }};
+        _df_2021_home = {{ df_2021_home | safe }};
+        _df_2021_work = {{ df_2021_work | safe }};
+        //_categories_2021 = {{categories_2021 | safe }};
+        _locations = {{ locations | safe }}
+        _df_2021_all = {{ df_2021_all | safe }} 
+        historical = {{ historical | safe }};
+    </script>
+    <script src="{% static 'js/monitor/script.js' %}"></script>
+
+{% endblock script %}

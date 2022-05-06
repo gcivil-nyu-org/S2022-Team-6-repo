@@ -1,60 +1,128 @@
+# Django
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib import messages
 from django.core import signing
+
+# other
 from .hashes import PBKDF2WrappedSHA1PasswordHasher
 
-from .models import UserData, Privacy
-from .helper import update_compliance
+# models
+from .models import UserData, Privacy, Counties
 from circle.models import CircleUser
+from .helper import update_compliance
 from alert.models import Alert
-from monitor.driver import get_s3_client, get_data
+
+# helper
+from selftracking.helper import (
+    check_upload_today,
+    get_current_streak,
+    check_uploaded_yesterday,
+)
+from alert.helper import get_alert
+from circle.helper import get_notifications, get_all_non_compliance
+
+# # driver
+# from monitor.driver import get_s3_client, get_data
 
 
 def profile_view(request, username):
     try:
-        userdata = UserData.objects.get(username=username)
+        view_userdata = UserData.objects.get(username=username)
     except Exception:
         # invlaid user url #
         url = reverse("login:error")
         return HttpResponseRedirect(url)
 
+    view_circles = CircleUser.objects.filter(username=view_userdata.username)
+
     try:
         # check user logged in
         current_username = signing.loads(request.session["user_key"])
-        if current_username != username:
-            raise Exception()
+        userdata = UserData.objects.get(username=current_username)
+
+        if current_username == username:
+            return user_profile(request, username)
+
     except Exception:
 
         context = {
             "page_name": username,
-            "session_valid": False,
             "username": username,
-            "FirstName": userdata.firstname,
-            "LastName": userdata.lastname,
-            "Email": userdata.email,
+            # other
+            "view_userdata": view_userdata,
+            "session_valid": False,
+            "circles": view_circles,
         }
-        return render(request, "login/profile.html", context)
+
+        return render(request, "login/profile-general.html", context)
+
+    logged_circles = CircleUser.objects.filter(username=userdata.username)
+
+    common_circles = logged_circles.values("circle_id").intersection(
+        view_circles.values("circle_id")
+    )
+    other_circles = view_circles.values("circle_id").difference(common_circles)
+
+    common_circles = CircleUser.objects.filter(
+        username=view_userdata.username, circle_id__in=common_circles
+    )
+    other_circles = CircleUser.objects.filter(
+        username=view_userdata.username, circle_id__in=other_circles
+    )
+
+    # print(view_circles.values("circle_id"))
+    # print(logged_circles.values("circle_id"))
+    # print(CircleUser.objects.filter(username=view_userdata.username, circle_id__in=common_circles))
+    # print(other_circles)
+    # common_circles = list()
+    # other_circles = list()
+
+    # for circle_views in view_circles:
+    #     for circle_logged in logged_circles:
+    #         if circle_views.circle_id.circle_id == circle_logged.circle_id.circle_id:
+    #             common_circles.append()
+
+    request_user_data, requests = get_notifications(username=userdata.username)
+    three_non_compliance, non_compliance = get_all_non_compliance(
+        userdata.username, True
+    )
+
+    total_notify = requests + non_compliance
+    streak_today = check_upload_today(userdata.username)
+    alert = get_alert(username=userdata.username)
+
+    current_streak = get_current_streak(userdata.username)
+    streak_yesterday = check_uploaded_yesterday(userdata.username)
 
     context = {
         "page_name": username,
+        "username": current_username,
+        "userdata": userdata,
+        "request_user_data": request_user_data,
+        "total_notify": total_notify,
+        "three_non_compliance": three_non_compliance,
+        "streak_today": streak_today,
+        "alert": alert,
+        "current_streak": current_streak,
+        "streak_yesterday": streak_yesterday,
+        # other
+        "view_userdata": view_userdata,
         "session_valid": True,
-        "username": username,
-        "FirstName": userdata.firstname,
-        "LastName": userdata.lastname,
-        "Email": userdata.email,
+        "common_circles": common_circles,
+        "other_circles": other_circles,
     }
     # valid username
-    return render(request, "login/profile.html", context)
+    return render(request, "login/profile-login.html", context)
 
 
 def user_profile(request, username):
     try:
         # check valid username
         userdata = UserData.objects.get(username=username)
-        _, client_object = get_s3_client()
-        historical, _, _ = get_data(client_object)
+        # _, client_object = get_s3_client()
+        # historical, _, _ = get_data(client_object)
     except Exception:
         # not a valid username
         url = reverse("login:error")
@@ -113,17 +181,31 @@ def user_profile(request, username):
     # user logged in
     userdata = UserData.objects.get(username=username)
 
-    historical = historical[historical.state == "New York"]
-    counties = historical.county.dropna().unique()
-    counties = counties[counties != "Unknown"]
+    counties = Counties.objects.all().values_list("county", flat=True)
+
+    request_user_data, requests = get_notifications(username=username)
+    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
+
+    total_notify = requests + non_compliance
+    streak_today = check_upload_today(username)
+    alert = get_alert(username=username)
+    current_streak = get_current_streak(userdata.username)
+    streak_yesterday = check_uploaded_yesterday(username)
 
     context = {
         "page_name": username,
-        "session_valid": True,
         "username": current_username,
         "userdata": userdata,
+        "request_user_data": request_user_data,
+        "total_notify": total_notify,
+        "three_non_compliance": three_non_compliance,
+        "streak_today": streak_today,
+        "alert": alert,
+        "current_streak": current_streak,
+        "streak_yesterday": streak_yesterday,
         # other
         "counties": counties,
+        "page": "profile",
     }
     # user is logged in & user is looking for his own profile #
     return render(request, "login/user_profile.html", context)
@@ -178,13 +260,30 @@ def user_privacy(request, username):
 
     privacy = Privacy.objects.get(username=username)
 
+    request_user_data, requests = get_notifications(username=username)
+    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
+
+    total_notify = requests + non_compliance
+    streak_today = check_upload_today(username)
+    alert = get_alert(username=username)
+    current_streak = get_current_streak(userdata.username)
+    streak_yesterday = check_uploaded_yesterday(username)
+
     context = {
         "page_name": username,
-        "session_valid": True,
         "username": current_username,
         "userdata": userdata,
+        "request_user_data": request_user_data,
+        "total_notify": total_notify,
+        "three_non_compliance": three_non_compliance,
+        "streak_today": streak_today,
+        "alert": alert,
+        "current_streak": current_streak,
+        "streak_yesterday": streak_yesterday,
         # other
+        "session_valid": True,
         "privacy": privacy,
+        "page": "privacy",
     }
 
     return render(request, "login/user_privacy.html", context)
@@ -193,6 +292,7 @@ def user_privacy(request, username):
 def user_change_password(request, username):
     try:
         current_username = signing.loads(request.session["user_key"])
+        userdata = UserData.objects.get(username=username)
         if current_username != username:
             raise Exception()
     except Exception:
@@ -224,10 +324,29 @@ def user_change_password(request, username):
         except Exception:
             messages.error(request, "Invalid Old Password")
 
+    request_user_data, requests = get_notifications(username=username)
+    three_non_compliance, non_compliance = get_all_non_compliance(username, True)
+
+    total_notify = requests + non_compliance
+    streak_today = check_upload_today(username)
+    alert = get_alert(username=username)
+    current_streak = get_current_streak(userdata.username)
+    streak_yesterday = check_uploaded_yesterday(username)
+
     context = {
         "page_name": username,
-        "session_valid": True,
         "username": current_username,
+        "userdata": userdata,
+        "request_user_data": request_user_data,
+        "total_notify": total_notify,
+        "three_non_compliance": three_non_compliance,
+        "streak_today": streak_today,
+        "alert": alert,
+        "current_streak": current_streak,
+        "streak_yesterday": streak_yesterday,
+        # other
+        "session_valid": True,
+        "page": "password",
     }
 
     return render(request, "login/user_password.html", context)
@@ -250,23 +369,31 @@ def index(request):
     if "user_key" in request.session.keys():
         current_session_valid = True
         username = signing.loads(request.session["user_key"])
+        userdata = UserData.objects.get(username=username)
     if current_session_valid:
         context = {
             "page_name": "CoviGuard",
             "css_name": "login",
             "session_valid": current_session_valid,
             "username": username,
+            "userdata": userdata,
+            "index": True,
         }
     else:
         context = {
             "page_name": "CoviGuard",
             "css_name": "login",
             "session_valid": current_session_valid,
+            "index": True,
         }
     return render(request, "login/index.html", context)
 
 
 def signin(request):
+
+    if "user_key" in request.session.keys():
+        url = reverse("login:index")
+        return HttpResponseRedirect(url)
 
     if request.method == "POST" and "sign-in" in request.POST:
         try:
@@ -275,12 +402,11 @@ def signin(request):
             password = hasher.encode(request.POST.get("password"), "test123")
 
             user = UserData.objects.get(username=username)
-            print(user.password)
-            print(password)
             if user.password == password:
                 user_enc = signing.dumps(username)
                 request.session["user_key"] = user_enc
-                url = reverse("circle:dashboard", kwargs={"username": username})
+                # url = reverse("circle:dashboard", kwargs={"username": username})
+                url = reverse("login:index")
                 return HttpResponseRedirect(url)
             else:
                 raise Exception("Invalid Password")
@@ -292,6 +418,10 @@ def signin(request):
 
 
 def signup(request):
+
+    if "user_key" in request.session.keys():
+        url = reverse("login:index")
+        return HttpResponseRedirect(url)
 
     context = {"page_name": "SignUp"}
 

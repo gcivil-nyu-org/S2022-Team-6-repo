@@ -13,3 +13,204 @@
   height: 180;
   width: 180px;
 }
+
+.scrollable-menu {
+  height: auto;
+  max-height: 200px;
+  overflow-x: hidden;
+}
+
+@keyframes blinker {
+  from {
+    opacity: 1.0;
+  }
+
+  to {
+    opacity: 0.0;
+  }
+}
+
+.blink {
+  text-decoration: blink;
+  animation-name: blinker;
+  animation-duration: 0.6s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  animation-direction: alternate;
+}
+
+.coviguard-bg-dark {
+  background-color: #0B090A;
+}
+
+.coviguard-bg-dark-light {
+  background-color: #161A1D;
+}
+
+.coviguard-bg-maroon {
+  background-color: #660708;
+}
+
+.coviguard-bg-dark-red {
+  background-color: #A4161A;
+}
+
+.coviguard-bg-red {
+  background-color: #BA181B;
+}
+
+.coviguard-bg-red-light {
+  background-color: #E5383B;
+}
+
+.coviguard-bg-grey {
+  background-color: #B1A7A6;
+}
+
+.coviguard-bg-grey-light {
+  background-color: #D3D3D3;
+}
+
+.coviguard-bg-plain-grey {
+  background-color: #F5F3F4;
+}
+
+.coviguard-bg-white {
+  background-color: #FFFFFF;
+}
+
+.coviguard-text-dark {
+  color: #0B090A;
+}
+
+.coviguard-text-dark-light {
+  color: #161A1D;
+}
+
+.coviguard-text-maroon {
+  color: #660708;
+}
+
+.coviguard-text-maroon:hover {
+  color: #A4161A;
+}
+
+.coviguard-text-dark-red {
+  color: #A4161A;
+}
+
+.coviguard-text-red {
+  color: #BA181B;
+}
+
+.coviguard-text-red-light {
+  color: #E5383B;
+}
+
+.coviguard-text-grey {
+  color: #B1A7A6;
+}
+
+.coviguard-text-grey-light {
+  color: #D3D3D3;
+}
+
+.coviguard-text-plain-grey {
+  color: #F5F3F4;
+}
+
+.coviguard-text-white {
+  color: #FFFFFF;
+}
+
+.palette-text {
+  color: #ABC4FF;
+}
+
+.get-started {
+  background-color: #ABC4FF !important;
+  transition: all 0.5s;
+  cursor: pointer;
+  transition-duration: 0.4s !important;
+  border-radius: 4px !important;
+}
+
+.get-started span {
+  display: inline-block;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.get-started span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.get-started:hover span {
+  padding-right: 25px;
+}
+
+.get-started:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
+.intro-cards {
+  background-color: #ABC4FF !important;
+  transition-duration: 0.1s !important;
+  border-radius: 4px !important;
+}
+
+.intro-cards:hover {
+  background-color: #C1D3FE !important;
+}
+
+.dark-card {
+  background-color: #ABC4FF;
+  transition-duration: 0.4s;
+}
+
+.dark-card:hover {
+  background-color: #C1D3FE !important;
+}
+
+.mid-card {
+  background-color: #C1D3FE;
+  transition-duration: 0.4s;
+}
+
+.mid-card:hover {
+  background-color: #ABC4FF !important;
+}
+
+.dev-bg {
+  background-color: #ABC4FF !important;
+  border-radius: 8px;
+}
+
+.dev-contrast-card {
+  background-color: #CCDBFD !important;
+  border-radius: 8px;
+}
+
+.coviguard-button {
+  border: 2px solid #660708;
+  background-color: #F5F3F4;
+  color: black;
+  transition-duration: 0.3s !important;
+}
+
+.coviguard-button:hover {
+  background-color: #660708 !important;
+}
+
+.bg-img {
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+}

@@ -1,0 +1,99 @@
+a {
+    text-decoration: none;
+}
+
+.logo-title {
+    font-size: 25px;
+    font-weight: bold;
+    color: #9e0000;
+}
+
+.section-50 {
+    padding: 50px 0;
+}
+
+.m-b-50 {
+    margin-bottom: 50px;
+}
+
+.dark-link {
+    color: #333;
+    text-decoration: none !important;
+}
+
+.heading-line {
+    position: relative;
+    padding-bottom: 5px;
+}
+
+.heading-line:after {
+    content: "";
+    height: 5px;
+    width: 120px;
+    background-color: #9e0000;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.member-ui_dd-content {
+    margin-bottom: 30px;
+}
+
+.member-list {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: 20px;
+    margin-bottom: 7px;
+    background: #fff;
+    -webkit-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+.member-list--member {
+    border-left: 6px solid #0355d0;
+    position: relative;
+}
+
+.member-list--admin {
+    border-left: 6px solid #f1ee2c;
+    position: relative;
+}
+
+.member-list--alert {
+    box-shadow: 0 0 0 2px rgb(241, 150, 150);
+}
+
+.member-list--safe {
+    box-shadow: 0 0 0 2px rgb(123, 223, 144);
+}
+
+.member-list .member-list_content {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.member-list .member-list_content .member-list_img img {
+    height: 48px;
+    width: 48px;
+    border-radius: 50px;
+    margin-right: 20px;
+}
+
+.member-list .member-list_content .member-list_detail p {
+    margin-bottom: 5px;
+    line-height: 1.2;
+}
+
+.member-list .member-list_feature-btn img {
+    height: 12px;
+    width: 12px;
+    border-radius: 5px;
+    margin-left: 20px;
+    margin-top: 20px;
+}

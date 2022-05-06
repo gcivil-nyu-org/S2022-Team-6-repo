@@ -1,77 +1,113 @@
 {% extends 'main.html' %}
 {% load static %}
+
+{% block stylesheettwo %}
+    <link rel="stylesheet" href="{% static 'css/alert/style.css' %}" />
+{% endblock stylesheettwo %}
+
 {% block content %}
 
 <section>
-    <div class="container-fluid my-5">
-        <div class="rows">
-            <div class="bg-light col-md-6 m-auto border border-secondary border-3 rounded rounded-3 p-3">
-                    <h1 class="text-muted">Pending Requests</h1>
-                <hr>
-                <table class="table">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">Circle</th>
-                            <th scope="col">Username</th>
-                            <th scope="col">Accept</th>
-                            <th scope="col">Reject</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for request_data in all_requests %}
-                            <form action="" method="post">
-                            {% csrf_token %}
-                                <tr>
-                                    <td>{{ request_data.circle_id.circle_name }}</td>
-                                    <td>{{ request_data.username.username }}</td>
-                                    <td><button name="accept_circle" value="{{request_data.request_id}}" type="submit" class="btn btn-outline-success">Accept</button></td>
-                                    <td><button name="reject_circle" value="{{request_data.request_id}}" type="submit" class="btn btn-outline-danger">Reject</button></td>
-                                </tr>
-                            </form>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <div class="container bg-light my-5 p-3">
+        <h3 class="m-b-50 heading-line text-secondary">Pending Requests</h3>
+        {% if all_requests %}
+            {% for request_data in all_requests %}
+                <div class="notification-ui_dd-content">
+                    <div class="notification-list notification-list--unread">
+                        <div class="notification-list_content">
+                            <div class="notification-list_detail">
+                                <p class="text-muted"><span class="fw-bold">{{ request_data.username.username }}</span> requested to join <span class="fw-bold">{{request_data.circle_id.circle_name }}</span></p>
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    <button name="accept_circle" value="{{request_data.request_id}}" type="submit" class="btn btn-outline-success">Accept</button>
+                                    <button name="reject_circle" value="{{request_data.request_id}}" type="submit" class="btn btn-outline-danger">Reject</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="notification-list_feature-img"> 
+                            <img src="{{ request_data.username.user_image.url }}"  class="rounded-circle border" style="margin: 0 0 0 0;" alt="">
+                            <i class="bi bi-arrow-right"></i>
+                            <img src="{{ request_data.circle_id.group_image.url }}" class="rounded-circle border" style="margin: 0 0 0 0;" alt="">
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted text-center"> No Pending Request </p>
+        {% endif %}
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'info' %}
+                    <div class="alert alert-info my-2" role="alert">
+                        {{message}}
+                    </div>
+                {% elif message.tags == 'error' %}
+                    <div class="alert alert-danger my-2" role="alert">
+                        {{message}}
+                    </div>
+                {% elif message.tags == 'success' %}
+                    <div class="alert alert-success my-2" role="alert">
+                        {{message}}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
     </div>
 </section>
 
 <section>
-    <div class="container-fluid my-5">
-        <div class="rows">
-            <div class="bg-light col-md-6 m-auto border border-secondary border-3 rounded rounded-3 p-3">
-                <h1 class="text-muted">Non-Compliance</h1>
-                <hr>
-                <table class="table table-danger">
-                    <thead class="thead">
-                        <tr>
-                            <th scope="col">Circle</th>
-                            <th scope="col">Policy</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for non_compliance in all_non_compliance %}
-                            <form action="" method="post">
-                            {% csrf_token %}
-                                <tr>
-                                    <td>{{ non_compliance.circle_id.circle_name }}</td>
-                                    <td>{{ non_compliance.policy_id.policy_name }}</td>
-                                </tr>
-                            </form>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                <div class="d-grid gap-2 col-6 mx-auto">
-                    <a style="text-decoration: none" href="{% url 'login:privacy' username %}">
-                        <div class="d-grid gap-2 col-6 mx-auto">
-                            <button type="button" class="btn btn-outline-dark m-auto">Change Privacy Settings</button>
-                        </div>
-                    </a>
+    <div class="container bg-light my-5 p-3">
+        <h3 class="m-b-50 heading-line text-secondary">Non-Compliance</h3>
+        {% if all_non_compliance %}
+            <a style="text-decoration: none" href="{% url 'login:privacy' username %}">
+                <div class="d-grid gap-2 col-6 mx-auto p-2">
+                    <button type="button" class="btn btn-outline-danger m-auto">Change Privacy Settings</button>
                 </div>
-            </div>
-        </div>
+            </a>
+            {% for non_compliance in all_non_compliance %}
+                <div class="notification-ui_dd-content">
+                    <div class="notification-list notification-list--unread">
+                        <div class="notification-list_content">
+                            <div class="notification-list_detail">
+                                <p class="text-muted">In <span class="fw-bold">{{ non_compliance.circle_id.circle_name }}</span> non compliant <span class="fw-bold">{{ non_compliance.policy_id.policy_name }}</span></p>
+                                </div>
+                        </div>
+                        <div class="notification-list_feature-img"> 
+                            
+                            <img src="{{ non_compliance.circle_id.group_image.url }}"  class="rounded-circle border" style="margin: 0 0 0 0;" alt="">
+                            {% comment %} <i class="bi bi-x-lg text-danger p-0 m-0"></i>
+                            {% static '' %}img/circle/{{non_compliance.policy_id.policy_id}}.jpg
+                            <img src="{% static '' %}img/circle/{{non_compliance.policy_id.policy_id}}.jpg"  class="rounded-circle border" style="margin: 0 0 0 0;" alt=""> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {% if all_non_compliance.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page=1"><i class="bi bi-caret-left-fill"></i><i class="bi bi-caret-left-fill"></i></a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ all_non_compliance.previous_page_number }}"><i class="bi bi-caret-left"></i></a></li>
+                    {% else %}
+                        <li class="page-item disabled"><a class="page-link" href="#"><i class="bi bi-caret-left-fill"></i><i class="bi bi-caret-left-fill"></i></a></li>
+                        <li class="page-item disabled"><a class="page-link" href="#"><i class="bi bi-caret-left"></i></a></li>
+                    {% endif %}
+                    
+                    <li class="page-item"><a class="page-link" href="#">Page {{all_non_compliance.number}} of {{ all_non_compliance.paginator.num_pages }}</a></li>
+                    
+                    {% if all_non_compliance.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ all_non_compliance.next_page_number }}"><i class="bi bi-caret-right"></i></a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ all_non_compliance.paginator.num_pages }}"><i class="bi bi-caret-right-fill"></i><i class="bi bi-caret-right-fill"></i></a></li>
+                    {% else %}
+                        <li class="page-item disabled"><a class="page-link" href="#"><i class="bi bi-caret-right"></i></a></li>
+                        <li class="page-item disabled"><a class="page-link" href="#"><i class="bi bi-caret-right-fill"></i><i class="bi bi-caret-right-fill"></i></a></li>
+                    {% endif %}
+                
+                </ul>
+            </nav>
+        {% else %}
+            <p class="text-muted text-center"> All circles compliant </p>
+        {% endif %}
     </div>
 </section>
-
 
 {% endblock %}

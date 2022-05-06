@@ -3,27 +3,24 @@ let mainChartSelector = document.querySelector("#mainchart_1");
 let homechartSelector = document.querySelector("#homechart_1");
 let workchartSelector = document.querySelector("#workchart_1");
 let dropdownMenuLinkSelector = document.querySelector("#dropdownMenuLink");
-let chart,homechart,workchart;
+let countyDropDownMain = document.querySelector("#countyDropDownMain");
+let datepickerSelector = document.querySelector("#datePicker");
+let searchButtonSelector = document.querySelector("#searchButton");
+let chart, homechart, workchart;
+const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 let mainChartConfig = {
     chart: {
-        type: 'spline',
-        options3d: {
-            enabled: true,
-            alpha: 15,
-            beta: 15,
-            depth: 50,
-            viewDistance: 25
-        }
+        type: 'spline'
     },
     title: {
-        text: 'NYC Covid Cases'
+        text: 'New York City Covid Cases'
     },
     xAxis: [
         {
             'type': "category",
-        title: {
-            text: 'Month'
-        },
+            title: {
+                text: 'Month'
+            },
         }
     ],
 
@@ -31,7 +28,7 @@ let mainChartConfig = {
 
     credits: {
         enabled: false
-      },
+    },
 
     yAxis: {
         title: {
@@ -50,14 +47,12 @@ let mainChartConfig = {
         }
     },
 
-    colors: ['#6CF'],
-
     series: [
-    {
-        showInLegend: false,
-        name: "",
-        data: generateseriesData(_df_2021)
-    }],
+        {
+            showInLegend: false,
+            name: "",
+            data: generateseriesData(_df_2021)
+        }],
 
     responsive: {
         rules: [{
@@ -83,15 +78,19 @@ let homeChartConfig = {
         type: 'spline'
     },
     title: {
-        text: 'Home Covid Cases'
+        text: _locations[0] + ' Covid Cases'
+    },
+    exporting: { enabled: false },
+
+    credits: {
+        enabled: false
     },
     xAxis: [
         {
-            'categories': ["January", "February", "March", "April", "May", "June", "July", "August", "September", 
-            "October", "November", "December"],
-        title: {
-            text: 'Month'
-        },
+            'type': "category",
+            title: {
+                text: 'Month'
+            },
         }
     ],
     yAxis: {
@@ -100,8 +99,7 @@ let homeChartConfig = {
         }
     },
     tooltip: {
-        headerFormat: '<b>{series.name}</b><br>',
-        pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+        pointFormat: '{point.x}: {point.y}'
     },
 
     plotOptions: {
@@ -113,9 +111,9 @@ let homeChartConfig = {
         }
     },
 
-    colors: ['#39F'],
-
     series: [{
+        showInLegend: false,
+        name: "",
         data: generateseriesData(_df_2021_home)
     }],
 
@@ -144,15 +142,19 @@ let workChartConfig = {
         type: 'spline'
     },
     title: {
-        text: 'Work Covid Cases'
+        text: _locations[1] + ' Covid Cases'
+    },
+    exporting: { enabled: false },
+
+    credits: {
+        enabled: false
     },
     xAxis: [
         {
-            'categories': ["January", "February", "March", "April", "May", "June", "July", "August", "September", 
-            "October", "November", "December"],
-        title: {
-            text: 'Month'
-        },
+            'type': "category",
+            title: {
+                text: 'Month'
+            },
         }
     ],
     yAxis: {
@@ -161,8 +163,7 @@ let workChartConfig = {
         }
     },
     tooltip: {
-        headerFormat: '<b>{series.name}</b><br>',
-        pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+        pointFormat: '{point.x}: {point.y}'
     },
 
     plotOptions: {
@@ -174,9 +175,9 @@ let workChartConfig = {
         }
     },
 
-    colors: ['#036'],
-
     series: [{
+        showInLegend: false,
+        name: "",
         data: generateseriesData(_df_2021_work)
     }],
 
@@ -217,25 +218,20 @@ function toggleNav() {
 function openNav() {
     document.getElementById("mySidebar").style.width = "250px";
     document.getElementById("main").style.marginLeft = "250px";
-}
-  
-function closeNav() {
-    document.getElementById("mySidebar").style.width = "0";
-    document.getElementById("main").style.marginLeft= "0";
+    $('#mainchart').css("width", "940px");
+    $('#homechart').css("width", "940px");
+    $('#workchart').css("width", "940px");
 }
 
-function changeCss () {
-    //var side_bar = document.querySelector(".sidebar");
-    let side_bar = document.querySelector("#mySidebar");
-    let toggle_bar = document.querySelector("#toggleBtn")
-    this.scrollY > 30 ? side_bar.style.top = "0px" : side_bar.style.top = "92px";
-    this.scrollY > 30 ? toggle_bar.style.top = "0px" : toggle_bar.style.top = "132px";
+function closeNav() {
+    document.getElementById("mySidebar").style.width = "0";
+    document.getElementById("main").style.marginLeft = "0";
+    $('#mainchart').css("width", "1210px");
+    $('#homechart').css("width", "1210px");
+    $('#workchart').css("width", "1210px");
 }
 
 function showMainChart() {
-    //let mainChart = document.querySelector("#mainchart");
-    //let homechart = document.querySelector("#homechart");
-    //let workchart = document.querySelector("#workchart");
     if (mainChartSelector.classList && mainChartSelector.classList.contains('hideChart')) {
         mainChartSelector.classList.remove('hideChart');
     }
@@ -245,12 +241,19 @@ function showMainChart() {
     if (workchartSelector.classList && !workchartSelector.classList.contains('hideChart')) {
         workchartSelector.classList.add('hideChart');
     }
+    if (countyDropDownMain.classList && countyDropDownMain.classList.contains('hideChart')) {
+        countyDropDownMain.classList.remove('hideChart');
+    }
+    if (datepickerSelector.classList && datepickerSelector.classList.contains('hideChart')) {
+        datepickerSelector.classList.remove('hideChart');
+    }
+    if (searchButtonSelector.classList && searchButtonSelector.classList.contains('hideChart')) {
+        searchButtonSelector.classList.remove('hideChart');
+    }
+    chart.reflow();
 }
 
 function showHomeChart() {
-    //let mainChart = document.querySelector("#mainchart");
-    //let homechart = document.querySelector("#homechart");
-    //let workchart = document.querySelector("#workchart");
     if (mainChartSelector.classList && !mainChartSelector.classList.contains('hideChart')) {
         mainChartSelector.classList.add('hideChart');
     }
@@ -260,12 +263,19 @@ function showHomeChart() {
     if (workchartSelector.classList && !workchartSelector.classList.contains('hideChart')) {
         workchartSelector.classList.add('hideChart');
     }
+    if (countyDropDownMain.classList && !countyDropDownMain.classList.contains('hideChart')) {
+        countyDropDownMain.classList.add('hideChart');
+    }
+    if (datepickerSelector.classList && !datepickerSelector.classList.contains('hideChart')) {
+        datepickerSelector.classList.add('hideChart');
+    }
+    if (searchButtonSelector.classList && !searchButtonSelector.classList.contains('hideChart')) {
+        searchButtonSelector.classList.add('hideChart');
+    }
+    homechart.reflow();
 }
 
 function showWorkChart() {
-    //let mainChart = document.querySelector("#mainchart");
-    //let homechart = document.querySelector("#homechart");
-    //let workchart = document.querySelector("#workchart");
     if (mainChartSelector.classList && !mainChartSelector.classList.contains('hideChart')) {
         mainChartSelector.classList.add('hideChart');
     }
@@ -275,79 +285,170 @@ function showWorkChart() {
     if (workchartSelector.classList && workchartSelector.classList.contains('hideChart')) {
         workchartSelector.classList.remove('hideChart');
     }
+    if (countyDropDownMain.classList && !countyDropDownMain.classList.contains('hideChart')) {
+        countyDropDownMain.classList.add('hideChart');
+    }
+    if (datepickerSelector.classList && !datepickerSelector.classList.contains('hideChart')) {
+        datepickerSelector.classList.add('hideChart');
+    }
+    if (searchButtonSelector.classList && !searchButtonSelector.classList.contains('hideChart')) {
+        searchButtonSelector.classList.add('hideChart');
+    }
+    searchButtonSelector
+    workchart.reflow();
 }
 
 function generateLineGraph() {
     dropdownMenuLinkSelector.innerText = 'Line Graph';
     mainChartConfig.chart.type = 'spline';
+    if (mainChartConfig.chart.options3d)
+        delete mainChartConfig.chart.options3d;
+    if (homeChartConfig.chart.options3d)
+        delete homeChartConfig.chart.options3d;
+    if (workChartConfig.chart.options3d)
+        delete workChartConfig.chart.options3d;
     chart = Highcharts.chart('mainchart', mainChartConfig);
     homeChartConfig.chart.type = 'spline';
-    chart = Highcharts.chart('homechart', homeChartConfig);
+    homechart = Highcharts.chart('homechart', homeChartConfig);
     workChartConfig.chart.type = 'spline';
-    chart = Highcharts.chart('workchart', workChartConfig);
+    workchart = Highcharts.chart('workchart', workChartConfig);
 }
 function generateBarGraph() {
     dropdownMenuLinkSelector.innerText = 'Bar Graph';
     mainChartConfig.chart.type = 'bar';
+    if (mainChartConfig.chart.options3d)
+        delete mainChartConfig.chart.options3d;
+    if (homeChartConfig.chart.options3d)
+        delete homeChartConfig.chart.options3d;
+    if (workChartConfig.chart.options3d)
+        delete workChartConfig.chart.options3d;
     chart = Highcharts.chart('mainchart', mainChartConfig);
     homeChartConfig.chart.type = 'bar';
-    chart = Highcharts.chart('homechart', homeChartConfig);
+    homechart = Highcharts.chart('homechart', homeChartConfig);
     workChartConfig.chart.type = 'bar';
-    chart = Highcharts.chart('workchart', workChartConfig);
+    workchart = Highcharts.chart('workchart', workChartConfig);
 }
 
 function generateScatter() {
     dropdownMenuLinkSelector.innerText = 'Scatter Plot';
     mainChartConfig.chart.type = 'scatter';
+    if (mainChartConfig.chart.options3d)
+        delete mainChartConfig.chart.options3d;
+    if (homeChartConfig.chart.options3d)
+        delete homeChartConfig.chart.options3d;
+    if (workChartConfig.chart.options3d)
+        delete workChartConfig.chart.options3d;
     chart = Highcharts.chart('mainchart', mainChartConfig);
     homeChartConfig.chart.type = 'scatter';
-    chart = Highcharts.chart('homechart', homeChartConfig);
+    homechart = Highcharts.chart('homechart', homeChartConfig);
     workChartConfig.chart.type = 'scatter';
-    chart = Highcharts.chart('workchart', workChartConfig);
+    workchart = Highcharts.chart('workchart', workChartConfig);
 }
 
 function generateColumn() {
+
     dropdownMenuLinkSelector.innerText = 'Column Graph';
     mainChartConfig.chart.type = 'column';
+    if (mainChartConfig.chart.options3d)
+        delete mainChartConfig.chart.options3d;
+    if (homeChartConfig.chart.options3d)
+        delete homeChartConfig.chart.options3d;
+    if (workChartConfig.chart.options3d)
+        delete workChartConfig.chart.options3d;
+
     chart = Highcharts.chart('mainchart', mainChartConfig);
     homeChartConfig.chart.type = 'column';
-    chart = Highcharts.chart('homechart', homeChartConfig);
+    homechart = Highcharts.chart('homechart', homeChartConfig);
     workChartConfig.chart.type = 'column';
-    chart = Highcharts.chart('workchart', workChartConfig);
+    workchart = Highcharts.chart('workchart', workChartConfig);
 }
 
 function generatePie() {
+    let pieGraph3d = {
+        enabled: true,
+        alpha: 45,
+        beta: 0,
+        depth: 50,
+    };
     dropdownMenuLinkSelector.innerText = 'Pie Chart';
     mainChartConfig.chart.type = 'pie';
+    if (mainChartConfig.plotOptions.pie)
+        delete mainChartConfig.plotOptions.pie;
+    if (homeChartConfig.plotOptions.pie)
+        delete homeChartConfig.plotOptions.pie;
+    if (workChartConfig.plotOptions.pie)
+        delete workChartConfig.plotOptions.pie;
+    mainChartConfig.plotOptions.pie = { allowPointSelect: true };
+    mainChartConfig.plotOptions.pie.depth = 35;
+    homeChartConfig.plotOptions.pie = { allowPointSelect: true };
+    homeChartConfig.plotOptions.pie.depth = 35;
+    workChartConfig.plotOptions.pie = { allowPointSelect: true };
+    workChartConfig.plotOptions.pie.depth = 35;
+    if (mainChartConfig.chart.options3d)
+        delete mainChartConfig.chart.options3d;
+    if (homeChartConfig.chart.options3d)
+        delete homeChartConfig.chart.options3d;
+    if (workChartConfig.chart.options3d)
+        delete workChartConfig.chart.options3d;
+    if (!mainChartConfig.chart.options3d)
+        mainChartConfig.chart.options3d = pieGraph3d;
+    if (!homeChartConfig.chart.options3d)
+        homeChartConfig.chart.options3d = pieGraph3d;
+    if (!workChartConfig.chart.options3d)
+        workChartConfig.chart.options3d = pieGraph3d;
     chart = Highcharts.chart('mainchart', mainChartConfig);
     homeChartConfig.chart.type = 'pie';
-    chart = Highcharts.chart('homechart', homeChartConfig);
+    homechart = Highcharts.chart('homechart', homeChartConfig);
     workChartConfig.chart.type = 'pie';
-    chart = Highcharts.chart('workchart', workChartConfig);
+    workchart = Highcharts.chart('workchart', workChartConfig);
 }
 
 function generateseriesData(data) {
-    monthToCasesMap = {"January": 0, "February": 0, "March": 0, "April": 0, "May": 0, "June": 0, "July": 0, "August": 0, "September": 0, 
-    "October": 0, "November": 0, "December": 0};
-    monthNumberToNameMap = {"01": "January", "02": "February", "03": "March", "04": "April", "05": "May", "06": "June", 
-    "07": "July","08": "August", "09": "September", "10": "October", "11": "November", "12": "December"};
+    //monthToCasesMap = {
+    //    "December": 0, "January": 0, "February": 0, "March": 0, "April": 0, "May": 0, "June": 0, "July": 0, "August": 0, "September": 0,
+    //    "October": 0, "November": 0
+    //};
+    monthToCasesMap = {};
+    currentMonthName = new Date().getMonth();
+    if ($('#dateFrom').val() != "" && $('#dateTo').val() != "") {
+        currentMonthName = (new Date($('#dateFrom').val())).getMonth() - 1;
+    }
+    let i = 0;
+    for (i = currentMonthName + 1; i <= 11; i++) {
+        monthToCasesMap[months[i]] = 0;
+    }
+    for (i = 0; i <= currentMonthName; i++) {
+        monthToCasesMap[months[i]] = 0;
+    }
+    monthNumberToNameMap = {
+        "01": "January", "02": "February", "03": "March", "04": "April", "05": "May", "06": "June",
+        "07": "July", "08": "August", "09": "September", "10": "October", "11": "November", "12": "December"
+    };
     seriesDataMap = [];
+    let finalSeriesDataMap = [];
     for (temp in data) {
         monthToCasesMap[monthNumberToNameMap[data[temp][0].split("-")[1]]] += data[temp][1];
     }
     for (temp in monthToCasesMap) {
-        let temp1 = {"name": temp, "y": monthToCasesMap[temp], "drilldown": temp};
+        let temp1 = { "name": temp, "y": monthToCasesMap[temp], "drilldown": temp };
         seriesDataMap.push(temp1);
     }
-    return seriesDataMap;
+    for (temp in seriesDataMap) {
+        if (seriesDataMap[temp].y != 0) {
+            finalSeriesDataMap.push(seriesDataMap[temp]);
+        }
+    }
+    return finalSeriesDataMap;
 }
 
 function generateDrillDownData(data) {
-    drilldownData = [{"id": "January", "data": []}, {"id": "February", "data": []}, {"id": "March", "data": []}, {"id": "April", "data": []},
-    {"id": "May", "data": []}, {"id": "June", "data": []}, {"id": "July", "data": []}, {"id": "August", "data": []}, {"id": "September", "data": []},
-    {"id": "October", "data": []}, {"id": "November", "data": []}, {"id": "December", "data": []}];
-    monthNumberToNameMap = {"01": "January", "02": "February", "03": "March", "04": "April", "05": "May", "06": "June", 
-    "07": "July","08": "August", "09": "September", "10": "October", "11": "November", "12": "December"};
+    drilldownData = [{ "id": "January", "data": [] }, { "id": "February", "data": [] }, { "id": "March", "data": [] }, { "id": "April", "data": [] },
+    { "id": "May", "data": [] }, { "id": "June", "data": [] }, { "id": "July", "data": [] }, { "id": "August", "data": [] }, { "id": "September", "data": [] },
+    { "id": "October", "data": [] }, { "id": "November", "data": [] }, { "id": "December", "data": [] }];
+    monthNumberToNameMap = {
+        "01": "January", "02": "February", "03": "March", "04": "April", "05": "May", "06": "June",
+        "07": "July", "08": "August", "09": "September", "10": "October", "11": "November", "12": "December"
+    };
     for (temp in data) {
         for (temp2 in drilldownData) {
             if (drilldownData[temp2]["id"] == monthNumberToNameMap[data[temp][0].split("-")[1]]) {
@@ -355,16 +456,111 @@ function generateDrillDownData(data) {
             }
         }
     }
-    finalData = {"series": drilldownData};
+    let finalDrillDownData = [];
+    for (temp in drilldownData) {
+        if (drilldownData[temp].data.length != 0) {
+            finalDrillDownData.push(drilldownData[temp])
+        }
+    }
+    finalData = { "series": finalDrillDownData };
     return finalData;
 }
 
-window.addEventListener("scroll", changeCss , false);
+function generateCountySpecificGraph(value) {
+    document.querySelector('#dropdownCountyLink').innerText = value;
+    if ($('#dateFrom').val() != "" && $('#dateTo').val() != "") {
+        showDatewiseChart();
+    }
+    else {
+        let countyData = [];
+        for (i in _df_2021_all) {
+            if (_df_2021_all[i][2] == value) {
+                dateToCasesArray = [];
+                dateToCasesArray.push(_df_2021_all[i][0]);
+                dateToCasesArray.push(_df_2021_all[i][1]);
+                countyData.push(dateToCasesArray);
+            }
+        }
+        mainChartConfig.series[0]['data'] = generateseriesData(countyData);
+        mainChartConfig.drilldown = generateDrillDownData(countyData);
+        mainChartConfig.title.text = value + ' Covid Cases';
+        chart = Highcharts.chart('mainchart', mainChartConfig);
+    }
+}
+
+function showDatewiseChart() {
+    let fromDateValueStr = $('#dateFrom');
+    let toDateValueStr = $('#dateTo');
+    let fromDateValue = new Date(fromDateValueStr.val());
+    let toDateValue = new Date(toDateValueStr.val());
+    let currentDate = new Date();
+    let countyName = document.querySelector('#dropdownCountyLink').innerText.trim();
+
+    if (fromDateValue > toDateValue) {
+        if (!alert('From Date cannot be greater than To Date')) { window.location.reload(); }
+    }
+
+    if (fromDateValue.getDate() > currentDate.getDate() || toDateValue.getDate() > currentDate.getDate()) {
+        if (!alert("From Date or To Date cannot be greater to current date")) { window.location.reload(); }
+    }
+
+    if (fromDateValue.getDate() == currentDate.getDate() || toDateValue.getDate() == currentDate.getDate()) {
+        if (!alert("From Date or To Date cannot be equal to current date")) { window.location.reload(); }
+    }
+
+
+    if (fromDateValue.getDate() == toDateValue.getDate()) {
+        if (!alert("From and To Date cannot be today")) { window.location.reload(); }
+    }
+
+    let Difference_In_Time = toDateValue - fromDateValue;
+    let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+    if (Difference_In_Days > 365) {
+        if (!alert('From Date and To Date must be 1 year apart')) { window.location.reload(); }
+    }
+
+    console.log(currentDate);
+    let res = [];
+    for (index in historical) {
+        let tempDate = new Date(historical[index][0]);
+        if (tempDate >= fromDateValue && tempDate <= toDateValue && countyName == historical[index][2]) {
+            let tempArr = [];
+            tempArr.push(historical[index][0]);
+            tempArr.push(historical[index][1]);
+            res.push(tempArr);
+        }
+    }
+    mainChartConfig.series[0].data = generateseriesData(res);
+    mainChartConfig.drilldown = generateDrillDownData(res);
+    chart = Highcharts.chart('mainchart', mainChartConfig);
+}
 
 document.addEventListener('DOMContentLoaded', function () {
+    let leastDate = new Date("January 22, 2020");
+    const today = new Date()
+    const yesterday = new Date(today)
+
+    yesterday.setDate(yesterday.getDate() - 1)
+
     chart = Highcharts.chart('mainchart', mainChartConfig);
+    $("#dateFrom").datepicker({ maxDate: yesterday, minDate: leastDate });
+    $("#dateTo").datepicker({ maxDate: yesterday, minDate: leastDate });
 });
-    
-    homechart = Highcharts.chart('homechart', homeChartConfig);
-    
-    workchart = Highcharts.chart('workchart', workChartConfig);
+
+$("#dateFrom").on("change", function () {
+    let datetemp = new Date();
+    let fromDate = new Date($(this).val());
+    let year = fromDate.getFullYear();
+    let month = fromDate.getMonth();
+    let day = fromDate.getDate();
+    let dateToBeSet = new Date(year + 1, month - 1, day);
+    if (dateToBeSet > datetemp) {
+        dateToBeSet = datetemp;
+    }
+    $('#dateTo').datepicker('destroy');
+    $("#dateTo").datepicker({ maxDate: dateToBeSet });
+});
+
+homechart = Highcharts.chart('homechart', homeChartConfig);
+
+workchart = Highcharts.chart('workchart', workChartConfig);

@@ -1,0 +1,40 @@
+.develop {
+  width: 15em;
+  height: 250px;
+}
+
+.thumb {
+  height: 320px;
+  width: 300px;
+  background-color: #fff;
+}
+
+.plus {
+  height: 180;
+  width: 180px;
+}
+
+.scrollable-menu {
+  height: auto;
+  max-height: 200px;
+  overflow-x: hidden;
+}
+
+@keyframes blinker {
+  from {
+    opacity: 1.0;
+  }
+
+  to {
+    opacity: 0.0;
+  }
+}
+
+.blink {
+  text-decoration: blink;
+  animation-name: blinker;
+  animation-duration: 0.6s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  animation-direction: alternate;
+}

@@ -1,6 +1,12 @@
 {% extends 'main-no-nav.html' %}
+{%load static %}
+
+{% block style %}
+   <link rel="stylesheet" href="{%static 'css/login/login.css'%}" />
+{% endblock style %}
 
 {% block content %}
+<body class = 'bg-img'style="background-image: url('{%static 'img/login/covid-image.png'%}');background-size: cover">
 <div class="container">
     <div class="row">
         <div class="col-md-5 mx-auto">
@@ -8,37 +14,37 @@
               <div class="myform form ">
                     <div class="logo mb-3">
                        <div class="col-md-12 text-center">
-                          <h1>CoviGuard</h1>
-                                 <h2>SignUp</h2>
+                          <h1 class="coviguard-text-dark-red"><a href="{% url 'login:index' %}">CoviGuard</a></h1>
+                          <h2>SignUp</h2>
                        </div>
                     </div>
                     <form action="" method="post">
                      {% csrf_token %}
-                       <div class="form-group">
+                       <div class="form-group my-3">
                           <label for="firstname">First Name</label>
-                          <input type="text"  name="firstname" class="form-control" id="firstname" required>
+                          <input type="text"  name="firstname" class="form-control" id="firstname" pattern= "^[a-zA-Z0-9]+$" title="Cannot contain spaces and special characters" maxlength="15" required>
                        </div>
-                       <div class="form-group">
+                       <div class="form-group my-3">
                           <label for="lastname">Last Name</label>
-                          <input type="text"  name="lastname" class="form-control" id="username" required>
+                          <input type="text"  name="lastname" class="form-control" id="username" maxlength="15" pattern= "^[a-zA-Z0-9]+$" title="Cannot contain spaces and special characters" required>
                        </div>
-                       <div class="form-group">
+                       <div class="form-group my-3">
                           <label for="username">Username</label>
-                          <input type="text"  name="username" class="form-control" id="username" required>
+                          <input type="text"  name="username" class="form-control" id="username" pattern= "^[a-zA-Z0-9]+$" title="Cannot contain spaces and special characters" maxlength="15" required>
                        </div>
-                       
-                       <div class="form-group">
+                       <div class="form-group my-3">
                           <label for="email">Email Address</label>
-                          <input type="email" name="email"  class="form-control" id="email" aria-describedby="emailHelp" required>
+                          <input type="email" name="email" class="form-control" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" title="Enter a valid email address" aria-describedby="emailHelp" maxlength="25" required>
                        </div>
-                       <div class="form-group">
+                       <div class="form-group my-3">
                           <label for="password">Password</label>
-                          <input type="password" name="password" id="password"  class="form-control" required>
+                          <input type="password" name="password" id="password"  class="form-control"  data-strength class="form-control input-lg" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$" title="Must contain at least one number,one uppercase,lowercase letter and one special character, and at least 8 or more characters " data-toggle="popover" title="Password Strength" required>
                        </div>
-                       <div class="form-group">
+                       <div class="form-group my-3">
                           <label for="confirmpassword">Confirm Password</label>
-                          <input type="password" name="confirmpassword" id="confirmpassword" class="form-control">
+                          <input type="password" name="confirmpassword" id="confirmpassword" class="form-control" required>
                        </div>
+
                         {% if messages %}
                            {% for message in messages %}
                               {% if message.tags == 'error' %}
@@ -47,15 +53,13 @@
                                  </div>
                               {% endif %}
                            {% endfor %}
-                        {% endif %} 
+                        {% endif %}
                        <br>
-                       <div class="form-group">
-                           <p class="text-center">By signing up you accept our <a href="#">Terms Of Use</a></p>
-                        </div>
-                       <div class="col-md-12 text-center mb-3">
-                          <button type="submit" name= "signup-button" class=" btn btn-block mybtn btn-primary tx-tfm">Register</button>
+
+                       <div class="col-md-12 text-center">
+                          <button type="submit" name= "signup-button" class=" btn btn-block mybtn btn-outline-danger tx-tfm">Register</button>
                        </div>
-                       <div class="col-md-12 ">
+                       <div class="col-md-12">
                           <div class="form-group">
                              <p class="text-center"><a href="{% url 'login:signin' %}" id="signin">Already have an account?</a></p>
                           </div>
@@ -66,4 +70,6 @@
               </div>
        </div>
   </div>
+  
+   </body>
 {% endblock content %}

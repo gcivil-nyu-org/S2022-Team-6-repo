@@ -1,0 +1,25 @@
+.btn {
+  padding: .45rem 1.5rem .35rem;
+}
+
+.gradient-custom {
+  /* fallback for old browsers */
+  background: #e4442f;
+
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-linear-gradient(to right, rgb(95, 15, 10), rgb(233, 20, 20));
+
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: linear-gradient(to right, rgb(95, 15, 10), rgb(233, 20, 20));
+}
+
+.gradient-custom-footer {
+  /* fallback for old browsers */
+  background: #e4442f;
+
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-linear-gradient(to right, rgb(231, 111, 102), rgb(233, 20, 20));
+
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: linear-gradient(to right, rgb(231, 111, 102), rgb(233, 20, 20));
+}

@@ -8,74 +8,126 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% block stylesheetone %}
+    
+    {% endblock stylesheetone %}
+    
+    {% block stylesheettwo %}
+    
+    {% endblock stylesheettwo %}
+    
     <link href="{% static 'assets/dist/css/bootstrap.min.css' %}" rel="stylesheet">
-    {% comment %} <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> {% endcomment %}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/navbar/navbar.css' %}" />
     <title>{{ page_name }}</title>
-    {% comment %} <style>
-    .develop {
-      width: 15em;
-      height: 250px;
-    }
-    </style> {% endcomment %}
+    <link rel="icon" type="image/png" href="{% static 'img/coviguard/favicon.png' %}">
+
 </head>
 
 <body>
-    <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 fixed-top">
-    <div class="container-sm">
-      <a class="navbar-brand" href="{% url 'login:index' %}">
-        <img src="{% static 'img/5.png' %}" width="50" height="50" alt="">
-        CoviGuard
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navmenu">
-        <ul class="navbar-nav ms-auto">
 
-          {% if session_valid %}
-            <li class="nav-item"><a href="{% url 'circle:dashboard' username %}" class="nav-link">Dashboard</a></li>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark gradient-custom">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'login:index' %}">
+        <img src="{% static 'img/coviguard/favicon.png' %}" width="50" height="45" alt="">
+        Coviguard
+      </a>
+
+      <!-- Toggle button -->
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></i></span>
+      </button>
+
+      <!-- Collapsible wrapper -->
+      <div class="navbar-collapse collapse" id="navbarSupportedContent">
+        <!-- Left links -->
+        <ul class="navbar-nav me-auto d-flex flex-row mt-3 mt-lg-0">
+          <li class="nav-item text-center mx-2 mx-lg-1">
+            <a class="nav-link active" aria-current="page" href="{% if index %} #home {% else %} {% url 'login:index' %} {% endif %}">
+              <div>
+                <i class="bi bi-house-door"></i>
+              </div>
+              Home
+            </a>
+          </li>
+          {% if index %}
+            <li class="nav-item text-center mx-2 mx-lg-1">
+              <a class="nav-link active" href="#functionalities">
+                <div>
+                  <i class="bi bi-cart"></i>
+                </div>
+                Functionalities
+              </a>
+            </li>
+            <li class="nav-item text-center mx-2 mx-lg-1">
+              <a class="nav-link active" href="#why">
+                <div>
+                  <i class="bi bi-question-circle-fill"></i>
+                </div>
+                Why CoviGuard?
+              </a>
+            </li>
+            <li class="nav-item text-center mx-2 mx-lg-1">
+              <a class="nav-link active" href="#developers">
+                <div>
+                  <i class="bi bi-person-workspace"></i>
+                </div>
+                Developers
+              </a>
+            </li>
           {% endif %}
-          <li class="nav-item"><a href="#functionalities" class="nav-link">Functionalities</a></li>
-          <li class="nav-item"><a href="#why" class="nav-link">Why CoviGuard?</a></li>
-          <li class="nav-item"><a href="#developers" class="nav-link">Developers</a></li>
         </ul>
+        <!-- Left links -->
+
+        <!-- Right links -->
         {% if session_valid %}
-          <div class="dropdown">
-              <button class="btn btn-outline-secondary dropdown-toggle position-relative mx-3" type="button"
-                  id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="bi bi-gear"></i>
-                  {% if update_settings %}
-                      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                          <i class="bi bi-exclamation-lg"></i>
-                          <span class="visually-hidden">unread messages</span>
-                      </span>
-                  {% endif %}
-              </button>
-              <ul class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton1">
-                  <li>
-                      <div class="alert alert-light m-0" role="alert">
-                          <a href="{% url 'login:settings' username 'profile' %}" class="text-decoration-none">
-                              Settings
-                          </a>
-                      </div>
-                  </li>
-                  <li>
-                      <div class="alert alert-light m-0" role="alert">
-                          <a href="{% url 'login:logout' %}" class="text-decoration-none">
-                              Sign-Out
-                          </a>
-                      </div>
-                  </li>
-              </ul>
-          </div>
-        {% else %}
-          <a href="{% url 'login:signup' %}" class="nav-link">
-          <button class="btn btn-outline-success mx-3" type="submit">SignUp</button>
+        <ul class="navbar-nav mx-3 d-flex flex-row mt-3 mt-lg-0">
+          <li class="nav-item text-center mx-2 mx-lg-1 ">
+              <a class="nav-link active" href="{% url 'circle:dashboard' username 'map' %}">
+                <div>
+                  <i class="bi bi-box2"></i>
+                </div>
+                Dashboard
+              </a>
+            </li>
+          <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="{{ userdata.user_image.url }}" class="rounded-circle" style="width:50px; height:50px" alt="">
           </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="min-width: 100px;">
+            <li><a class="dropdown-item" href="{% url 'login:settings' username 'profile' %}">Settings</a></li>
+            <li><a class="dropdown-item" href="{% url 'login:logout' %}">Logout</a></li>
+          </ul>
+        </li>
+        </ul>
+
+        {% else %}
+          {% if not index %}
+            <ul class="navbar-nav mx-3 d-flex flex-row mt-3 mt-lg-0">
+              <li class="nav-item text-center mx-2 mx-lg-1 ">
+                <a class="nav-link active" href="{% url 'login:signin' %}">
+                  <div>
+                    <i class="bi bi-box-arrow-in-left"></i>
+                  </div>
+                  Sign In
+                </a>
+              </li>
+            </ul>
+          {% endif %}
+          <ul class="navbar-nav mx-3 d-flex flex-row mt-3 mt-lg-0">
+            <li class="nav-item text-center mx-2 mx-lg-1 ">
+              <a class="nav-link active" href="{% url 'login:signup' %}">
+                <div>
+                  <i class="bi bi-person-plus"></i>
+                </div>
+                Sign Up
+              </a>
+            </li>
+          </ul>
         {% endif %}
+
       </div>
     </div>
   </nav>
@@ -83,10 +135,11 @@
 
     {% endblock content %}
 
-    {% include 'footer.html' %}
+    {% include 'footer-index.html' %}
 
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="{% static 'assets/dist/js/bootstrap.bundle.min.js' %}"></script>
-    {% comment %} <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> {% endcomment %}
+
 
 </body>
 

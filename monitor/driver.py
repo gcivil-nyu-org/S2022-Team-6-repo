@@ -9,6 +9,10 @@ def get_s3_client():
 
 def get_data(client_object):
     historical = client_object.get_historical()
-    live = client_object.get_live()
-    average = client_object.get_avg()
+    live = None
+    average = None
     return historical, live, average
+
+
+def get_live(client_object):
+    return client_object.get_live()

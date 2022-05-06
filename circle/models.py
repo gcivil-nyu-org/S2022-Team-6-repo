@@ -6,7 +6,7 @@ import random
 
 
 def random_img():
-    return "media/default/circle/" + str(random.randint(1, 5)) + ".jpg"
+    return "media/default/circle/" + str(random.randint(1, 25)) + ".jpg"
 
 
 class Circle(models.Model):
@@ -15,9 +15,8 @@ class Circle(models.Model):
     admin_username = models.ForeignKey(UserData, on_delete=models.CASCADE)
     no_of_users = models.IntegerField(default=1)
     created = models.DateTimeField(auto_now_add=True)
-    group_image = models.ImageField(
-        default=random_img, upload_to="media/circle/", null=True, blank=True
-    )
+    group_image = models.ImageField(default=random_img, upload_to="media/circle/")
+    display_code = models.CharField(max_length=8, null=True)
 
 
 class CircleUser(models.Model):

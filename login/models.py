@@ -4,7 +4,7 @@ import random
 
 
 def random_img():
-    return "media/default/user/" + str(random.randint(1, 6)) + ".svg"
+    return "media/default/user/" + str(random.randint(1, 37)) + ".svg"
 
 
 class UserData(models.Model):
@@ -26,3 +26,7 @@ class Privacy(models.Model):
     show_vacination = models.BooleanField(default=False)
     show_people_met = models.BooleanField(default=False)
     show_location_visited = models.BooleanField(default=False)
+
+
+class Counties(models.Model):
+    county = models.CharField(max_length=100)

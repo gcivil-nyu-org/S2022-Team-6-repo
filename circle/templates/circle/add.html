@@ -1,5 +1,21 @@
 {% extends 'main.html' %}
 
+{% load static %}
+
+{% block stylesheetone %}
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.css">
+    <link rel="stylesheet" href="{% static 'css/selftrack/style.css' %}">
+{% endblock stylesheetone %}
+
+{% block stylesheettwo %}
+    <link rel="stylesheet" href="{% static 'css/alert/style.css' %}" />
+{% endblock stylesheettwo %}
+
+
 {% block content %}
 
 
@@ -7,16 +23,21 @@
 <section>
     <div class="container-fluid my-5">
         <div class="row">
-            <div class="bg-light col-md-6 m-auto border border-secondary border-3 rounded rounded-3 p-3">
-                <h1 class="text-muted">Join Existing Circle</h1>
-                <hr>
+            <div class="bg-light col-md-6 m-auto rounded rounded-3 p-3">
+                <h1 class="heading-line text-muted">Join Existing Circle</h1>
+
                 <form action="", method="post">
                     {% csrf_token %}
+
                     <div class="mb-3">
-                        <label for="circle_id" class="form-label">Circle ID</label>
+                        <label for="circle_id" class="form-label text-secondary" >Circle ID</label>
                         <input type="text" class="form-control" name="circle_id" id="circle_id" required>
                     </div>
-                    <button type="submit" name="request_circle" class="btn btn-primary">Join</button>
+
+                    <div class="mb-3 text-center">
+                        <button type="submit" name="request_circle" class="btn btn-outline-danger">Join</button>
+                    </div>
+
                     {% if messages %}
                         {% for message in messages %}
                             {% if message.tags == 'error' %}
@@ -31,33 +52,53 @@
                         {% endfor %}
                     {% endif %}
                 </form>
+                <hr class="my-5 mx-auto" style="width: 90%;">  
             </div>
         </div>
-    </div>
-</section>
-
-{% comment %} create circle {% endcomment %}
-<section>
-    <div class="container-fluid my-5">
         <div class="row">
-            <div class="bg-light col-md-6 m-auto border border-secondary border-3 rounded rounded-3 p-3">
-                <h1 class="text-muted">Create Circle</h1>
-                <hr>
+            <div class="bg-light col-md-6 m-auto rounded rounded-3 p-3">
+                <h1 class="heading-line text-muted">Create Circle</h1>
+
                 <form action="", method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="mb-3">
-                        <label for="circle_name" class="form-label">Circle Name</label>
-                        <input type="text" class="form-control" name="circle_name" id="circle_name" required>
-                        <label for="policy_id" class="form-label">Select Policy</label>
-                        <select id="policy_id" name="policy_id" class="form-select" multiple aria-label="multiple select example">
-                            <option value="1">Vaccination Status</option>
-                            <option value="2">People Met</option>
-                            <option value="3">Location Visited</option>
-                        </select>
-                        <label for="circle_image" class="form-label">Example file input</label>
-                        <input type="file" class="form-control-file" id="circle_image" name="circle_image">
+
+                        <div class="my-3">
+                            <label for="circle_name" class="form-label text-secondary">Circle Name</label>
+                            <input type="text" class="form-control" name="circle_name" id="circle_name" required pattern="^[A-Za-z]*$" title="Circle name cannot contain spaces" maxlength="10" required>
+                        </div>
+                        
+                        <div class="my-3">
+                            <label for="policy_id" class="form-label text-secondary">Select Policy</label>
+                            <select multiple="" class="label ui selection fluid dropdown" name="policy_id" id="policy_id" multiple>
+                                    <option value="">Select Policies</option>
+                                    <option value="1">Vaccination Status</option>
+                                    <option value="2">People Met</option>
+                                    <option value="3">Location Visited</option>
+                            </select>
+                        </div>
+                        <div class="my-3">
+                            <label for="circle_image" class="form-label text-secondary">Circle Image</label>
+                            <input class="form-control" type="file" id="circle_image" name="circle_image" accept="image/png, image/jpeg">
+                        </div>
+                        
+                        <div class="my-3 text-center">
+                            <button type="submit" name='create_circle' class="btn btn-outline-danger ">Create Circle</button>
+                        </div>
                     </div>
-                    <button type="submit" name='create_circle' class="btn btn-primary">Create Circle</button>
+                    {% if messages %}
+                        {% for message in messages %}
+                            {% if message.tags == 'info' %}
+                                <div class="alert alert-info my-2" role="alert">
+                                    {{message}}
+                                </div>
+                            {% elif message.tags == 'error' %}
+                                <div class="alert alert-success my-2" role="alert">
+                                    {{message}}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                 </form>
             </div>
         </div>
@@ -65,3 +106,10 @@
 </section>
 
 {% endblock content %}
+
+{% block script %}
+    <script src="{% static 'js/selftrack/jquery.min.js' %}"></script>
+    {% comment %} <script src="{% static 'js/selftrack/popper.js' %}"></script> {% endcomment %}
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.js"></script>
+    <script src="{% static 'js/selftrack/main.js' %}"></script>
+{% endblock script %}

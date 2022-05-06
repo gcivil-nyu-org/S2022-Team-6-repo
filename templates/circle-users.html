@@ -1,0 +1,178 @@
+{% load static %}
+{% load get_value %}
+
+{% for data in circle_user_data %}
+    <div class="col-lg-4">
+    <div class="member-ui_dd-content">
+        <div class="member-list {% if user_alert|hash:data.username.username %} member-list--alert {% else %} member-list--safe {% endif %} {% if data.is_admin %} member-list--admin {% else %} member-list--member {% endif %}" style="border-radius: 25px;">
+            <div class="member-list_content">
+                <div class="member-list_img"> 
+                    <img src="{{ data.username.user_image.url }}" alt="user"> 
+                </div>
+                <div class="member-list_detail">
+                    <h4>{{data.username.username}}</h4>
+                    <a href="{% url 'login:settings' data.username.username 'profile' %}"><button type="button" class="btn btn-outline-warning">Profile</button></a>
+
+                    <button type="button" class="btn {% if is_compliant|hash:data.username.username %} btn-outline-success {% else %} btn-outline-danger {% endif %}" data-bs-toggle="modal" data-bs-target="#{{ data.username.username }}-compliance">
+                        Policy
+                    </button>
+                    
+                    <!-- Modal -->
+                    <div class="modal fade" id="{{ data.username.username }}-compliance" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <div class="container p-0">
+                                        <div class="row">
+                                            <div class="col-lg-7">
+                                            <p>Compliance Status <h4>{{data.username.username}}</h4></p>
+                                            </div>
+                                            <div class="col-lg-5 p-0 member-list_img text-align-right">
+                                                <img class="float-end" src="{{ data.username.user_image.url }}" alt="user"> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr style="width:90%; margin: auto;">
+                                <div class="p-4">
+                                    {% for policy in policies %}
+                                        {% if policy.policy_id == 1 %}
+                                            <div class="col-lg-6">
+                                                Vaccination Status: 
+                                                {% if circle_compliance|hash:data.username.username|hash:policy.policy_id %}
+                                                    <i class="bi bi-check-square-fill text-success"></i>
+                                                {% else %}
+                                                    <i class="bi bi-file-excel-fill text-danger"></i>
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+
+                                        {% if policy.policy_id == 2 %}
+                                            <div class="col-lg-6">
+                                                People Met: 
+                                                {% if circle_compliance|hash:data.username.username|hash:policy.policy_id %}
+                                                    <i class="bi bi-check-square-fill text-success"></i>
+                                                {% else %}
+                                                    <i class="bi bi-file-excel-fill text-danger"></i>
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+
+                                        {% if policy.policy_id == 3 %}
+                                            <div class="col-lg-6">
+                                                Location Visited: 
+                                                {% if circle_compliance|hash:data.username.username|hash:policy.policy_id %}
+                                                    <i class="bi bi-check-square-fill text-success"></i>
+                                                {% else %}
+                                                    <i class="bi bi-file-excel-fill text-danger"></i>
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn {% if user_alert|hash:data.username.username %} btn-outline-danger {% else %} btn-outline-success {% endif %}" data-bs-toggle="modal" data-bs-target="#{{ data.username.username }}-alert">
+                        Alert
+                    </button>
+                    
+                    <!-- Modal -->
+                    <div class="modal fade" id="{{ data.username.username }}-alert" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <div class="container p-0">
+                                        <div class="row">
+                                            <div class="col-lg-7">
+                                            <p>Alerts <h4>{{data.username.username}}</h4></p>
+                                            </div>
+                                            <div class="col-lg-5 p-0 member-list_img text-align-right">
+                                                <img class="float-end" src="{{ data.username.user_image.url }}" alt="user"> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr style="width:90%; margin: auto;">
+                                <div class="p-4">
+                                {% for location in user_alert_data|hash:data.username.username %}
+                                    {% if user_alert_data|hash:data.username.username|hash:location %}
+                                        <div class="col">
+                                            <i class="bi bi-exclamation-square-fill text-danger"></i> {{location}}
+                                        </div>
+                                    {% else %}
+                                        <div class="col">
+                                            <i class="bi bi-check2-circle text-success"></i> {{location}}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col pt-3">
+                            {% if circle_compliance|hash:data.username.username|hash_try:1 != 100 %}
+                                {% if circle_compliance|hash:data.username.username|hash:1 %}
+                                    {% if check_vacinated_policy %}
+                                        {% if data.username.is_vacinated %}
+                                            <p class="text-success fw-bold">Vaccinated</p>
+                                        {% else %}
+                                            <p class="text-danger fw-bold">Not Vaccinated</p>
+                                        {% endif %}
+                                    {% endif %}
+                                {% else %}
+                                    <p class="text-danger fw-bold">No Vaccination Data</p>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col pt-1">
+
+                            {% if streak_last_updated|hash:data.username.username %}
+                                <p class="text-muted">Streak last Updated on {{stread_date_updated|hash:data.username.username}}</p>
+                            {% else %}
+                                <p class="text-muted">No Streak Uploaded</p>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+            <div class="member-list_feature-btn">
+                {% if is_admin %}
+                    {% if data.is_member %}
+                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#{{ data.username.username }}">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="{{ data.username.username }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        Are you sure you want to remove {{data.username.username}}?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form action="" method="post">
+                                            {% csrf_token %}
+                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                            <button class="btn btn-outline-danger" type="submit" name="remove_user" value="{{data.username.username}}">
+                                                Yes
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    </div>
+{% endfor %}

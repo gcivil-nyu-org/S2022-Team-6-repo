@@ -1,128 +1,117 @@
 <!-- Navbar -->
 {% load static %}
-    <nav class="navbar navbar-expand-lg bg-light navbar-light py-3">
-        <div class="container-sm">
-            <a class="navbar-brand" href="{% url 'login:index' %}">
-                <img src="{%static 'img/5.png'%}" width="50" height="50" alt="">
-                CoviGuard
-            </a>
-            <a href="#" class="navbar-brand"></a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+{% block navbar-style %}
+    <link rel="stylesheet" href="{% static 'css/navbar/navbar.css' %}" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+{% endblock navbar-style %}
 
-            <div class="collapse navbar-collapse" id="navmenu">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a href="{% url 'login:index' %}" class="nav-link">Main</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'circle:dashboard' username %}" class="nav-link">Dashboard</a>
-                    </li>
-                    {% comment %} <li class="nav-item">
-                        <a href="{% url 'selftracking:selftrack' username %}" class="nav-link">Self-Track</a>
-                    </li> {% endcomment %}
-                    <li class="nav-item">
-                        <a style="text-decoration: none" href="{% url 'selftracking:selftrack' username %}">
-                        <button type="button" class="btn btn-light position-relative">
-                            
-                            <p class="text-secondary">Self-Track</p>
-                            {% if not streak_today %}
-                                <span
-                                    class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
-                                    {% comment %} {{ total_notify }} {% endcomment %}
-                                    <span class="visually-hidden">New alerts</span>
-                                </span>
-                            {% endif %}
-                                {% comment %} <p class="text-danger">Self-Track</p>
-                            {% endif %} {% endcomment %}
+<nav class="navbar navbar-expand-lg navbar-dark gradient-custom">
+<div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'login:index' %}">
+    <img src="{% static 'img/coviguard/favicon.png' %}" width="50" height="45" alt="">
+    Coviguard
+    </a>
 
-                        </button>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'monitor:user_monitor' %}" class="nav-link">Monitor</a>
-                    </li>
-                   <li class="nav-item">
-                        <a style="text-decoration: none" href="{% url 'alert:alert_user' username %}">
-                        <button type="button" class="btn btn-light position-relative">
-                            
-                            <p class="text-secondary">Alert</p>
-                            {% if alert %}
-                                <span
-                                    class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
-                                    {% comment %} {{ total_notify }} {% endcomment %}
-                                    <span class="visually-hidden">New alerts</span>
-                                </span>
-                            {% endif %}
-                                {% comment %} <p class="text-danger">Self-Track</p>
-                            {% endif %} {% endcomment %}
+    <!-- Toggle button -->
+    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></i></span>
+    </button>
 
-                        </button>
-                        </a>
-                    </li>
-                    <li class="nav-item text-dark">
-                        <a href="{% url 'circle:create' %}" class="nav-link">
-                            <i class="bi bi-plus-lg"></i>
-                        </a>
-                    </li>
-
-                    <li>
-                        <div class="dropdown">
-                            <button class="btn btn-outline-primary dropdown-toggle position-relative mx-3" type="button"
-                                id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-bell"></i>
-                                {% if total_notify != 0 %}
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        {{ total_notify }}
-                                        <span class="visually-hidden">unread messages</span>
-                                    </span>
-                                {% endif %}
-                            </button>
-                            <ul class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton1">
-                                {% if request_user_data or three_non_compliance %}
-                                    {% for request in request_user_data %}
-                                        <li>
-                                            <div class="alert alert-danger m-0" role="alert">
-                                                {{request.username.username}} requested to join {{request.circle_id.circle_name}}
-                                            </div>
-                                        </li>
-                                    {% endfor %}
-                                    {% for non_compliance in three_non_compliance %}
-                                        <li>
-                                            <div class="alert alert-danger m-0" role="alert">
-                                                {{non_compliance.circle_id.circle_name}} non-compliance on {{non_compliance.policy_id.policy_name}}
-                                            </div>
-                                        </li>
-                                    {% endfor %}
-                                    <li>
-                                        <div role="alert">
-                                            <a href="{% url 'circle:notify' %}">
-                                                <button type="button" class="btn btn-outline-info">See all Notifications</button>
-                                            </a>
-                                        </div>
-                                    </li>
-                                {% else %}
-                                <li>
-                                    <div class="alert alert-primary m-0" role="alert">
-                                        No Notifications
-                                    </div>
-                                </li>
-                                {% endif %}
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="{{ userdata.user_image.url }}" width="35" height="35" class="rounded-circle">
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item" href="{% url 'login:settings' username 'profile' %}">Settings</a></li>
-                            <li><a class="dropdown-item" href="{% url 'login:logout' %}">Sign-Out</a></li>
-                        </ul>
-                    </li>
-                </ul>
+    <!-- Collapsible wrapper -->
+    <div class="navbar-collapse collapse" id="navbarSupportedContent">
+    <!-- Left links -->
+    <ul class="navbar-nav me-auto d-flex flex-row mt-3 mt-lg-0">
+        <li class="nav-item text-center mx-2 mx-lg-1">
+        <a class="nav-link active" aria-current="page" href="{% url 'login:index' %}">
+            <div>
+            <i class="bi bi-house-door"></i>
             </div>
-        </div>
-    </nav>
+            Home
+        </a>
+        </li>
+
+        <li class="nav-item text-center mx-2 mx-lg-1">
+        <a class="nav-link active" href="{% url 'circle:dashboard' username 'map' %}">
+            <div>
+            <i class="bi bi-box2"></i>
+            </div>
+            Dashboard
+        </a>
+        </li>
+
+        <li class="nav-item text-center mx-2 mx-lg-1">
+        <a class="nav-link active" href="{% url 'selftracking:selftrack' username %}">
+            <div>
+                {% if streak_yesterday or streak_today %}
+                    <span class="badge rounded-pill badge-notification"><mark class="fw-bold p-0 bg-transparent text-light">{{current_streak}} </mark><i class="fa-solid fa-fire fa-1x"></i></span>
+                {% else %}
+                    <i class="bi bi-person-bounding-box"></i>
+                {% endif %}
+            </div>
+            Self-Track
+            {% if not streak_today %}
+                <span class="badge rounded-pill badge-notification bg-light text-dark"><i class="bi bi-bell"></i></span>
+            {% endif %}
+        </a>
+        </li>
+
+        <li class="nav-item text-center mx-2 mx-lg-1">
+        <a class="nav-link active" href="{% url 'monitor:user_monitor' %}">
+            <div>
+            <i class="bi bi-bar-chart"></i>
+            </div>
+            Monitor
+        </a>
+        </li>
+
+        <li class="nav-item text-center mx-2 mx-lg-1">
+        <a class="nav-link active" href="{% url 'alert:alert_user' username %}">
+            <div>
+                <i class="bi bi-exclamation-triangle"></i>
+            </div>
+            Alert
+            {% if alert %}
+                <span class="badge rounded-pill badge-notification bg-light text-dark"><i class="bi bi-bell"></i></span>
+            {% endif %}
+        </a>
+        </li>
+    </ul>
+    <!-- Left links -->
+
+    <!-- Right links -->
+    
+    <ul class="navbar-nav mx-3 d-flex flex-row mt-3 mt-lg-0">
+        <li class="nav-item text-center mx-2 mx-lg-1">
+            <a class="nav-link active" href="{% url 'circle:create' %}">
+                <div>
+                    <i class="bi bi-plus-circle-fill"></i>
+                </div>
+                Create
+            </a>
+        </li>
+        <li class="nav-item text-center mx-2 mx-lg-1">
+            <a class="nav-link active" href="{% url 'circle:notify' username %}">
+                <div>
+                    <i class="bi bi-bell"></i>
+                </div>
+                <span class="badge rounded-pill badge-notification bg-light text-dark">{{ total_notify }}</span>
+            </a>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="{{ userdata.user_image.url }}" class="rounded-circle" style="width:50px; height:50px;" alt="">
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="min-width: 100px;">
+                <li><a class="dropdown-item" href="{% url 'login:settings' username 'profile' %}">Settings</a></li>
+                <li><a class="dropdown-item" href="{% url 'login:logout' %}">Logout</a></li>
+            </ul>
+        </li>
+    </ul>
+
+    </div>
+</div>
+</nav>
+{% block script %}
+<script src="https://kit.fontawesome.com/4ea6e3ab0b.js" crossorigin="anonymous"></script>
+{% endblock script %}

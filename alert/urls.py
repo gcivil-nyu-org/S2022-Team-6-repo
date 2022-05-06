@@ -5,4 +5,5 @@ app_name = "alert"
 
 urlpatterns = [
     path("<str:username>/", views.alert_user, name="alert_user"),
+    path("<str:username>/markAllRead", views.markAllAsRead, name="markAllRead"),
 ]

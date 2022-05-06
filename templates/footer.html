@@ -1,10 +1,55 @@
 <!-- Footer -->
-<div class="container-fluid p-5">
-</div>
-    <footer class="p-5 bg-dark fixed-bottom">
-        <div class="container-fluid">
-            <a href="#" class="position-absolute bottom-0 end-0 p-4">
-                <i class="bi bi-arrow-up-circle h1"></i>
-            </a>
+{% load static %}
+<div class="container-fluid p-0 gradient-custom-footer coviguard-text-white" style=" display: flex; min-height: 34vh; flex-direction: column; justify-content: flex-start;">
+    <footer class="p-5 my-auto" >
+        <div class="container-fluid ">
+            <div class="container-fluid text-center">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 m-auto">
+                        <p>Copyright ©2022 All rights reserved with by Coviguard.com <i class="bi bi-heart-fill"></i></p>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <img class="img-fluid d-none d-sm-block mx-auto" src="{% static 'img/coviguard/favicon.png' %}" alt="" style="height:100px; width:100px;"/>
+                    </div>
+                    <div class="col-lg-4 col-md-4 m-auto">
+                        <div class="row">
+                            <div class="col-lg-4 p-0">
+                                <h5>
+                                    <a class="coviguard-text-white" style="text-decoration: none;"href="{% url 'login:index'%}">
+                                        Home
+                                        <i class="bi bi-house-door"></i>
+                                    </a>
+                                </h5>
+                            </div>
+                            <div class="col-lg-4 p-0">
+                                <h5>
+                                    <a class="coviguard-text-white" style="text-decoration: none;"href="{% url 'circle:dashboard' username 'map' %}">
+                                        Dashboard
+                                        <i class="bi bi-box2"></i>
+                                    </a>
+                                </h5>
+                            </div>
+                            <div class="col-lg-4 p-0">
+                                <h5>
+                                    <a class="coviguard-text-white" style="text-decoration: none;"href="{% url 'login:settings' username 'profile' %}">
+                                        Profile
+                                        <i class="bi bi-file-person"></i>
+                                    </a>
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+
+                
+            </div>
+
+            <div class="fixed-bottom">
+                <a href="#" class="position-absolute bottom-0 end-0  p-4">
+                    <i class="bi  custom-text-darkest coviguard-text-maroon bi-arrow-up-circle h1"></i>
+                </a>
+            </div>
         </div>
     </footer>
+</div>

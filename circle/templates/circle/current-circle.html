@@ -1,6 +1,13 @@
 {% extends 'main.html' %}
 {% load static %}
-{% comment %} {% load media %} {% endcomment %}
+{% load get_value %}
+
+{% block stylesheettwo %}
+    <link rel="stylesheet" href="{% static 'css/circle/style_members.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/circle/copy.css' %}" />
+{% endblock stylesheettwo %}
+
+
 {% block content %}
 <!-- intro -->
 <section class="bg-light p-1">
@@ -10,10 +17,17 @@
                 <img height="250" width="250" src="{{ circle_data.circle_id.group_image.url }}" class="img-fluid rounded-circle" alt="...">
             </div>
             <div class="col-sm-9">
-                <h1 class="fw-bold text-uppercase text-secondary align-self-start">
-                    {{circle_data.circle_id.circle_name}}
-                </h1>
-                <hr>
+                <div class = "row">
+                    <div>
+                        <h1 class="fw-bold text-uppercase text-secondary align-self-start">
+                            {{circle_data.circle_id.circle_name}}
+                        </h1>
+                        <p class="text-muted d-block">
+                            <button class="copy-btn" value="{% url 'circle:request_url' circle_data.circle_id.display_code %}">Copy Link</button>
+                        </p>
+                    </div>
+                    <hr>
+                </div>
                 <p class="text-muted d-block">Admin:
                     <spam class="text-dark fw-bold">{{circle_data.circle_id.admin_username.username}}</spam>
                 </p>
@@ -30,73 +44,40 @@
     </div>
 </section>
 
-{% comment %} <!-- table --> {% endcomment %}
 <section>
-    <div class="container-fluid">
-        <table class="table table-hover table-success">
-            <thead>
-                <tr>
-                    <th class="table-light text-center" scope="col">Username</th>
-                    <th class="table-light text-center" scope="col">Home Status</th>
-                    <th class="table-light text-center" scope="col">Workplace Status</th>
-                    <th class="table-light text-center" scope="col">Last Updated</th>
-                    {% for policy in policies %}
-                        <th class="table-light text-center" scope="col">{{ policy.policy_name }}</th>
-                    {% endfor %}
-                    {% if is_admin %}
-                        <th class="table-light text-center" scope="col"></th>
-                    {% endif %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for data in circle_user_data %}
-                    <tr>
-                        <td class="table-danger text-center">{{data.username.username}} {% if data.is_admin %} (Admin) {% endif %}</td>
-                        <td class="table-danger text-center">Risk</td>
-                        <td class="table-danger text-center">Safe</td>
-                        <td class="table-danger text-center">3 days ago</td>
-                            {% for key, value in circle_compliance.items %}
-                                {% if key == data.username.username %}
-                                    {% for key1, value1 in value.items %}
-                                            <td class="table-danger text-center">{{value1}}</td>
-                                    {% endfor %}
-                                {% endif %}
-                            {% endfor %}
-                        {% if is_admin %}
-                            {% if data.is_member %}
-                            <td class="table-danger text-center">
-                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#{{ data.username.username }}">
-                                    <i class="bi bi-x-lg"></i>
-                                </button>
-                            </td>
-                            <!-- Modal -->
-                            <div class="modal fade" id="{{ data.username.username }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-body">
-                                            Are you sure you want to remove {{data.username.username}}?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <form action="" method="post">
-                                                {% csrf_token %}
-                                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-                                                <button class="btn btn-outline-danger" type="submit" name="remove_user" value="{{data.username.username}}">
-                                                    Yes
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {% else %}
-                                <td class="table-danger text-center"></td>
-                            {% endif %}
-                        {% endif %}
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-    </section>
+    <div class="container-fluid bg-light my-0 p-5 col-lg-12">
+        <h3 class="m-b-50 heading-line">Members
+            {% comment %} <i class="bi bi-exclamation-square-fill text-danger"></i> {% endcomment %}
+        </h3>
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="container pb-5">
+                <div class="row">
+                    <div class="input-group form-outline mx-auto">
+                        
+                            <input type="search" id="search-users" name="search-users" class="form-control" placeholder="Search"/>
+                            <button id="search-users-submit" name="search-users-submit" type="submit" class="btn btn-danger">
+                                <i class="bi bi-search"></i>
+                            </button>
 
+                    </div>
+                </div>
+            </div>
+        </form>
+        {% if search %}
+            <div class="row">
+                {% include 'user-search.html' %}
+            </div>
+        {% endif %}
+        <h2 class="mb-3">All Members</h2>
+        <div class="row">
+            {% include 'circle-users.html' %}
+        </div>
+    </div>
+</section>
 
 {% endblock content %}
+
+{% block script %}
+    <script src="{% static 'js/circle/copy.js' %}"></script>
+{% endblock script %}

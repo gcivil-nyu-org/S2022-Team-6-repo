@@ -1,62 +1,66 @@
 {% extends 'main-no-nav.html' %}
+{%load static %}
+
+{% block style %}
+   <link rel="stylesheet" href="{%static 'css/login/login.css'%}" />
+{% endblock style %}
 
 {% block content %}
-
-<div class="container">
-   <div class="row">
-      <div class="col-md-5 mx-auto">
-         <div id="first">
-            <div class="myform form ">
-               <div class="logo mb-3">
-                  <div class="col-md-12 text-center">
-                     <h1>CoviGuard</h1>
-                     <h2>Login</h2>
-                  </div>
-               </div>
-               <form action="" method="post">
-                  {% csrf_token %}
-                  <div class="form-group">
-                     <label for="username">Username</label>
-                     <input type="text" name="username"  class="form-control" id="username" placeholder="Enter Username">
-                  </div>
-                  <br>
-                  <div class="form-group">
-                     <label for="password">Password</label>
-                     <input type="password" name="password" id="password" class="form-control" placeholder="Enter Password">
-                  </div>
-                  <div class="form-group">
-                     <p class="text-center">By signing up you accept our <a href="#">Terms Of Use</a></p>
-                  </div>
-                  {% if messages %}
-                     {% for message in messages %}
-                        {% if message.tags == 'error' %}
-                           <div class="alert alert-danger my-2" role="alert">
-                              {{message}}
-                           </div>
-                        {% endif %}
-                     {% endfor %}
-                  {% endif %}   
-                  <div class="col-md-12 text-center">
-                  </div>
-                  <div class="col-md-12 text-center">
-                     <button type="submit" name="sign-in" class=" btn btn-block mybtn btn-primary tx-tfm">Login</button>
-                  </div>
-                  <div class="d-flex justify-content-around align-items-center ">
+   <body class = 'bg-img'style="background-image: url('{%static 'img/login/covid-image.png'%}');background-size: cover">
+   <div class="container">
+      <div class="row">
+         <div class="col-md-5 mx-auto">
+            <div id="first">
+               <div class="myform form ">
+                  <div class="logo mb-3">
                      <div class="col-md-12 text-center">
-                       <a class="fw-bold text-black" href='/password-reset'>Forgot your password?</a>
-                  <div class="col-md-12 ">
-                     <div class="login-or">
-                        <hr class="hr-or">
+                        <h1 class="coviguard-text-dark-red"><a href="{% url 'login:index' %}">CoviGuard</a></h1>
+                        <h2>Login</h2>
                      </div>
                   </div>
-                  <div class="form-group">
-                     <p class="text-center">Don't have account? <a href="{% url 'login:signup' %}" id="signup">Sign up here</a></p>
-                     
-                  </div>
-               </form>
+                  <form action="" method="post">
+                     {% csrf_token %}
+                     <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" name="username"  class="form-control" id="username" placeholder="Enter Username">
+                     </div>
+                     <br>
+                     <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" id="password" class="form-control" placeholder="Enter Password">
+                     </div>
+                     {% if messages %}
+                        {% for message in messages %}
+                           {% if message.tags == 'error' %}
+                              <div class="alert alert-danger my-2" role="alert">
+                                 {{message}}
+                              </div>
+                           {% endif %}
+                        {% endfor %}
+                     {% endif %}   
+
+                     <div class="col-md-12 text-center my-3">
+                        <button type="submit" name="sign-in" class="btn btn-block mybtn btn-outline-danger tx-tfm">Login</button>
+                     </div>
+                     <div class="d-flex justify-content-around align-items-center ">
+                        <div class="col-md-12 text-center">
+                           <a class="fw-bold" href='/password-reset'>Forgot your password?</a>
+                           <div class="col-md-12 ">
+                              <div class="login-or">
+                                 <hr class="hr-or">
+                              </div>
+                           </div>
+                           <div class="form-group">
+                              <p class="text-center">Don't have account? <a href="{% url 'login:signup' %}" id="signup">Sign up here</a></p>
+                           </div>
+                        </div>
+                     </div>
+                  </form>
+               </div>
             </div>
          </div>
       </div>
-   </div>
-</div>
+      
+   </body>
+
 {% endblock content %}

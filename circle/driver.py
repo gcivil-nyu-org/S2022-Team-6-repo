@@ -10,6 +10,7 @@ from .models import (
 
 from login.models import UserData, Privacy
 import json
+import secrets
 
 
 def recent_circle(username):
@@ -79,6 +80,16 @@ def create_circle(username, circle_name, policy_id, group_image):
     circle = Circle()
     circle.circle_name = circle_name
     circle.admin_username = UserData.objects.get(username=username)
+
+    circle.save()
+
+    display_code = secrets.token_urlsafe(int(circle.circle_id))
+
+    if len(str(display_code)) > 7:
+        display_code = display_code[0:6]
+
+    circle.display_code = display_code
+
     circle.save()
 
     if group_image:
@@ -113,6 +124,12 @@ def create_circle(username, circle_name, policy_id, group_image):
 def accept_request(request_id):
 
     current_request = RequestCircle.objects.get(request_id=request_id)
+
+    if (
+        Circle.objects.get(circle_id=current_request.circle_id.circle_id).no_of_users
+        == 15
+    ):
+        return False
 
     circleusers = CircleUser()
 
@@ -150,6 +167,8 @@ def accept_request(request_id):
             policy, current_request.username.username
         )
         policycomplicance.save()
+
+    return True
 
 
 def reject_request(request_id):

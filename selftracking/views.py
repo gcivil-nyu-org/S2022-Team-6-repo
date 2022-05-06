@@ -1,11 +1,16 @@
+# Django import
 from django.shortcuts import render
-from .models import SelfTrack
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.core import signing
-from login.models import UserData
-from circle.helper import get_notifications, get_all_non_compliance
+from django.contrib import messages
 
+# model import
+from .models import SelfTrack
+from login.models import UserData, Counties
+
+# helper import
+from circle.helper import get_notifications, get_all_non_compliance
 from .helper import (
     check_date_uplaoded,
     check_uploaded_yesterday,
@@ -14,14 +19,13 @@ from .helper import (
     check_upload_today,
     get_all_connections,
 )
-
-from .driver import add_user_met, add_location_visited
-
-from monitor.driver import get_s3_client, get_data
-
 from alert.helper import get_alert
 
+# driver import
+from .driver import add_user_met, add_location_visited
+
 import datetime
+import json
 
 
 def selftrack(request, username):
@@ -30,8 +34,8 @@ def selftrack(request, username):
     try:
         username = signing.loads(request.session["user_key"])
         userdata = UserData.objects.get(username=username)
-        _, client_object = get_s3_client()
-        historical, _, _ = get_data(client_object)
+        # _, client_object = get_s3_client()
+        # historical, _, _ = get_data(client_object)
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)
@@ -76,6 +80,24 @@ def selftrack(request, username):
                 selftrack.largest_streak = get_longest_streak(username)
 
             selftrack.save()
+            messages.success(request, "Great Job SelfTrack Successful!")
+    else:
+
+        if request.method == "POST" and "track-update" in request.POST:
+
+            try:
+                selftrack = SelfTrack.objects.filter(username=username).latest(
+                    "date_uploaded"
+                )
+                selftrack.user_met = add_user_met(request.POST.getlist("user_met"))
+                selftrack.location_visited = add_location_visited(
+                    request.POST.getlist("location_visited")
+                )
+                selftrack.save()
+                messages.success(request, "Updated Successfully!")
+
+            except Exception:
+                messages.error(request, "Not able to update!")
 
     request_user_data, requests = get_notifications(username=username)
     three_non_compliance, non_compliance = get_all_non_compliance(username, True)
@@ -86,13 +108,23 @@ def selftrack(request, username):
     longest_streak = get_longest_streak(username)
 
     streak_today = check_upload_today(username)
+    already_met = list()
+    already_visited = list()
+
+    if streak_today:
+        jsonDec = json.decoder.JSONDecoder()
+
+        selected = SelfTrack.objects.filter(username=username).latest("date_uploaded")
+
+        already_visited = jsonDec.decode(selected.location_visited)
+        already_met = jsonDec.decode(selected.user_met)
+
     streak_yesterday = check_uploaded_yesterday(username)
     alert = get_alert(username=username)
 
     connections = get_all_connections(username)
-    historical = historical[historical.state == "New York"]
-    counties = historical.county.dropna().unique()
-    counties = counties[counties != "Unknown"]
+
+    counties = Counties.objects.all().values_list("county", flat=True)
 
     context = {
         "page_name": "SelfTrack",
@@ -110,5 +142,7 @@ def selftrack(request, username):
         "selftrack": True,
         "counties": counties,
         "connections": connections,
+        "already_visited": already_visited,
+        "already_met": already_met,
     }
     return render(request, "selftracking/self_track.html", context)

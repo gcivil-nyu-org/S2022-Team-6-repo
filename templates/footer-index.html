@@ -1,0 +1,66 @@
+<!-- Footer -->
+{% load static %}
+<div class="container-fluid p-0 gradient-custom-footer coviguard-text-white">
+    <footer class="p-5">
+        <div class="container-fluid ">
+            <div class="container-fluid text-center">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 m-auto">
+                        <p>Copyright ©2022 All rights reserved with by Coviguard.com <i class="bi bi-heart-fill"></i></p>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <img class="img-fluid d-none d-sm-block mx-auto" src="{% static 'img/coviguard/favicon.png' %}" alt="" style="height:100px; width:100px;"/>
+                    </div>
+                    <div class="col-lg-4 col-md-4 m-auto">
+                        <div class="row mx-auto">
+                            {% if not session_valid %}
+                                <div class="col-lg-4 p-0">
+                                    <h4>
+                                        <a class="coviguard-text-white" style="text-decoration: none;"href="{% url 'login:index'%}">
+                                            Home
+                                            <i class="bi bi-house-door"></i>
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div class="col-lg-4 p-0">
+                                    <h4>
+                                        <a class="coviguard-text-white" style="text-decoration: none;"href="{% url 'login:signin' %}">
+                                            Sign In
+                                            <i class="bi bi-box-arrow-in-left"></i>
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div class="col-lg-4 p-0">
+                                    <h4>
+                                        <a class="coviguard-text-white" style="text-decoration: none;"href="{% url 'login:signup' %}">
+                                            Sign Up
+                                            <i class="bi bi-person-plus"></i>
+                                        </a>
+                                    </h4>
+                                </div>
+                            {% else %}
+                                <div class="col-lg-4 p-0 mx-auto">
+                                    <h4>
+                                        <a class="coviguard-text-white" style="text-decoration: none;"href="{% url 'login:signup' %}">
+                                            Dashboard
+                                            <i class="bi bi-box2"></i>
+                                        </a>
+                                    </h4>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                   
+                </div>
+
+                
+            </div>
+
+            <div class="fixed-bottom">
+                <a href="#" class="position-absolute bottom-0 end-0  p-4">
+                    <i class="bi  custom-text-darkest coviguard-text-maroon bi-arrow-up-circle h1"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+</div>

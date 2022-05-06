@@ -1,0 +1,118 @@
+{% extends 'main.html' %}
+{% load get_value %}
+
+{% load static %}
+
+{% block stylesheetone %}
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.css">
+    <link rel="stylesheet" href="{% static 'css/selftrack/style.css' %}">
+{% endblock stylesheetone %}
+
+{% block stylesheettwo %}
+    <link rel="stylesheet" href="{% static 'css/circle/style_edit_permission.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/circle/circle-page.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/alert/style.css' %}" />
+
+{% endblock stylesheettwo %}
+
+{% block content %}
+
+<div class="container rounded bg-white {% if not common_circles and not other_circles %} pb-5 mb-5{% endif %}">
+    <div class="row">
+        <div class="col-md-12" style="{% if not common_circles and not other_circles %} margin-bottom: 120px {% endif %}">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                <img class="rounded-circle mt-5" width="130px" height="130px" src="{{ view_userdata.user_image.url }}">
+                <span class="font-weight-bold">{{view_userdata.username}}</span>
+                <span class="text-black-50">{{view_userdata.email}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if common_circles or other_circles %}
+    <div class="container mb-3">
+        {% if common_circles %}
+        <h1 class="m-b-50 heading-line">Common Circles</h1>
+            <div class="row">
+                {% for data in common_circles %}
+                <div class="col-md-4">
+                    <div class="card p-3 mb-2 border">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex flex-row align-items-center">
+                                <div class="icon"> 
+                                    <img src="{{ data.circle_id.group_image.url }}" alt=""> 
+                                    </img>
+                                </div>
+                                <div class="ms-2 c-details">
+                                    <h2 class="mb-0">{{data.circle_id.circle_name}}</h2>
+                                    <span>{{ data.circle_id.admin_username.username }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-1">
+                            <div class="mt-1">
+                                <div class="mt-1"> <span class="text1">{{data.circle_id.no_of_users}} Users <span class="text2">of 15 capacity</span></span> </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="container mb-3">
+        {% if other_circles %}
+        <h1 class="m-b-50 heading-line">Circles</h1>
+            <div class="row">
+                {% for data in other_circles %}
+                <div class="col-md-4">
+                    <div class="card p-3 mb-2 border">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex flex-row align-items-center">
+                                <div class="icon"> 
+                                    <img src="{{ data.circle_id.group_image.url }}" alt=""> 
+                                    </img>
+                                </div>
+                                <div class="ms-2 c-details">
+                                    <h2 class="mb-0">{{data.circle_id.circle_name}}</h2>
+                                    <span>{{ data.circle_id.admin_username.username }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-1">
+                            <div class="mt-1">
+                                <div class="mt-1"> <span class="text1">{{data.circle_id.no_of_users}} Users <span class="text2">of 15 capacity</span></span> </div>
+                            </div>
+                            <div class="mt-5 text-center">
+                                <a href="{% url 'circle:request_url' data.circle_id.display_code %}">
+                                    <button type="button" class="btn btn-outline-danger">Request Circle</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% comment %} {% else %}
+<div class="container mt-5 mb-3" id="replaceable-content">
+    <p class='text-secondary'>No Circles to display</p>
+</div> {% endcomment %}
+{% endif %}
+
+{% endblock %}
+
+{% comment %} <ul class="card-wrapper">
+                    {% for circle in circle_data %}
+                        <li class="card">
+                            <img class="profile-member-list" src='{{circle.circle_id.group_image.url}}' alt=''>
+                            <a href="">{{circle.circle_id.circle_name}}</a>
+                        </li>
+                    {% endfor %} 
+                    </ul> {% endcomment %}

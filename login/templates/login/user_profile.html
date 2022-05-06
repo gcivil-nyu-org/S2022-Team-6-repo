@@ -1,117 +1,149 @@
-{% extends 'main-extend-nav.html' %}
-{% load static %}
-{% block content %}
-<br><br><br><br><br>
+{% extends 'main.html' %}
 
-<div class="container-fluid">
+{% load static %}
+
+{% block stylesheetone %}
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.css">
+    <link rel="stylesheet" href="{% static 'css/selftrack/style.css' %}">
+{% endblock stylesheetone %}
+
+{% block stylesheettwo %}
+    <link rel="stylesheet" href="{% static 'css/circle/style_edit_permission.css' %}" />
+{% endblock stylesheettwo %}
+
+{% block content %}
+
+<div class="container rounded bg-white mt-2 mb-2">
     <div class="row">
-        
-        <div class="col-2 m-4 border" id="sticky-sidebar">
-            <div class="sticky-top">
-                <table class="table">
-                    <tbody>
-                        <tr>
-                            <th><a class="btn btn-link" style="text-decoration: none" href="{% url 'login:settings' username 'profile' %}" class="link-dark"><h3>Profile</h3></a></th>
-                        </tr>
-                        <tr>
-                            <th><a class="btn btn-link" style="text-decoration: none" href="{% url 'login:settings' username 'privacy' %}" class="link-dark"><h3>Privacy</h3></a></th>
-                        </tr>
-                        <tr>
-                            <th><a class="btn btn-link" style="text-decoration: none" href="{% url 'login:settings' username 'password' %}" class="link-dark"><h3>Password</h3></a></th>
-                        </tr>
-                        <tr>
-                            <th><a class="btn btn-link" style="text-decoration: none" href="#" class="link-dark"><h3>Preview</h3></a></th>
-                        </tr>
-                    </tbody>
-                    </table>
+        <div class="col-md-5 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3">
+                <img class="rounded-circle mt-5" width="130px" height="130px" src="{{ userdata.user_image.url }}">
+                <span class="font-weight-bold">{{userdata.username}}</span>
+                <span class="text-black-50">{{userdata.email}}</span>
+            </div>
+            <div class="d-flex flex-column align-items-center text-center p-3">
+                <div class="col-lg-6 p-0 m-0">
+                    <a class="btn btn-link p-0 m-0" style="text-decoration: none" href="{% url 'login:settings' username 'profile' %}" class="link-dark">
+                        <h2 class="{% if page == 'profile' %} text-danger {% endif %}">Profile</h2>
+                    </a>
+                    <br>
+                </div>
+
+                <div class="col-lg-6 p-0 m-0">
+                    <a class="btn btn-link p-0 m-0" style="text-decoration: none" href="{% url 'login:settings' username 'privacy' %}" class="link-dark">
+                        <h2 class="{% if page == 'privacy' %} text-danger {% endif %}">Privacy</h2>
+                    </a>
+                    <br>
+                </div>
+
+                <div class="col-lg-6 p-0 m-0">
+                    <a class="btn btn-link p-0 m-0" style="text-decoration: none" href="{% url 'login:settings' username 'password' %}" class="link-dark">
+                        <h2 class="{% if page == 'password' %} text-danger {% endif %}">Password</h2>
+                    </a>
+                </div>
             </div>
         </div>
-
-        <div class="col m-4 border p-5" id="main">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-5 mx-auto">
-                        <div id="first">
-                            <div class="myform form ">
-                                <div class="logo mb-3">
-                                    <div class="col-md-12 text-center">
-                                        <h1>{{userdata.username}}</h1>
-                                    </div>
-                                </div>
-                                <form action="" method="post" enctype="multipart/form-data">
-                                    {% csrf_token %}
-                                    <div class="form-group p-2">
-                                        <label for="first_name">First Name: </label>
-                                        <input type="text" name="first_name" id="first_name" class="form-control" {% if userdata.firstname %} value={{userdata.firstname}} {% endif %}>
-                                    </div>
-                                    <div class="form-group p-2">
-                                        <label for="last_name">Last Name: </label>
-                                        <input type="text" name="last_name" id="last_name" class="form-control" {% if userdata.lastname %} value={{userdata.lastname}} {% endif %}>
-                                    </div>
-                                    <div class="form-group p-2">
-                                        <label for="dob">Date Of Birth: </label>
-                                        <input type="date" name="dob" id="dob" class="form-control" {% if userdata.dob %} value={{ userdata.dob|stringformat:"s" }} {% endif %}>
-                                    </div>
-                                    <div class="form-group p-2">
-                                        <label for="phone">Phone Number: </label>
-                                        <input type="tel" name="phone" id="phone" class="form-control" {% if userdata.phone %} value={{userdata.phone}} {% endif %}>
-                                    </div>
-                                    <div class="form-group p-2">
-                                        <label for="home">Home County: </label>
-                                        <select class="form-select" name="home" id="home">
-                                            <option selected>{% if userdata.home_adress %} {{userdata.home_adress}} {% endif %}</option>
-                                            {% for county in counties %}
-                                                <option value="{{county}}">{{county}}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="form-group p-2">
-                                        <label for="work">Work County: </label>
-                                        <select class="form-select" name="work" id="work">
-                                            <option selected>{% if userdata.work_address %} {{userdata.work_address}} {% endif %}</option>
-                                            {% for county in counties %}
-                                                <option value="{{county}}">{{county}}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="form-group p-2">
-                                        <label for="vaccination_status">Vaccination Status: </label><br>
-                                        
-                                        <h5>
-                                            <input class="form-check-input" type="checkbox" name="vaccination_status_yes" id="vaccination_status_yes" value="vaccination_status_yes" {% if userdata.is_vacinated %} disabled {% endif %}>
-                                            <label class="form-check-label" for="vaccination_status_yes">Yes</label>
-                                            <br>
-                                        </h5>
-                                        <h5>
-                                            <input class="form-check-input" type="checkbox" name="vaccination_status_no" id="vaccination_status_no" value="vaccination_status_no" {% if not userdata.is_vacinated %} disabled {% endif %}>
-                                            <label class="form-check-label" for="vaccination_status_no">No</label>
-                                        </h5>
-                                    </div>
-                                    <div class="form-group p-2">
-                                        <label for="user_image" class="form-label">Change Profile Picture</label>
-                                        <input type="file" class="form-control-file" id="user_image" name="user_image">
-                                    </div>
-                                    <div class="col-md-12 text-center p-2">
-                                        <button type="submit" name="submit_change" class=" btn btn-block mybtn btn-outline-primary tx-tfm">Change Profile</button>
-                                    </div>
-                                    
-                                    {% if messages %}
-                                        {% for message in messages %}
-                                            {% if message.tags == 'error' %}
-                                            <div class="alert alert-danger my-2" role="alert">
-                                                {{message}}
-                                            </div>
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endif %}   
-                                </form>
-                            </div>
+        <div class="col-md-7">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Profile Settings</h4>
+                </div>
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <label for="first_name">First Name: </label>
+                            <input type="text" name="first_name" id="first_name" pattern= "^[a-zA-Z0-9]+$" title="Cannot contain spaces and special characters" class="form-control" {% if userdata.firstname %} value={{userdata.firstname}} {% endif %}>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="last_name">Last Name: </label>
+                            <input type="text" name="last_name" id="last_name" pattern= "^[a-zA-Z0-9]+$" title="Cannot contain spaces and special characters" class="form-control" {% if userdata.lastname %} value={{userdata.lastname}} {% endif %}>
                         </div>
                     </div>
-                </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label for="dob">Date Of Birth: </label>
+                            <input type="date" name="dob" id="dob" class="form-control" {% if userdata.dob %} value={{ userdata.dob|stringformat:"s" }} {% endif %}>
+                            <script>
+                                var todayDate = new Date();
+                                var month = todayDate.getMonth()+1; //04 - current month
+                                var year = todayDate.getUTCFullYear(); //2021 - current year
+                                var tdate = todayDate.getDate(); // 27 - current date 
+                                if(month < 10){
+                                month = "0" + month //'0' + 4 = 04
+                                }
+                                if(tdate < 10){
+                                tdate = "0" + tdate;
+                                }
+                                var maxDate = year + "-" + month + "-" + tdate;
+                                document.getElementById("dob").setAttribute("max", maxDate);
+                                console.log(maxDate);
+                            </script>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <label for="phone">Phone Number: </label>
+                            <input type="tel" name="phone"  id="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="form-control" {% if userdata.phone %} value={{userdata.phone}} {% endif %}>
+                            <small>Format: 123-456-7890</small>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <label for="home">Home County: </label>
+                            <select class="form-select" name="home" id="home">
+                                <option value=""></option>
+                                {% if userdata.home_adress %}<option selected> {{userdata.home_adress}} </option>{% endif %}
+                                {% for county in counties %}
+                                    <option value="{{county}}">{{county}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <label for="work">Work County: </label>
+                            <select class="form-select" name="work" id="work">
+                                <option value=""></option>
+                                {% if userdata.work_address %}<option selected> {{userdata.work_address}} </option>{% endif %}
+                                {% for county in counties %}
+                                    <option value="{{county}}">{{county}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <label for="vaccination_status">Vaccination Status: </label><br>
+                            <h5 class="ms-3">
+                                <input class="form-check-input" type="checkbox" name="vaccination_status_yes" id="vaccination_status_yes" value="vaccination_status_yes" {% if userdata.is_vacinated %} disabled {% endif %}>
+                                <label class="form-check-label ps-1" for="vaccination_status_yes">Yes</label>
+                                <br>
+                            </h5>
+                            <h5 class="ms-3">
+                                <input class="form-check-input" type="checkbox" name="vaccination_status_no" id="vaccination_status_no" value="vaccination_status_no" {% if not userdata.is_vacinated %} disabled {% endif %}>
+                                <label class="form-check-label ps-1" for="vaccination_status_no">No</label>
+                            </h5>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <label for="user_image" class="form-label">Change Profile Picture</label><br>
+                            <input type="file" class="form-control" id="user_image" name="user_image" accept="image/png, image/jpeg">
+                        </div>
+                        <div class="col-md-6 text-center p-2 mt-3 mx-auto">
+                            <button type="submit" name="submit_change" class=" btn btn-block mybtn btn-outline-danger">Change Profile</button>
+                        </div>
+                        
+                        {% if messages %}
+                            {% for message in messages %}
+                                {% if message.tags == 'error' %}
+                                <div class="col-md-12 mt-3">
+                                    <div class="alert alert-danger my-2" role="alert">
+                                        {{message}}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
-
 {% endblock %}
