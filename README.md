@@ -19,6 +19,7 @@ This application is built keeping in mind all the functionalities a user might a
 
 ### Home Page
 The first step towards becoming a CoviGuardian is visiting the application and signing up if you haven't done that yet. The rest of the features are just a few basic steps away.
+
 <img width="1432" alt="Screen Shot 2022-05-09 at 17 00 12" src="https://user-images.githubusercontent.com/86052891/167498546-bc8bb187-c748-4490-88a8-2bd01c3fc382.png">
 
 ### Dashboard
@@ -42,3 +43,13 @@ This is the feature that allows the user to track if going to a location is safe
 
 ### Monitor
 This alows the user to track the number of cases in the state and his work & home location through various types of interactive graphs. These graphs can be altered in terms of choosing different counties, customising the dates for which you want to track the cases and choosing one of the five types of graphs offered for a better understanding of the data.
+
+### Alerts
+The name is sufficient to understand what this functionality does. Yes, it provides the user with realtime alerts about what is happening within their circles, which area is safe to visit and which area has the highest recorded covid cases.
+
+<img width="1433" alt="Screen Shot 2022-05-09 at 17 38 42" src="https://user-images.githubusercontent.com/86052891/167503250-41eb0bf4-32e4-4a08-875b-2b30b85a324b.png">
+
+### Notifications
+This notifies the user about any pending request he needs to accept or reject as an admin. Also notifies him know if he is compliant with all the policies of the circles he is enrolled in.
+
+### Settings Page
