@@ -96,8 +96,8 @@ def selftrack(request, username):
                 selftrack.save()
                 messages.success(request, "Updated Successfully!")
 
-            except Exception:
-                messages.error(request, "Not able to update!")
+            except Exception:  # pragma: no cover
+                messages.error(request, "Not able to update!")  # pragma: no cover
 
     request_user_data, requests = get_notifications(username=username)
     three_non_compliance, non_compliance = get_all_non_compliance(username, True)
