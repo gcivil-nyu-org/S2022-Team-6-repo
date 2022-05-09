@@ -53,3 +53,19 @@ The name is sufficient to understand what this functionality does. Yes, it provi
 This notifies the user about any pending request he needs to accept or reject as an admin. Also notifies him know if he is compliant with all the policies of the circles he is enrolled in.
 
 ### Settings Page
+This is the page where the user can make changes to his profile. From changing their name, work & home location, their vaccination status and a profile picture of their choice if they dont like the randomly generated display picture. 
+Furthermore, provacy can be changes. This includes vaccination status, people they met and the locations they last visited which may be needed by some circles to declare the user compliant. Finally the user can make changes to their password from here too.
+
+<img width="1436" alt="Screen Shot 2022-05-09 at 17 56 12" src="https://user-images.githubusercontent.com/86052891/167505993-6c951e11-b73d-46f3-b3bd-04b2f632bbd9.png">
+
+<img width="1436" alt="Screen Shot 2022-05-09 at 18 01 50" src="https://user-images.githubusercontent.com/86052891/167506014-da41c2d2-ccd0-48d9-8a59-7cfcbfb7e200.png">
+
+<img width="1432" alt="Screen Shot 2022-05-09 at 18 01 59" src="https://user-images.githubusercontent.com/86052891/167506026-54be48aa-2b92-4548-b44f-a815442522fc.png">
+
+## Developers
+
+- Eashan Kaushik
+- Srijan Malhotra
+- Chinmay Kulkarni
+- Pranav Singh
+- Shardha Koul
