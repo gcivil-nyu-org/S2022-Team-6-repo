@@ -12,8 +12,10 @@ This application is built keeping in mind all the functionalities a user might a
 
 ## CD
 
-- Development:  https://coviguard-dev.herokuapp.com/
-- Production: https://coviguard.herokuapp.com/
+| Environment | Link |
+| ----------- | ---- |
+| Development | https://coviguard-dev.herokuapp.com/ |
+| Production  | https://coviguard.herokuapp.com/ |
 
 ## Functionalities
 
@@ -44,6 +46,8 @@ This is the feature that allows the user to track if going to a location is safe
 ### Monitor
 This alows the user to track the number of cases in the state and his work & home location through various types of interactive graphs. These graphs can be altered in terms of choosing different counties, customising the dates for which you want to track the cases and choosing one of the five types of graphs offered for a better understanding of the data.
 
+<img width="1434" alt="Screen Shot 2022-05-09 at 20 34 46" src="https://user-images.githubusercontent.com/86052891/167519943-d08241c4-bee9-47c3-8dba-8349fa577ac4.png">
+
 ### Alerts
 The name is sufficient to understand what this functionality does. Yes, it provides the user with realtime alerts about what is happening within their circles, which area is safe to visit and which area has the highest recorded covid cases.
 
@@ -51,6 +55,8 @@ The name is sufficient to understand what this functionality does. Yes, it provi
 
 ### Notifications
 This notifies the user about any pending request he needs to accept or reject as an admin. Also notifies him know if he is compliant with all the policies of the circles he is enrolled in.
+
+<img width="1430" alt="Screen Shot 2022-05-09 at 20 41 57" src="https://user-images.githubusercontent.com/86052891/167520496-eef5022e-a7f3-4083-bf2d-01218723d7bb.png">
 
 ### Settings Page
 This is the page where the user can make changes to his profile. From changing their name, work & home location, their vaccination status and a profile picture of their choice if they dont like the randomly generated display picture. 
