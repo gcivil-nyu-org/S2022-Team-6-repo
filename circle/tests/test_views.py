@@ -234,3 +234,19 @@ class TestView(TestCase):
         self.assertEqual(response.status_code, 302)
         url = reverse("login:error")
         self.assertEqual(url, response.url)
+
+    def test_search_user(self):
+        response = self.client.post(
+            self.user_circle_url,
+            data={"search-users-submit": "", "search-users": "Eas"},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "circle/current-circle.html")
+
+    def test_search_userNotFound(self):
+        response = self.client.post(
+            self.user_circle_url,
+            data={"search-users-submit": "", "search-users": "qwerty"},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "circle/current-circle.html")
