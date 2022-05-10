@@ -8,7 +8,7 @@ This application is built keeping in mind all the functionalities a user might a
 | --------- | ----- | ------- |
 | Travis CI | [![Build Status](https://app.travis-ci.com/gcivil-nyu-org/S2022-Team-6-repo.svg?branch=main)](https://app.travis-ci.com/gcivil-nyu-org/S2022-Team-6-repo)      | [![Build Status](https://app.travis-ci.com/gcivil-nyu-org/S2022-Team-6-repo.svg?branch=develop)](https://app.travis-ci.com/gcivil-nyu-org/S2022-Team-6-repo) | 
 | Coveralls | [![Coverage Status](https://coveralls.io/repos/github/gcivil-nyu-org/S2022-Team-6-repo/badge.svg?branch=main)](https://coveralls.io/github/gcivil-nyu-org/S2022-Team-6-repo?branch=main)  | [![Coverage Status](https://coveralls.io/repos/github/gcivil-nyu-org/S2022-Team-6-repo/badge.svg)](https://coveralls.io/github/gcivil-nyu-org/S2022-Team-6-repo) |
-|   Black   | [![Code style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) | [![Code style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) |
+|   black   | [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) | [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) |
 
 ## CD
 
@@ -53,7 +53,7 @@ The name is sufficient to understand what this functionality does. Yes, it provi
 <img width="1433" alt="Screen Shot 2022-05-09 at 17 38 42" src="https://user-images.githubusercontent.com/86052891/167503250-41eb0bf4-32e4-4a08-875b-2b30b85a324b.png">
 
 ### Notifications
-This notifies the user about any pending request they need to accept or reject as an admin. Also notifies them if they are compliant with all the policies of the circles they are enrolled in.
+This notifies the user about any pending request they need to accept or reject as an admin. Also notifies them if they are compliant with all the policies of the circles they are part of.
 
 <img width="1430" alt="Screen Shot 2022-05-09 at 20 41 57" src="https://user-images.githubusercontent.com/86052891/167520496-eef5022e-a7f3-4083-bf2d-01218723d7bb.png">
 
