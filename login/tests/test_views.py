@@ -1,7 +1,7 @@
 from django.test import TestCase, Client, TransactionTestCase
 from django.urls import reverse
 from login.models import UserData, Privacy
-from circle.models import Circle, CircleUser
+from circle.models import Circle, CircleUser, Policy, CirclePolicyCompliance
 import datetime
 from login.hashes import PBKDF2WrappedSHA1PasswordHasher
 import os
@@ -354,6 +354,20 @@ class AtomicTests(TransactionTestCase):
 
         self.circle_user_data = CircleUser.objects.create(
             circle_id=self.circle, username=self.userdata, is_admin=True, is_member=True
+        )
+
+        self.policy = Policy.objects.create(
+            policy_id=1,
+            policy_name="TestPolicy",
+            policy_desc="TestPolicyDesc",
+            policy_level=0,
+        )
+
+        self.compliance = CirclePolicyCompliance.objects.create(
+            circle_id=self.circle,
+            policy_id=self.policy,
+            username=self.userdata,
+            compliance=True,
         )
 
     def test_user_profile_post(self):
