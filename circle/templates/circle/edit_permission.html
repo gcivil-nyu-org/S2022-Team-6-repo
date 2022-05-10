@@ -41,7 +41,7 @@
 
                     <div class="form-group p-2">
                         <label for="circle_name">Circle Name: </label>
-                        <input type="text" name="circle_name" id="circle_name" class="form-control" value={{circle_data.circle_name}}>
+                        <input type="text" name="circle_name" id="circle_name" required pattern="^[A-Za-z]*$" title="Circle name cannot contain spaces" class="form-control" value={{circle_data.circle_name}}>
                     </div>
 
                     <div class="form-group p-2">
