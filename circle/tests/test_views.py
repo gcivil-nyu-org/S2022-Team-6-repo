@@ -34,6 +34,11 @@ class TestView(TestCase):
             args=["EashanKaushik", "1"],
         )
 
+        self.user_circle_error_url = reverse(
+            "circle:user_circle",
+            args=["ChinmayKulkarni", "1"],
+        )
+
         self.create_url = reverse(
             "circle:create",
         )
@@ -105,6 +110,14 @@ class TestView(TestCase):
             admin_username=self.userdata,
             no_of_users=2,
         )
+
+        self.circle_2 = Circle.objects.create(
+            circle_id=2,
+            circle_name="TestCircle_2",
+            admin_username=self.userdata_2,
+            no_of_users=1,
+        )
+
         self.circle_user_data = CircleUser.objects.create(
             circle_id=self.circle, username=self.userdata, is_admin=True, is_member=True
         )
@@ -177,7 +190,7 @@ class TestView(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, "circle/current-circle.html")
 
-    def test_request_circle(self):
+    def test_request_circle_error(self):
         response = self.client.post(self.create_url, data={"request_circle": ""})
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, "circle/add.html")
@@ -250,3 +263,36 @@ class TestView(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "circle/current-circle.html")
+
+    def test_circle_search(self):
+        response = self.client.get(self.dashboard_url, data={"q": "Test"})
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, "circle/circle.html")
+
+    def test_user_circle_error(self):
+        response = self.client.get(self.user_circle_error_url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_request_circle_error_2(self):
+        response = self.client.post(
+            self.create_url, data={"request_circle": "", "circle_id": 1}
+        )
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, "circle/add.html")
+
+    def test_request_circle(self):
+        self.request_circle = RequestCircle.objects.create(
+            request_id=2, circle_id=self.circle, username=self.userdata
+        )
+        response = self.client.post(
+            self.create_url, data={"request_circle": "", "circle_id": 1}
+        )
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, "circle/add.html")
+
+    def test_request_circle_2(self):
+        response = self.client.post(
+            self.create_url, data={"request_circle": "", "circle_id": 2}
+        )
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, "circle/add.html")

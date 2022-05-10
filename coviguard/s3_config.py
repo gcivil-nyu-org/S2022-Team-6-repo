@@ -21,7 +21,7 @@ class s3Config:
         if status == 200:
             dataframe = pd.read_csv(response.get("Body"))
         else:
-            raise Exception("No bucket")
+            raise Exception("No bucket")  # pragma: no cover
 
         return dataframe
 
@@ -32,7 +32,9 @@ class s3Config:
         return self.read_data("us/us-counties-live.csv")
 
     def get_avg(self, year=2022):
-        return self.read_data("us-rolling-avg/us-" + str(year) + ".csv")
+        return self.read_data(
+            "us-rolling-avg/us-" + str(year) + ".csv"
+        )  # pragma: no cover
 
 
 # class s3ImageConfig:
