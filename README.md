@@ -8,7 +8,7 @@ This application is built keeping in mind all the functionalities a user might a
 | --------- | ----- | ------- |
 | Travis CI | [![Build Status](https://app.travis-ci.com/gcivil-nyu-org/S2022-Team-6-repo.svg?branch=main)](https://app.travis-ci.com/gcivil-nyu-org/S2022-Team-6-repo)      | [![Build Status](https://app.travis-ci.com/gcivil-nyu-org/S2022-Team-6-repo.svg?branch=develop)](https://app.travis-ci.com/gcivil-nyu-org/S2022-Team-6-repo) | 
 | Coveralls | [![Coverage Status](https://coveralls.io/repos/github/gcivil-nyu-org/S2022-Team-6-repo/badge.svg?branch=main)](https://coveralls.io/github/gcivil-nyu-org/S2022-Team-6-repo?branch=main)  | [![Coverage Status](https://coveralls.io/repos/github/gcivil-nyu-org/S2022-Team-6-repo/badge.svg)](https://coveralls.io/github/gcivil-nyu-org/S2022-Team-6-repo) |
-|   black   | [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) | [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) |
+|   black   | [![Code style: black](https://img.shields.io/badge/code%20style-Black-000000.svg)](https://github.com/psf/black) | [![Code style: black](https://img.shields.io/badge/code%20style-Black-000000.svg)](https://github.com/psf/black) |
 
 ## CD
 
