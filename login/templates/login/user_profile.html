@@ -86,8 +86,7 @@
                         </div>
                         <div class="col-md-12 mt-3">
                             <label for="phone">Phone Number: </label>
-                            <input type="tel" name="phone"  id="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="form-control" {% if userdata.phone %} value={{userdata.phone}} {% endif %}>
-                            <small>Format: 123-456-7890</small>
+                            <input type="tel" name="phone"  id="phone" pattern="^(\d)(?!\1{5})\d{9}$" title ="Please enter a valid phone number" class="form-control" {% if userdata.phone %} value={{userdata.phone}} {% endif %}>
                         </div>
                         <div class="col-md-12 mt-3">
                             <label for="home">Home County: </label>
