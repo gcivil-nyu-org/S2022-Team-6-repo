@@ -14,7 +14,6 @@ This application is built keeping in mind all the functionalities a user might a
 
 | Environment | Link |
 | ----------- | ---- |
-| Development | https://coviguard-dev.herokuapp.com/ |
 | Production  | https://coviguard.herokuapp.com/ |
 
 ## Functionalities
@@ -54,7 +53,7 @@ The name is sufficient to understand what this functionality does. Yes, it provi
 <img width="1433" alt="Screen Shot 2022-05-09 at 17 38 42" src="https://user-images.githubusercontent.com/86052891/167503250-41eb0bf4-32e4-4a08-875b-2b30b85a324b.png">
 
 ### Notifications
-This notifies the user about any pending request he needs to accept or reject as an admin. Also notifies him know if he is compliant with all the policies of the circles he is enrolled in.
+This notifies the user about any pending request they need to accept or reject as an admin. Also notifies them if they are compliant with all the policies of the circles they are enrolled in.
 
 <img width="1430" alt="Screen Shot 2022-05-09 at 20 41 57" src="https://user-images.githubusercontent.com/86052891/167520496-eef5022e-a7f3-4083-bf2d-01218723d7bb.png">
 
