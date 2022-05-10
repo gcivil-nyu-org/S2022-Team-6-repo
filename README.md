@@ -8,7 +8,7 @@ This application is built keeping in mind all the functionalities a user might a
 | --------- | ----- | ------- |
 | Travis CI | [![Build Status](https://app.travis-ci.com/gcivil-nyu-org/S2022-Team-6-repo.svg?branch=main)](https://app.travis-ci.com/gcivil-nyu-org/S2022-Team-6-repo)      | [![Build Status](https://app.travis-ci.com/gcivil-nyu-org/S2022-Team-6-repo.svg?branch=develop)](https://app.travis-ci.com/gcivil-nyu-org/S2022-Team-6-repo) | 
 | Coveralls | [![Coverage Status](https://coveralls.io/repos/github/gcivil-nyu-org/S2022-Team-6-repo/badge.svg?branch=main)](https://coveralls.io/github/gcivil-nyu-org/S2022-Team-6-repo?branch=main)  | [![Coverage Status](https://coveralls.io/repos/github/gcivil-nyu-org/S2022-Team-6-repo/badge.svg)](https://coveralls.io/github/gcivil-nyu-org/S2022-Team-6-repo) |
-|   Black   | [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) | [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) |
+|   Black   | [![Code style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) | [![Code style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) |
 
 ## CD
 
@@ -24,7 +24,7 @@ The first step towards becoming a CoviGuardian is visiting the application and s
 <img width="1432" alt="Screen Shot 2022-05-09 at 17 00 12" src="https://user-images.githubusercontent.com/86052891/167498546-bc8bb187-c748-4490-88a8-2bd01c3fc382.png">
 
 ### Dashboard
-One of the major highlight of this project is a place where the users can see all their circles, map of the entire state and how badly has it been affected. All this would be available on the dashboard. This makes it easy ofr the user to navigate between 2 major functionalities ina jiffy.
+One of the major highlight of this project is a place where the users can see all their circles, map of the entire state and how badly has it been affected. All this would be available on the dashboard. This makes it easy for the user to navigate between 2 major functionalities in a jiffy.
 
 <img width="1433" alt="Screen Shot 2022-05-09 at 17 08 07" src="https://user-images.githubusercontent.com/86052891/167499215-5c5f3106-35f6-4b5f-a68c-6f02337e73b5.png">
 
