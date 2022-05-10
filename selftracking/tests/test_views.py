@@ -3,6 +3,8 @@ from selftracking.models import SelfTrack
 from django.urls import reverse
 from login.models import UserData
 from alert.models import Alert
+from circle.models import CircleUser, Circle
+from selftracking.driver import get_user_met, get_location_visited
 
 import datetime
 import json
@@ -71,6 +73,27 @@ class TestViews(TestCase):
             location_visited="42a7b2626eae970122e01f65af2f5092",
             streak=0,
             largest_streak=0,
+        )
+
+        self.circle = Circle.objects.create(
+            circle_id=1,
+            circle_name="TestCircle",
+            admin_username=self.userdata,
+            no_of_users=2,
+        )
+
+        self.CircleUserData = CircleUser.objects.create(
+            circle_id=self.circle,
+            username=self.userdata,
+            is_admin=True,
+            is_member=True,
+        )
+
+        self.CircleUserData_2 = CircleUser.objects.create(
+            circle_id=self.circle,
+            username=self.userdata_2,
+            is_admin=False,
+            is_member=True,
         )
 
         self.selftrack_url = reverse(
@@ -222,6 +245,28 @@ class TestViews(TestCase):
             },
         )
         self.assertEqual(response.status_code, 200)
+
+    def test_driver_code(self):
+        self.userdata_3 = UserData.objects.create(
+            firstname="Chinmay",
+            lastname="Kulkarni",
+            password="coviguard",
+            username="TestUser",
+            email="test@gmail.com",
+            dob=datetime.datetime.now(),
+            work_address="1122",
+            home_adress="1122",
+        )
+        self.SelfTrackData_4 = SelfTrack.objects.create(
+            date_uploaded=datetime.date.today() + datetime.timedelta(days=0),
+            username=self.userdata_3,
+            user_met=json.dumps(["met1"]),
+            location_visited=json.dumps(["11225"]),
+            streak=0,
+            largest_streak=10,
+        )
+        get_user_met("TestUser")
+        get_location_visited("TestUser")
 
 
 class TestExceptionViews(TestCase):
