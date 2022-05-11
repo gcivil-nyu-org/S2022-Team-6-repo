@@ -530,6 +530,9 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 $("#dateFrom").on("change", function () {
+    if ($(this).val() === "") {
+        return;
+    }
     let datetemp = new Date();
     let fromDate = new Date($(this).val());
     let year = fromDate.getFullYear();
@@ -541,6 +544,23 @@ $("#dateFrom").on("change", function () {
     }
     $('#dateTo').datepicker('destroy');
     $("#dateTo").datepicker({ maxDate: dateToBeSet, minDate: fromDate });
+});
+
+$("#dateTo").on("change", function () {
+    if ($(this).val() === "") {
+        return;
+    }
+    let datetemp = new Date("January 22, 2020");
+    let toDate = new Date($(this).val());
+    let year = toDate.getFullYear();
+    let month = toDate.getMonth();
+    let day = toDate.getDate();
+    let dateToBeSet = new Date(year - 1, month + 1, day);
+    if (dateToBeSet < datetemp) {
+        dateToBeSet = datetemp;
+    }
+    $('#dateFrom').datepicker('destroy');
+    $("#dateFrom").datepicker({ maxDate: toDate, minDate: dateToBeSet });
 });
 
 homechart = Highcharts.chart('homechart', homeChartConfig);
