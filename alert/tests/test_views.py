@@ -179,4 +179,28 @@ class TestView(TestCase):
         create_notification(self.userdata, "test", "test")
 
     def test_notify_alerts(self):
-        notify_alerts(self.userdata)
+        self.userdata_4 = UserData.objects.create(
+            firstname="Test",
+            lastname="Test",
+            password="coviguard",
+            username="Test",
+            email="test@gmail.com",
+            dob=datetime.datetime.now(),
+            work_address="1122",
+            home_adress="1122",
+        )
+        Alert.objects.create(
+            username=self.userdata_4,
+            location_data_case='["TEST"]',
+            location_data_death='["TEST"]',
+            location_alert_case=True,
+            location_alert_death=True,
+            home_alert_case=True,
+            home_alert_death=True,
+            work_alert_case=True,
+            work_alert_death=True,
+            people_data='["TEST"]',
+            people_alert=True,
+            alert=True,
+        )
+        notify_alerts(self.userdata_4)
