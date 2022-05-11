@@ -12,6 +12,7 @@ from circle.models import (
 from login.models import UserData, Privacy
 from alert.models import Alert
 import datetime
+import secrets
 
 
 class TestView(TestCase):
@@ -296,3 +297,82 @@ class TestView(TestCase):
         )
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, "circle/add.html")
+
+    def test_search_userNotFound_2(self):
+        response = self.client.post(
+            reverse(
+                "circle:user_circle",
+                args=["EashanKaushik", "1"],
+            ),
+            data={"search-users-submit": "", "search-users": "SrijanMalhotra"},
+        )
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, "circle/current-circle.html")
+
+    def test_notify_userError(self):
+        response = self.client.get(reverse("circle:notify", args=["ChinmayKulkarni"]))
+        self.assertEquals(response.status_code, 302)
+
+    def test_circle_full(self):
+        self.tempcircle = Circle.objects.create(
+            circle_id=10,
+            circle_name="TestCircle",
+            admin_username=self.userdata,
+            no_of_users=15,
+        )
+        self.request_circle_2 = RequestCircle.objects.create(
+            request_id=5, circle_id=self.tempcircle, username=self.userdata_3
+        )
+        response = self.client.post(self.notify_url, data={"accept_circle": 5})
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, "circle/notifications.html")
+
+    def test_deleteCircle(self):
+        self.tempCircle = Circle.objects.create(
+            circle_id=5,
+            circle_name="TestCircle",
+            admin_username=self.userdata,
+            no_of_users=2,
+        )
+        CircleUser.objects.create(
+            circle_id=self.tempCircle,
+            username=self.userdata,
+            is_admin=True,
+            is_member=True,
+        )
+        response = self.client.get(
+            reverse("circle:deletecircle", args=["EashanKaushik", "5"])
+        )
+        self.assertEquals(response.status_code, 302)
+
+    def test_edit_permission(self):
+        response = self.client.get(
+            reverse("circle:editpermission", args=["EashanKaushik", "1"])
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "circle/edit_permission.html")
+
+    def test_edit_permission_post(self):
+        response = self.client.post(
+            reverse("circle:editpermission", args=["EashanKaushik", "1"]),
+            data={"circle_update": "", "circle_name": "TestCircle"},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "circle/edit_permission.html")
+
+    def test_request_url(self):
+        display_code = secrets.token_urlsafe(1)
+        if len(str(display_code)) > 7:
+            display_code = display_code[0:6]
+        response = self.client.get(reverse("circle:request_url", args=[display_code]))
+        self.assertEqual(response.status_code, 302)
+
+    def test_request_url_post(self):
+        display_code = secrets.token_urlsafe(1)
+        if len(str(display_code)) > 7:
+            display_code = display_code[0:6]
+        response = self.client.post(
+            reverse("circle:request_url", args=[display_code]),
+            data={"send_request": ""},
+        )
+        self.assertEqual(response.status_code, 302)
