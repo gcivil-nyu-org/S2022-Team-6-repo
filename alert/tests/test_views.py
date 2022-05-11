@@ -7,6 +7,8 @@ from alert.driver import (
     work_alert,
     people_met_alert,
     location_visited_alert,
+    create_notification,
+    notify_alerts,
 )
 from monitor.driver import get_s3_client, get_data
 from selftracking.models import SelfTrack
@@ -172,3 +174,9 @@ class TestView(TestCase):
             "%Y-%m-%d"
         )
         location_visited_alert("[]", historical, yesterday)
+
+    def test_create_notification(self):
+        create_notification(self.userdata, "test", "test")
+
+    def test_notify_alerts(self):
+        notify_alerts(self.userdata)

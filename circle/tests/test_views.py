@@ -363,14 +363,14 @@ class TestView(TestCase):
     def test_request_url(self):
         display_code = secrets.token_urlsafe(1)
         if len(str(display_code)) > 7:
-            display_code = display_code[0:6]
+            display_code = display_code[0:6]  # pragma: no cover
         response = self.client.get(reverse("circle:request_url", args=[display_code]))
         self.assertEqual(response.status_code, 302)
 
     def test_request_url_post(self):
         display_code = secrets.token_urlsafe(1)
         if len(str(display_code)) > 7:
-            display_code = display_code[0:6]
+            display_code = display_code[0:6]  # pragma: no cover
         response = self.client.post(
             reverse("circle:request_url", args=[display_code]),
             data={"send_request": ""},
