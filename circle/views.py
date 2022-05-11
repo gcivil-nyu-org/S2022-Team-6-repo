@@ -55,7 +55,7 @@ def circle(request, username, query):
             liveData[liveData.state == "New York"][["county", "cases"]].values
         ).tolist()
         if current_username != username:
-            raise Exception()
+            raise Exception()  # pragma: no cover
     except Exception:
         url = reverse("login:error")
         return HttpResponseRedirect(url)

@@ -17,8 +17,8 @@ def home_alert(home_address, historical, yesterday):
                 alert_case = True
             if death_average < int(historical[historical.date == yesterday].deaths):
                 alert_death = True
-        except Exception:
-            return False, False
+        except Exception:  # pragma: no cover
+            return False, False  # pragma: no cover
     # print(alert_case, alert_death)
     return alert_case, alert_death
 
@@ -38,8 +38,8 @@ def work_alert(work_address, historical, yesterday):
                 alert_case = True
             if death_average < int(historical[historical.date == yesterday].deaths):
                 alert_death = True
-        except Exception:
-            return False, False
+        except Exception:  # pragma: no cover
+            return False, False  # pragma: no cover
 
     # print(alert_case, alert_death)
     return alert_case, alert_death
@@ -105,8 +105,8 @@ def location_visited_alert(location_visted, historical, yesterday):
                     data_alert_death.append(location)
                 else:
                     location_alert_death.append(False)
-            except Exception:
-                return list(), list(), False, False
+            except Exception:  # pragma: no cover
+                return list(), list(), False, False  # pragma: no cover
     else:
         return data_alert_case, data_alert_death, False, False
 

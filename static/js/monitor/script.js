@@ -496,33 +496,15 @@ function showDatewiseChart() {
     let currentDate = new Date();
     let countyName = document.querySelector('#dropdownCountyLink').innerText.trim();
 
-    if (fromDateValue > toDateValue) {
-        if (!alert('From Date cannot be greater than To Date')) { window.location.reload(); }
+    if (fromDateValueStr.val() === "" || toDateValueStr.val() === "") {
+        alert("From Date or To Date cannot be blank");
+        return;
     }
 
-    if (fromDateValue.getDate() > currentDate.getDate() || toDateValue.getDate() > currentDate.getDate()) {
-        if (!alert("From Date or To Date cannot be greater to current date")) { window.location.reload(); }
-    }
-
-    if (fromDateValue.getDate() == currentDate.getDate() || toDateValue.getDate() == currentDate.getDate()) {
-        if (!alert("From Date or To Date cannot be equal to current date")) { window.location.reload(); }
-    }
-
-
-    if (fromDateValue.getDate() == toDateValue.getDate()) {
-        if (!alert("From and To Date cannot be today")) { window.location.reload(); }
-    }
-
-    let Difference_In_Time = toDateValue - fromDateValue;
-    let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-    if (Difference_In_Days > 365) {
-        if (!alert('From Date and To Date must be 1 year apart')) { window.location.reload(); }
-    }
-
-    console.log(currentDate);
     let res = [];
     for (index in historical) {
-        let tempDate = new Date(historical[index][0]);
+        let parts =historical[index][0].split('-');
+        let tempDate = new Date(parts[0], parts[1] - 1, parts[2]);
         if (tempDate >= fromDateValue && tempDate <= toDateValue && countyName == historical[index][2]) {
             let tempArr = [];
             tempArr.push(historical[index][0]);
@@ -548,6 +530,9 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 $("#dateFrom").on("change", function () {
+    if ($(this).val() === "") {
+        return;
+    }
     let datetemp = new Date();
     let fromDate = new Date($(this).val());
     let year = fromDate.getFullYear();
@@ -558,7 +543,24 @@ $("#dateFrom").on("change", function () {
         dateToBeSet = datetemp;
     }
     $('#dateTo').datepicker('destroy');
-    $("#dateTo").datepicker({ maxDate: dateToBeSet });
+    $("#dateTo").datepicker({ maxDate: dateToBeSet, minDate: fromDate });
+});
+
+$("#dateTo").on("change", function () {
+    if ($(this).val() === "") {
+        return;
+    }
+    let datetemp = new Date("January 22, 2020");
+    let toDate = new Date($(this).val());
+    let year = toDate.getFullYear();
+    let month = toDate.getMonth();
+    let day = toDate.getDate();
+    let dateToBeSet = new Date(year - 1, month + 1, day);
+    if (dateToBeSet < datetemp) {
+        dateToBeSet = datetemp;
+    }
+    $('#dateFrom').datepicker('destroy');
+    $("#dateFrom").datepicker({ maxDate: toDate, minDate: dateToBeSet });
 });
 
 homechart = Highcharts.chart('homechart', homeChartConfig);

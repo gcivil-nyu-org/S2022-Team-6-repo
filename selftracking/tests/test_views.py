@@ -3,6 +3,8 @@ from selftracking.models import SelfTrack
 from django.urls import reverse
 from login.models import UserData
 from alert.models import Alert
+from circle.models import CircleUser, Circle
+from selftracking.driver import get_user_met, get_location_visited
 
 import datetime
 import json
@@ -31,6 +33,17 @@ class TestViews(TestCase):
             home_adress="1122",
         )
 
+        self.userdata_2 = UserData.objects.create(
+            firstname="Chinmay",
+            lastname="Kulkarni",
+            password="coviguard",
+            username="ChinmayKulkarni",
+            email="test@gmail.com",
+            dob=datetime.datetime.now(),
+            work_address="1122",
+            home_adress="1122",
+        )
+
         self.alert = Alert.objects.create(
             username=self.userdata,
         )
@@ -53,6 +66,36 @@ class TestViews(TestCase):
             largest_streak=10,
         )
 
+        self.SelfTrackData_2 = SelfTrack.objects.create(
+            date_uploaded=datetime.date.today() + datetime.timedelta(days=-2),
+            username=self.userdata_2,
+            user_met="42a7b2626eae970122e01f65af2f5092",
+            location_visited="42a7b2626eae970122e01f65af2f5092",
+            streak=0,
+            largest_streak=0,
+        )
+
+        self.circle = Circle.objects.create(
+            circle_id=1,
+            circle_name="TestCircle",
+            admin_username=self.userdata,
+            no_of_users=2,
+        )
+
+        self.CircleUserData = CircleUser.objects.create(
+            circle_id=self.circle,
+            username=self.userdata,
+            is_admin=True,
+            is_member=True,
+        )
+
+        self.CircleUserData_2 = CircleUser.objects.create(
+            circle_id=self.circle,
+            username=self.userdata_2,
+            is_admin=False,
+            is_member=True,
+        )
+
         self.selftrack_url = reverse(
             "selftracking:selftrack",
             args=["cs55"],
@@ -61,6 +104,11 @@ class TestViews(TestCase):
         self.selftrack_url_real = reverse(
             "selftracking:selftrack",
             args=["EashanKaushik"],
+        )
+
+        self.selftrack_url_real_3 = reverse(
+            "selftracking:selftrack",
+            args=["ChinmayKulkarni"],
         )
 
         self.client2 = Client()
@@ -114,6 +162,112 @@ class TestViews(TestCase):
         # print(url)
         self.assertEqual(url, response.url)
 
+    def test_add_self_track_post(self):
+        self.session[
+            "user_key"
+        ] = "IkNoaW5tYXlLdWxrYXJuaSI:1noBht:abL7sx3IPJVuK_xzPy-EUdKZwwZS-Mih7xjpThi6NLA"
+        self.session.save()
+        response = self.client.post(
+            self.selftrack_url_real_3,
+            data={
+                "track": "",
+                "user_met": '["met1"]',
+                "location_visited": '["location_visited"]',
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_add_self_track_uploadedYesterday(self):
+        self.SelfTrackData_3 = SelfTrack.objects.create(
+            date_uploaded=datetime.date.today() + datetime.timedelta(days=-1),
+            username=self.userdata_2,
+            user_met=json.dumps(["met1"]),
+            location_visited=json.dumps(["11225"]),
+            streak=0,
+            largest_streak=0,
+        )
+        self.session[
+            "user_key"
+        ] = "IkNoaW5tYXlLdWxrYXJuaSI:1noBht:abL7sx3IPJVuK_xzPy-EUdKZwwZS-Mih7xjpThi6NLA"
+        self.session.save()
+        response = self.client.post(
+            self.selftrack_url_real_3,
+            data={
+                "track": "",
+                "user_met": '["met1"]',
+                "location_visited": '["location_visited"]',
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_add_self_track_uploadedYesterday_2(self):
+        self.SelfTrackData_3 = SelfTrack.objects.create(
+            date_uploaded=datetime.date.today() + datetime.timedelta(days=-1),
+            username=self.userdata_2,
+            user_met=json.dumps(["met1"]),
+            location_visited=json.dumps(["11225"]),
+            streak=0,
+            largest_streak=10,
+        )
+        self.session[
+            "user_key"
+        ] = "IkNoaW5tYXlLdWxrYXJuaSI:1noBht:abL7sx3IPJVuK_xzPy-EUdKZwwZS-Mih7xjpThi6NLA"
+        self.session.save()
+        response = self.client.post(
+            self.selftrack_url_real_3,
+            data={
+                "track": "",
+                "user_met": '["met1"]',
+                "location_visited": '["location_visited"]',
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_add_self_track_update(self):
+        self.SelfTrackData_3 = SelfTrack.objects.create(
+            date_uploaded=datetime.date.today() + datetime.timedelta(days=0),
+            username=self.userdata_2,
+            user_met=json.dumps(["met1"]),
+            location_visited=json.dumps(["11225"]),
+            streak=0,
+            largest_streak=10,
+        )
+        self.session[
+            "user_key"
+        ] = "IkNoaW5tYXlLdWxrYXJuaSI:1noBht:abL7sx3IPJVuK_xzPy-EUdKZwwZS-Mih7xjpThi6NLA"
+        self.session.save()
+        response = self.client.post(
+            self.selftrack_url_real_3,
+            data={
+                "track-update": "",
+                "user_met": '["met1"]',
+                "location_visited": '["location_visited"]',
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_driver_code(self):
+        self.userdata_3 = UserData.objects.create(
+            firstname="Chinmay",
+            lastname="Kulkarni",
+            password="coviguard",
+            username="TestUser",
+            email="test@gmail.com",
+            dob=datetime.datetime.now(),
+            work_address="1122",
+            home_adress="1122",
+        )
+        self.SelfTrackData_4 = SelfTrack.objects.create(
+            date_uploaded=datetime.date.today() + datetime.timedelta(days=0),
+            username=self.userdata_3,
+            user_met=json.dumps(["met1"]),
+            location_visited=json.dumps(["11225"]),
+            streak=0,
+            largest_streak=10,
+        )
+        get_user_met("TestUser")
+        get_location_visited("TestUser")
+
 
 class TestExceptionViews(TestCase):
     def setUp(self):
@@ -146,9 +300,29 @@ class TestExceptionViews(TestCase):
             "selftracking:selftrack",
             args=["exceptionuser"],
         )
+
+        self.selftrack_url_exp_2 = reverse(
+            "selftracking:selftrack",
+            args=["EashanKaushik"],
+        )
+
         self.selftrack = SelfTrack()
 
     def test_add_self_track_exception(self):
         response = self.client.get(self.selftrack_url_exp)
         self.assertNotEqual(response.status_code, 200)
         # self.assertTemplateUsed(response, "selftracking/self_track.html")
+
+    def test_new_user_exception(self):
+        self.userdata_2 = UserData.objects.create(
+            firstname="Chinmay",
+            lastname="Kulkarni",
+            password="coviguard",
+            username="EashanKaushik",
+            email="test@gmail.com",
+            dob=datetime.datetime.now(),
+            work_address="1122",
+            home_adress="1122",
+        )
+        response = self.client.get(self.selftrack_url_exp_2)
+        self.assertEqual(response.status_code, 200)

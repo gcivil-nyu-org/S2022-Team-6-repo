@@ -6,7 +6,7 @@
         <div class="row">
             {% for data in recent_circles %}
                 <div class="card col-lg-3 col-md-5 mx-2 my-2">
-                    <div class="dropdown">
+                    <div>
                         <button type="button" class="btn" data-bs-toggle="dropdown" aria-expanded="false" style="float: right; background-color: white; margin: 0%;padding: 0%;">
                             <img src="{% static 'img/circle/circle_options.jpeg'%}"></img>
                         </button>
@@ -19,7 +19,7 @@
                             </li>
                             <li>
                                 <a href="{% url 'circle:editpermission' username data.circle_id.circle_id %}">
-                                    <button type="button" class="btn btn-outline-primary">Edit</button>
+                                    <button type="button" class="btn btn-outline-primary">Edit Circle</button>
                                 </a>
                             </li>
                             {% else %}
@@ -64,7 +64,7 @@
                         <div class="badge"> 
                             <span>
                                 <div class="dropdown">
-                                    <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button class="btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                         <img src="{%static 'img/circle/circle_options.jpeg'%}"></img>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
