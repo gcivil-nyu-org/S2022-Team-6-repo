@@ -368,11 +368,36 @@ class TestView(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_request_url_post(self):
-        display_code = secrets.token_urlsafe(1)
+        display_code = secrets.token_urlsafe(15)
         if len(str(display_code)) > 7:
             display_code = display_code[0:6]  # pragma: no cover
+        Circle.objects.create(
+            circle_id=15,
+            circle_name="TestCircle",
+            admin_username=self.userdata_2,
+            no_of_users=2,
+            display_code=display_code,
+        )
         response = self.client.post(
             reverse("circle:request_url", args=[display_code]),
             data={"send_request": ""},
         )
+        self.assertEqual(response.status_code, 200)
+
+    def test_exit_circle_loginError(self):
+        response = self.client.get(
+            reverse("circle:exitcircle", args=["ChinmayKulkarni", "1"])
+        )
         self.assertEqual(response.status_code, 302)
+
+    def test_delete_circle_loginError(self):
+        response = self.client.get(
+            reverse("circle:deletecircle", args=["EashanKaushik", "1"])
+        )
+        self.assertEqual(response.status_code, 302)
+
+    def test_edit_permission_loginError(self):
+        response = self.client.get(
+            reverse("circle:editpermission", args=["EashanKaushik", "1"])
+        )
+        self.assertEqual(response.status_code, 200)
